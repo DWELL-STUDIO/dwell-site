@@ -619,21 +619,7 @@
     align-items: flex-end;
     justify-content: center;
     gap: clamp(0.5rem, 2vw, 2rem);
-    margin-top: clamp(-3.5rem, -6.5vw, -5.5rem);
-  }
-  /* Compact ground shadow */
-  .founders-photos::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    bottom: -10px;
-    width: 60%;
-    height: 50px;
-    transform: translateX(-50%);
-    background: radial-gradient(50% 50% at 50% 50%, rgba(50,32,12,0.26) 0%, rgba(50,32,12,0.10) 40%, transparent 70%);
-    filter: blur(22px);
-    z-index: 0;
-    pointer-events: none;
+    margin-top: clamp(-5.5rem, -10vw, -8.5rem);
   }
   .founders-photos img {
     height: clamp(300px, 38vh, 460px);
@@ -642,7 +628,6 @@
     object-position: bottom;
     mix-blend-mode: multiply;
     transform: scaleX(-1);
-    filter: drop-shadow(0 22px 32px rgba(50,32,12,0.18));
   }
   .founders-photos img.matteo-photo { z-index: 2; }
   .founders-photos img.romeo-photo  { z-index: 1; }
