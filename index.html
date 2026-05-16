@@ -584,85 +584,114 @@
     margin: 1.4rem auto 0;
     max-width: 56ch;
   }
-  .method-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+  /* ─── METHOD LIST — vertical stacked pillars (each one = a row) ─── */
+  .method-list {
+    display: flex;
+    flex-direction: column;
     gap: clamp(1.2rem, 2.5vw, 2rem);
     max-width: 1200px;
     margin: 0 auto;
     position: relative;
     z-index: 1;
   }
-  @media (max-width: 800px) {
-    .method-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-  }
-  /* Pillars — refined editorial cards */
-  .method-item {
+
+  .method-pillar {
+    display: grid;
+    grid-template-columns: minmax(220px, 0.85fr) 1.7fr;
+    align-items: start;
+    gap: clamp(1.5rem, 4vw, 4rem);
+    padding: clamp(2rem, 3.2vw, 2.8rem) clamp(2rem, 3.2vw, 2.6rem);
     background: rgba(247, 241, 232, 0.55);
     backdrop-filter: blur(16px) saturate(150%);
     -webkit-backdrop-filter: blur(16px) saturate(150%);
     border: 1px solid var(--line);
-    border-radius: 20px;
-    padding: clamp(2.4rem, 3.5vw, 3.2rem) clamp(1.8rem, 2.6vw, 2.4rem);
+    border-radius: 22px;
     box-shadow: var(--shadow-md);
-    transition: transform .55s var(--ease-apple), box-shadow .55s var(--ease-apple), border-color .55s, background .55s;
+    transition: transform .55s var(--ease-apple), box-shadow .55s, background .55s, border-color .55s;
     position: relative;
-    overflow: hidden;
+  }
+  .method-pillar:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    background: rgba(250, 244, 232, 0.74);
+    border-color: var(--line-2);
+  }
+
+  /* LEFT — Number + title */
+  .pillar-head {
     display: flex;
     flex-direction: column;
+    gap: clamp(0.8rem, 1.3vw, 1.2rem);
   }
-  .method-item:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--line-2);
-    background: rgba(250, 244, 232, 0.75);
-  }
-  .method-item .num {
+  .pillar-num {
     font-family: var(--sans);
-    font-size: clamp(3.2rem, 5vw, 4.5rem);
+    font-size: clamp(2.8rem, 4.5vw, 4rem);
     color: var(--accent);
     letter-spacing: -0.05em;
     font-weight: 200;
     line-height: 0.9;
-    margin: 0;
     display: block;
   }
-  /* Tiny line between number and title */
-  .method-item .num::after {
+  .pillar-title {
+    font-family: var(--sans);
+    font-size: clamp(1.4rem, 2vw, 1.85rem);
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin: 0;
+  }
+  .pillar-head::after {
     content: "";
     display: block;
     width: 36px;
     height: 1px;
     background: var(--accent);
-    opacity: 0.55;
-    margin-top: clamp(1.2rem, 1.6vw, 1.5rem);
-    transition: width .6s var(--ease-apple), opacity .4s;
+    opacity: 0.6;
+    margin-top: 0.3rem;
+    transition: width .6s var(--ease-apple);
   }
-  .method-item:hover .num::after {
-    width: 72px;
-    opacity: 0.9;
+  .method-pillar:hover .pillar-head::after { width: 72px; }
+
+  /* RIGHT — Lead phrase + explanation */
+  .pillar-body {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.9rem, 1.4vw, 1.3rem);
+    padding-top: clamp(0.6rem, 1vw, 1rem);
   }
-  .method-item h3 {
+  .pillar-lead {
     font-family: var(--sans);
-    font-size: clamp(1.6rem, 2.1vw, 2rem);
-    font-weight: 700;
-    margin: clamp(1.4rem, 2vw, 1.8rem) 0 clamp(0.9rem, 1.4vw, 1.2rem);
+    font-size: clamp(1.15rem, 1.5vw, 1.4rem);
+    font-weight: 500;
     color: var(--ink);
-    letter-spacing: -0.03em;
-    line-height: 1.05;
+    line-height: 1.35;
+    letter-spacing: -0.018em;
+    margin: 0;
   }
-  .method-item p {
-    color: var(--ink-2);
-    font-size: clamp(0.95rem, 1.08vw, 1.08rem);
-    line-height: 1.7;
+  .pillar-text {
+    font-family: var(--sans);
+    font-size: clamp(0.95rem, 1.1vw, 1.08rem);
+    line-height: 1.75;
     font-weight: 300;
+    color: var(--ink-2);
     margin: 0;
     letter-spacing: -0.005em;
   }
-  .method-item p em {
+  .pillar-text em,
+  .pillar-lead em {
     font-style: italic;
     font-weight: 600;
     color: var(--accent-3);
+  }
+
+  @media (max-width: 760px) {
+    .method-pillar {
+      grid-template-columns: 1fr;
+      gap: 1.4rem;
+      padding: 1.8rem 1.6rem;
+    }
+    .pillar-head::after { display: none; }
   }
 
   /* ─────────── FOUNDERS — bold title + photos behind heads + visual bio blocks ─────────── */
@@ -1497,27 +1526,45 @@
 <section class="section method" id="method">
   <div class="method-head">
     <span class="small-caps reveal">La méthode</span>
-    <h2 class="h-display split-words">Trois piliers, une <em>intention</em>.</h2>
+    <h2 class="h-display split-words">Trois étapes, une <em>intention</em>.</h2>
     <p class="lede reveal">
-      Tout ce qui distingue une annonce immobilière classique d'une <em>page DWELL</em>&nbsp;: une narration construite, des règles claires, un objectif unique — déclencher la visite.
+      Comment DWELL transforme une annonce en désir de visite&nbsp;: trois principes appliqués méthodiquement à chaque page que nous concevons.
     </p>
   </div>
-  <div class="method-grid">
-    <div class="method-item reveal">
-      <span class="num">01</span>
-      <h3>Raconter</h3>
-      <p>On ne montre plus la maison&nbsp;: on la <em>raconte</em>. Lumière, volumes, style de vie&nbsp;— chaque détail nourrit l'émotion.</p>
-    </div>
-    <div class="method-item reveal">
-      <span class="num">02</span>
-      <h3>Suggérer</h3>
-      <p>Assez de détails pour créer la confiance, jamais trop pour préserver l'envie. La page <em>séduit sans tout révéler</em>.</p>
-    </div>
-    <div class="method-item reveal">
-      <span class="num">03</span>
-      <h3>Convertir</h3>
-      <p>L'intérêt devient <em>visite</em>. Une page DWELL pousse à l'action&nbsp;: contacter, réserver, partager.</p>
-    </div>
+
+  <div class="method-list">
+    <article class="method-pillar reveal">
+      <div class="pillar-head">
+        <span class="pillar-num">01</span>
+        <h3 class="pillar-title">Raconter<br>le lieu</h3>
+      </div>
+      <div class="pillar-body">
+        <p class="pillar-lead">Une maison qui devient <em>une histoire</em>.</p>
+        <p class="pillar-text">Atmosphère, lumière, volumes, style de vie&nbsp;: chaque détail nourrit l'émotion. La maison n'est plus simplement montrée&nbsp;— elle est <em>mise en récit</em>, comme une expérience que le visiteur traverse.</p>
+      </div>
+    </article>
+
+    <article class="method-pillar reveal">
+      <div class="pillar-head">
+        <span class="pillar-num">02</span>
+        <h3 class="pillar-title">Doser<br>le mystère</h3>
+      </div>
+      <div class="pillar-body">
+        <p class="pillar-lead">Le manque révèle <em>l'envie</em>.</p>
+        <p class="pillar-text">Une page DWELL donne assez d'informations pour créer la confiance et la projection — mais garde une part d'inconnu. La visite physique reste <em>indispensable</em>, jamais remplaçable par l'écran.</p>
+      </div>
+    </article>
+
+    <article class="method-pillar reveal">
+      <div class="pillar-head">
+        <span class="pillar-num">03</span>
+        <h3 class="pillar-title">Déclencher<br>l'action</h3>
+      </div>
+      <div class="pillar-body">
+        <p class="pillar-lead">L'intérêt devient <em>un geste</em>.</p>
+        <p class="pillar-text">Une demande d'information. Une visite réservée. Un bien partagé. Une page DWELL transforme l'<em>attention</em> en conversion réelle&nbsp;: c'est ce qui sépare la vitrine du véritable outil de vente.</p>
+      </div>
+    </article>
   </div>
 </section>
 
