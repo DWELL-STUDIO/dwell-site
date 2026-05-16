@@ -497,71 +497,73 @@
   @media (max-width: 800px) {
     .method-grid { grid-template-columns: 1fr; gap: 1.5rem; }
   }
-  /* Pillars as elevated cards — warm cream on sand */
+  /* Pillars — refined editorial cards */
   .method-item {
-    background: linear-gradient(180deg, #faf3e6 0%, #f6ede0 100%);
+    background: rgba(247, 241, 232, 0.55);
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
     border: 1px solid var(--line);
-    border-radius: 22px;
-    padding: clamp(2rem, 3vw, 2.6rem);
+    border-radius: 20px;
+    padding: clamp(2.4rem, 3.5vw, 3.2rem) clamp(1.8rem, 2.6vw, 2.4rem);
     box-shadow: var(--shadow-md);
-    transition: transform .5s var(--ease-apple), box-shadow .5s var(--ease-apple), border-color .5s;
+    transition: transform .55s var(--ease-apple), box-shadow .55s var(--ease-apple), border-color .55s, background .55s;
     position: relative;
     overflow: hidden;
-  }
-  .method-item::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.6), transparent 40%);
-    pointer-events: none;
-    border-radius: 22px;
+    display: flex;
+    flex-direction: column;
   }
   .method-item:hover {
     transform: translateY(-8px);
     box-shadow: var(--shadow-lg);
     border-color: var(--line-2);
+    background: rgba(250, 244, 232, 0.75);
+  }
+  .method-item .num {
+    font-family: var(--sans);
+    font-size: clamp(3.2rem, 5vw, 4.5rem);
+    color: var(--accent);
+    letter-spacing: -0.05em;
+    font-weight: 200;
+    line-height: 0.9;
+    margin: 0;
+    display: block;
+  }
+  /* Tiny line between number and title */
+  .method-item .num::after {
+    content: "";
+    display: block;
+    width: 36px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.55;
+    margin-top: clamp(1.2rem, 1.6vw, 1.5rem);
+    transition: width .6s var(--ease-apple), opacity .4s;
+  }
+  .method-item:hover .num::after {
+    width: 72px;
+    opacity: 0.9;
   }
   .method-item h3 {
-    font-size: clamp(1.35rem, 1.7vw, 1.55rem);
+    font-family: var(--sans);
+    font-size: clamp(1.6rem, 2.1vw, 2rem);
     font-weight: 700;
-    margin-bottom: 0.7rem;
+    margin: clamp(1.4rem, 2vw, 1.8rem) 0 clamp(0.9rem, 1.4vw, 1.2rem);
     color: var(--ink);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
   }
   .method-item p {
     color: var(--ink-2);
-    font-size: clamp(0.95rem, 1.05vw, 1.05rem);
+    font-size: clamp(0.95rem, 1.08vw, 1.08rem);
     line-height: 1.7;
     font-weight: 300;
+    margin: 0;
+    letter-spacing: -0.005em;
   }
-  .method-item .num {
-    display: block;
-    font-family: var(--sans);
-    font-size: clamp(2.4rem, 3.6vw, 3.4rem);
-    color: var(--accent);
-    letter-spacing: -0.04em;
-    font-weight: 300;
-    line-height: 1;
-    margin-bottom: clamp(1.2rem, 1.8vw, 1.6rem);
-    text-transform: none;
-    text-shadow: 0 2px 8px rgba(184,148,110,0.15);
-  }
-  /* Subtle accent line above each card */
-  .method-item::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 40px;
-    height: 2px;
-    background: var(--accent);
-    transform: translateX(-50%);
-    opacity: 0;
-    transition: opacity .4s, width .5s var(--ease-apple);
-  }
-  .method-item:hover::before {
-    opacity: 1;
-    width: 80px;
+  .method-item p em {
+    font-style: italic;
+    font-weight: 600;
+    color: var(--accent-3);
   }
 
   /* ─────────── FOUNDERS — bold title + photos behind heads + visual bio blocks ─────────── */
@@ -1432,18 +1434,18 @@
   <div class="method-grid">
     <div class="method-item reveal">
       <span class="num">01</span>
-      <h3>Atmosphère</h3>
-      <p>La lumière, les volumes, le style de vie. Le visiteur entre dans la maison.</p>
+      <h3>Raconter</h3>
+      <p>On ne montre plus la maison&nbsp;: on la <em>raconte</em>. Lumière, volumes, style de vie&nbsp;— chaque détail nourrit l'émotion.</p>
     </div>
     <div class="method-item reveal">
       <span class="num">02</span>
-      <h3>Projection</h3>
-      <p>Assez de détails pour se projeter. Jamais tout révéler.</p>
+      <h3>Suggérer</h3>
+      <p>Assez de détails pour créer la confiance, jamais trop pour préserver l'envie. La page <em>séduit sans tout révéler</em>.</p>
     </div>
     <div class="method-item reveal">
       <span class="num">03</span>
-      <h3>Désir</h3>
-      <p>Une part de mystère. L'envie devient visite.</p>
+      <h3>Convertir</h3>
+      <p>L'intérêt devient <em>visite</em>. Une page DWELL pousse à l'action&nbsp;: contacter, réserver, partager.</p>
     </div>
   </div>
 </section>
