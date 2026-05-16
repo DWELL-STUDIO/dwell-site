@@ -338,18 +338,82 @@
     text-align: center;
     position: relative;
   }
-  /* 2-column blocks with micro-titles — clearer narrative structure */
-  .about-blocks {
+  /* ─── ZIGZAG TIMELINE — vertical line draws as user scrolls ─── */
+  .about-timeline {
+    --gap-col: clamp(2.5rem, 5vw, 4.5rem);
+    --pad-block: clamp(1rem, 2vw, 1.8rem);
+    position: relative;
+    max-width: 1080px;
+    margin: clamp(3rem, 5vw, 4.5rem) auto 0;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: clamp(2rem, 4vw, 3.5rem);
-    max-width: 920px;
-    margin: clamp(2.8rem, 5vw, 4rem) auto 0;
+    column-gap: var(--gap-col);
+    row-gap: clamp(2.5rem, 5vw, 4.5rem);
+  }
+  /* Central line — track (always visible) */
+  .about-line-track,
+  .about-line-progress {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    pointer-events: none;
+  }
+  .about-line-track {
+    background: rgba(58,40,20,0.12);
+    transform: translateX(-50%);
+    z-index: 0;
+  }
+  /* Central line — progress (animated by GSAP scrub) */
+  .about-line-progress {
+    background: var(--accent);
+    transform: translateX(-50%) scaleY(0);
+    transform-origin: top center;
+    z-index: 1;
+  }
+
+  .about-block {
+    position: relative;
+    z-index: 2;
+  }
+  .about-block--right {
+    grid-column: 2;
     text-align: left;
+    padding-left: var(--pad-block);
   }
-  @media (max-width: 760px) {
-    .about-blocks { grid-template-columns: 1fr; }
+  .about-block--left {
+    grid-column: 1;
+    text-align: right;
+    padding-right: var(--pad-block);
   }
+
+  /* Dot marker on the line */
+  .about-block::before {
+    content: "";
+    position: absolute;
+    top: 0.45rem;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 0 5px rgba(184,148,110,0.12);
+    z-index: 3;
+    transform: scale(var(--dot-scale, 0.4));
+    opacity: var(--dot-opacity, 0.35);
+    transition: transform .6s var(--ease-apple), opacity .6s, background .4s;
+  }
+  .about-block.is-active::before {
+    background: var(--accent);
+  }
+  .about-block--right::before {
+    left: calc(var(--gap-col) / -2 - 7px);
+  }
+  .about-block--left::before {
+    right: calc(var(--gap-col) / -2 - 7px);
+  }
+
   .about-block-num {
     display: block;
     font-size: 0.7rem;
@@ -385,6 +449,37 @@
     font-weight: 600;
     color: var(--ink);
     font-style: normal;
+  }
+
+  /* Quote sits inline in the timeline, spanning both columns */
+  .about-timeline > .about-quote {
+    grid-column: 1 / -1;
+    margin: clamp(1rem, 2vw, 2rem) auto;
+    z-index: 2;
+    position: relative;
+  }
+
+  /* Mobile — single column, line on the left */
+  @media (max-width: 760px) {
+    .about-timeline {
+      grid-template-columns: 1fr;
+      --gap-col: 0px;
+    }
+    .about-line-track,
+    .about-line-progress {
+      left: 10px;
+    }
+    .about-block--right,
+    .about-block--left {
+      grid-column: 1;
+      text-align: left;
+      padding-left: 2.4rem;
+      padding-right: 0;
+    }
+    .about-block::before {
+      left: 3px !important;
+      right: auto !important;
+    }
   }
 
   /* Pull quote — moment de pause éditorial */
@@ -1357,30 +1452,33 @@
       DWELL aide les biens immobiliers de luxe à générer plus de visites en créant des pages web sur mesure — élégantes, immersives, conçues pour faire passer le visiteur de l'intérêt à <em>l'envie</em>.
     </p>
 
-    <div class="about-blocks">
-      <article class="about-block reveal">
+    <div class="about-timeline">
+      <div class="about-line-track"></div>
+      <div class="about-line-progress"></div>
+
+      <article class="about-block about-block--right reveal">
         <span class="about-block-num">— 01</span>
         <h3 class="about-block-title">Le constat</h3>
         <p>La plupart des biens d'exception sont présentés comme des annonces classiques&nbsp;: quelques photos, une vidéo, un descriptif. Même magnifiques, ils ne créent pas assez d'émotion pour déclencher un rendez-vous.</p>
       </article>
-      <article class="about-block reveal">
+
+      <article class="about-block about-block--left reveal">
         <span class="about-block-num">— 02</span>
         <h3 class="about-block-title">Notre réponse</h3>
         <p>DWELL conçoit pour chaque propriété une page unique, pensée comme une expérience haut de gamme. La maison n'est plus montrée&nbsp;— elle est <em>mise en scène</em>&nbsp;: atmosphère, lumière, volumes, ressenti.</p>
       </article>
-    </div>
 
-    <blockquote class="about-quote reveal">
-      Je veux voir cette maison <em>en vrai</em>.
-    </blockquote>
+      <blockquote class="about-quote reveal">
+        Je veux voir cette maison <em>en vrai</em>.
+      </blockquote>
 
-    <div class="about-blocks">
-      <article class="about-block reveal">
+      <article class="about-block about-block--right reveal">
         <span class="about-block-num">— 03</span>
         <h3 class="about-block-title">L'équilibre</h3>
         <p>La page ne révèle pas tout. Elle donne assez pour créer la confiance et la projection, mais garde une part de mystère pour que la visite reste indispensable. <strong>Montrer assez pour séduire, jamais trop pour préserver l'envie.</strong></p>
       </article>
-      <article class="about-block reveal">
+
+      <article class="about-block about-block--left reveal">
         <span class="about-block-num">— 04</span>
         <h3 class="about-block-title">Le résultat</h3>
         <p>Pas une vitrine digitale&nbsp;— <em>un outil de désir et de conversion</em>. Une page qui capte l'attention, valorise le bien, et pousse à l'action&nbsp;: contacter, réserver, partager.</p>
@@ -1682,6 +1780,43 @@
         scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' } }
     );
   });
+
+  // ─── ABOUT TIMELINE — scroll-drawn vertical line + dot activations ───
+  const aboutTL = document.querySelector('.about-timeline');
+  if (aboutTL) {
+    const lineProgress = aboutTL.querySelector('.about-line-progress');
+    if (lineProgress) {
+      gsap.to(lineProgress, {
+        scaleY: 1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: aboutTL,
+          start: 'top 72%',
+          end: 'bottom 72%',
+          scrub: 0.8
+        }
+      });
+    }
+    // Each dot scales up + lights up as user scrolls past it
+    aboutTL.querySelectorAll('.about-block').forEach(block => {
+      gsap.fromTo(block,
+        { '--dot-scale': 0.45, '--dot-opacity': 0.3 },
+        {
+          '--dot-scale': 1,
+          '--dot-opacity': 1,
+          ease: 'back.out(1.8)',
+          duration: 0.6,
+          scrollTrigger: {
+            trigger: block,
+            start: 'top 75%',
+            toggleActions: 'play none none reverse',
+            onEnter:      () => block.classList.add('is-active'),
+            onLeaveBack:  () => block.classList.remove('is-active')
+          }
+        }
+      );
+    });
+  }
 
   // ─── WORK SECTION — PINNED + scroll-controlled timeline ───
   const workSection  = document.querySelector('.work');
