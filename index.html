@@ -516,74 +516,73 @@
   .founders {
     background: transparent;
     background-image:
-      radial-gradient(55% 45% at 50% 0%, rgba(184,148,110,0.14), transparent 60%),
-      radial-gradient(45% 35% at 50% 100%, rgba(58,40,20,0.08), transparent 60%);
+      radial-gradient(55% 40% at 50% 10%, rgba(184,148,110,0.14), transparent 60%),
+      radial-gradient(45% 30% at 50% 100%, rgba(58,40,20,0.08), transparent 60%);
     overflow: hidden;
-    padding-top: clamp(5rem, 8vw, 7rem);
-    padding-bottom: clamp(4rem, 7vw, 6rem);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: clamp(3.5rem, 7vh, 5rem);
+    padding-bottom: clamp(3rem, 6vh, 4.5rem);
     position: relative;
   }
   .founders-frame {
     position: relative;
-    max-width: 1820px;
+    max-width: 1600px;
+    width: 100%;
     margin: 0 auto;
   }
 
-  /* Two-line title — DEUX FRÈRES / UNE VISION */
+  /* Single "UNE VISION" title — solid ink, sits behind the photos */
   .founders-title {
     font-family: var(--sans);
     font-weight: 800;
-    font-size: clamp(2.2rem, 7vw, 7rem);
+    font-size: clamp(2.6rem, 8vw, 7.5rem);
     line-height: 0.96;
-    letter-spacing: -0.045em;
+    letter-spacing: -0.05em;
     text-align: center;
+    color: var(--ink);
     margin: 0;
     position: relative;
     z-index: 1;
     user-select: none;
   }
-  .founders-title .top {
-    display: block;
-    color: var(--ink);
-  }
-  .founders-title .vision {
-    display: block;
-    color: rgba(58,40,20,0.20);
-    margin-top: 0.02em;
-    text-shadow: 0 2px 4px rgba(58,40,20,0.08), 0 16px 36px rgba(58,40,20,0.14);
-  }
+  .founders-title .word,
+  .founders-title .word-inner { line-height: 1; }
 
-  /* Photos overlap the VISION line — mix-blend hides the title behind the heads */
+  /* Photos overlap the title — mix-blend reveals UNE VISION through the white
+     background of the portraits and hides it behind the heads/bodies */
   .founders-photos {
     position: relative;
     z-index: 2;
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    margin-top: clamp(-3rem, -6.5vw, -6.5rem);
+    margin-top: clamp(-2.5rem, -5.5vw, -5.5rem);
   }
-  /* Ground shadow — warm elliptical shadow anchoring photos to the sand */
+  /* Compact ground shadow */
   .founders-photos::after {
     content: "";
     position: absolute;
     left: 50%;
-    bottom: -16px;
-    width: 70%;
-    height: 80px;
+    bottom: -10px;
+    width: 60%;
+    height: 50px;
     transform: translateX(-50%);
-    background: radial-gradient(50% 50% at 50% 50%, rgba(50,32,12,0.30) 0%, rgba(50,32,12,0.14) 40%, transparent 70%);
-    filter: blur(28px);
+    background: radial-gradient(50% 50% at 50% 50%, rgba(50,32,12,0.26) 0%, rgba(50,32,12,0.10) 40%, transparent 70%);
+    filter: blur(22px);
     z-index: 0;
     pointer-events: none;
   }
   .founders-photos img {
-    height: clamp(440px, 52vw, 720px);
+    height: clamp(300px, 38vh, 460px);
     width: auto;
     object-fit: contain;
     object-position: bottom;
     mix-blend-mode: multiply;
     transform: scaleX(-1);
-    filter: drop-shadow(0 32px 48px rgba(50,32,12,0.20));
+    filter: drop-shadow(0 22px 32px rgba(50,32,12,0.18));
   }
   .founders-photos img.matteo-photo {
     margin-right: -14%;
@@ -591,79 +590,74 @@
   }
   .founders-photos img.romeo-photo { z-index: 1; }
 
-  /* Subtle ambient depth on the entire founders section */
   .founders .founders-frame { position: relative; z-index: 1; }
 
-  /* Bio cards — subtle elevation */
-  .founder {
-    position: relative;
-    transition: transform .5s var(--ease-apple);
-  }
-
-  /* BIO BLOCKS below — big, visual, clearly separated */
+  /* Compact bio row — fits within the 100vh budget */
   .founders-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    max-width: 1400px;
-    margin: clamp(2rem, 4vw, 4rem) auto 0;
+    max-width: 1200px;
+    margin: clamp(1rem, 2vh, 1.8rem) auto 0;
     position: relative;
   }
   .founders-grid::after {
     content: "";
     position: absolute;
-    top: clamp(1rem, 2vw, 2rem);
-    bottom: clamp(1rem, 2vw, 2rem);
+    top: clamp(0.6rem, 1.5vw, 1.2rem);
+    bottom: clamp(0.6rem, 1.5vw, 1.2rem);
     left: 50%;
     width: 1px;
-    background: rgba(0,0,0,0.10);
+    background: rgba(58,40,20,0.10);
   }
   .founder {
     display: flex;
     flex-direction: column;
-    padding: clamp(1rem, 3vw, 2.5rem) clamp(1rem, 3.5vw, 4rem);
+    padding: clamp(0.6rem, 1.5vw, 1.4rem) clamp(1.4rem, 3vw, 3rem);
+    position: relative;
+    transition: transform .5s var(--ease-apple);
   }
   .founder-num {
     font-family: var(--sans);
-    font-size: clamp(0.85rem, 1vw, 1rem);
+    font-size: clamp(0.7rem, 0.85vw, 0.85rem);
     font-weight: 500;
     color: var(--accent-3);
     letter-spacing: 0.28em;
-    margin-bottom: clamp(1.4rem, 2vw, 1.8rem);
+    margin-bottom: clamp(0.7rem, 1.2vw, 1rem);
     line-height: 1;
   }
   .founder-name {
     font-family: var(--sans);
-    font-size: clamp(2.4rem, 4.2vw, 4rem);
+    font-size: clamp(1.5rem, 2.6vw, 2.2rem);
     font-weight: 600;
     letter-spacing: -0.03em;
     color: var(--ink);
-    margin: 0 0 0.4rem;
+    margin: 0 0 0.25rem;
     line-height: 1;
   }
   .founder-role {
     display: block;
-    font-size: clamp(0.78rem, 0.9vw, 0.92rem);
+    font-size: clamp(0.68rem, 0.78vw, 0.8rem);
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--muted);
-    margin-bottom: clamp(1.6rem, 2.6vw, 2rem);
+    margin-bottom: clamp(0.7rem, 1.2vw, 1rem);
     font-weight: 500;
   }
   .founder-rule {
-    width: 56px;
+    width: 40px;
     height: 1px;
     background: var(--accent);
     opacity: 0.8;
-    margin-bottom: clamp(1.6rem, 2.6vw, 2rem);
+    margin-bottom: clamp(0.7rem, 1.2vw, 1rem);
     display: block;
   }
   .founder-bio p {
     font-family: var(--sans);
-    font-size: clamp(1.05rem, 1.25vw, 1.25rem);
-    line-height: 1.75;
+    font-size: clamp(0.9rem, 1vw, 1.02rem);
+    line-height: 1.55;
     color: var(--ink-2);
     font-weight: 300;
-    margin: 0 0 clamp(1rem, 1.6vw, 1.4rem) 0;
+    margin: 0 0 clamp(0.5rem, 0.9vw, 0.7rem) 0;
     letter-spacing: -0.005em;
   }
   .founder-bio p:last-child { margin-bottom: 0; }
@@ -1396,10 +1390,7 @@
 <!-- ─────────── FOUNDERS ─────────── -->
 <section class="section founders" id="founders">
   <div class="founders-frame">
-    <h2 class="founders-title">
-      <span class="top split-words">DEUX FRÈRES</span>
-      <span class="vision split-words">UNE VISION</span>
-    </h2>
+    <h2 class="founders-title split-words">UNE VISION</h2>
 
     <!-- Photos rise into the VISION line; mix-blend-mode hides the title behind their heads -->
     <div class="founders-photos reveal">
@@ -1407,7 +1398,7 @@
       <img class="romeo-photo"  src="IMAGES/ROMEO%20SOLO.png"  alt="Romeo — Co-fondateur DWELL" loading="lazy" />
     </div>
 
-    <!-- Two large visual bio blocks, separated by a hairline -->
+    <!-- Two compact bio blocks, separated by a hairline -->
     <div class="founders-grid">
       <article class="founder founder--matteo">
         <span class="founder-num reveal">— 01</span>
@@ -1416,7 +1407,6 @@
         <span class="founder-rule reveal"></span>
         <div class="founder-bio">
           <p class="reveal">Designer de formation. Il pense chaque page comme un espace habitable.</p>
-          <p class="reveal">Il en dessine la structure, le rythme, la respiration — la manière dont l'œil glisse, ralentit, s'arrête.</p>
           <p class="reveal">Sous ses mains, une intention devient <em>une expérience que l'on traverse</em>.</p>
         </div>
       </article>
@@ -1428,8 +1418,7 @@
         <span class="founder-rule reveal"></span>
         <div class="founder-bio">
           <p class="reveal">Réalisateur et photographe. L'œil sensible aux atmosphères.</p>
-          <p class="reveal">Il raconte chaque maison du sol à la cime — du grain de la pierre à la qualité du ciel.</p>
-          <p class="reveal">Son regard capte ce qui ne se dit pas&nbsp;: <em>la lumière, le silence, l'émotion d'un lieu</em>.</p>
+          <p class="reveal">Son regard capte ce qui ne se dit pas&nbsp;: <em>la lumière, l'émotion d'un lieu</em>.</p>
         </div>
       </article>
     </div>
