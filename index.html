@@ -588,25 +588,31 @@
     margin: 0 auto;
   }
 
-  /* Single "UNE VISION" title — solid ink, sits behind the photos */
+  /* UNE VISION — huge editorial display, sits behind the portraits */
   .founders-title {
     font-family: var(--sans);
     font-weight: 800;
-    font-size: clamp(2.6rem, 8vw, 7.5rem);
-    line-height: 0.96;
-    letter-spacing: -0.05em;
+    font-size: clamp(3.2rem, 11vw, 11rem);
+    line-height: 0.92;
+    letter-spacing: -0.055em;
     text-align: center;
     color: var(--ink);
     margin: 0;
     position: relative;
     z-index: 1;
     user-select: none;
+    /* Layered depth shadows — the word feels embossed into the sand */
+    text-shadow:
+      0 1px 0 rgba(58,40,20,0.18),
+      0 2px 6px rgba(58,40,20,0.10),
+      0 12px 24px rgba(58,40,20,0.10),
+      0 28px 60px rgba(58,40,20,0.12);
   }
   .founders-title .word,
   .founders-title .word-inner { line-height: 1; }
 
-  /* Photos overlap the title — mix-blend reveals UNE VISION through the white
-     background of the portraits and hides it behind the heads/bodies */
+  /* Photos rise into the title — mix-blend reveals UNE VISION through the
+     white background of the portraits and hides it behind heads/bodies */
   .founders-photos {
     position: relative;
     z-index: 2;
@@ -614,7 +620,7 @@
     align-items: flex-end;
     justify-content: center;
     gap: clamp(0.5rem, 2vw, 2rem);
-    margin-top: clamp(-2.5rem, -5.5vw, -5.5rem);
+    margin-top: clamp(-5rem, -9vw, -8rem);
   }
   /* Compact ground shadow */
   .founders-photos::after {
