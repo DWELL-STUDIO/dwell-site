@@ -1384,67 +1384,15 @@
     75%      { opacity: 0.55; transform: translateX(-50%) scaleX(0.84); }
   }
 
-  /* ─────────── METHOD — horizontal-scroll pinned ─────────── */
-  .method-pin {
-    height: 100vh;
-    overflow: hidden;
+  /* ─────────── METHOD — vertical stack (clean & readable) ─────────── */
+  .method-list {
     display: flex;
     flex-direction: column;
+    gap: clamp(1.2rem, 2.5vw, 2rem);
+    max-width: 1200px;
+    margin: 0 auto;
     position: relative;
-  }
-  .method-pin .method-head {
-    flex-shrink: 0;
-    padding: clamp(4rem, 8vh, 6rem) var(--pad-x) clamp(0.5rem, 1.5vh, 1.5rem);
-    margin-bottom: 0;
-  }
-  .method-track-wrap {
-    flex: 1;
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-  .method-track {
-    display: flex;
-    align-items: stretch;
-    gap: clamp(1.5rem, 3vw, 3rem);
-    padding: 0 clamp(2rem, 5vw, 5rem);
-    will-change: transform;
-    height: min(440px, 70%);
-  }
-  .method-track .method-pillar {
-    flex: 0 0 min(1000px, 85vw);
-    height: 100%;
-  }
-  /* Progress indicator below the track */
-  .method-progress {
-    position: absolute;
-    bottom: clamp(2rem, 4vh, 3rem);
-    left: 50%;
-    transform: translateX(-50%);
-    width: clamp(120px, 18vw, 200px);
-    height: 2px;
-    background: rgba(58,40,20,0.10);
-    border-radius: 2px;
-    overflow: hidden;
-    z-index: 3;
-  }
-  .method-progress-bar {
-    height: 100%;
-    width: 0%;
-    background: var(--accent);
-    border-radius: 2px;
-    transform-origin: left center;
-    transition: none;
-  }
-
-  @media (max-width: 760px) {
-    .method-track .method-pillar { flex: 0 0 88vw; height: auto; }
-    .method-track { height: auto; padding: 1rem 5vw; }
-    .method-pin { height: auto; min-height: 100vh; padding-bottom: 4rem; }
-    .method-track-wrap { overflow: visible; }
-    .method-track { flex-direction: column; gap: 1.5rem; }
-    .method-progress { display: none; }
+    z-index: 1;
   }
 
   /* ─────────── ELYSE-STYLE WORD REVEAL (masked rise) ─────────── */
@@ -1715,57 +1663,49 @@
   </div>
 </div>
 
-<!-- ─────────── METHOD — horizontal-scroll pinned ─────────── -->
+<!-- ─────────── METHOD — vertical stacked pillars ─────────── -->
 <section class="section method" id="method">
-  <div class="method-pin">
-    <div class="method-head">
-      <span class="small-caps reveal">La méthode</span>
-      <h2 class="h-display split-words">Trois étapes, une <em>intention</em>.</h2>
-      <p class="lede reveal">
-        Comment DWELL transforme une annonce en désir de visite&nbsp;: trois principes appliqués méthodiquement à chaque page.
-      </p>
-    </div>
+  <div class="method-head">
+    <span class="small-caps reveal">La méthode</span>
+    <h2 class="h-display split-words">Trois étapes, une <em>intention</em>.</h2>
+    <p class="lede reveal">
+      Comment DWELL transforme une annonce en désir de visite&nbsp;: trois principes appliqués méthodiquement à chaque page.
+    </p>
+  </div>
 
-    <div class="method-track-wrap">
-      <div class="method-track">
-        <article class="method-pillar">
-          <div class="pillar-head">
-            <span class="pillar-num">01</span>
-            <h3 class="pillar-title">Raconter<br>le lieu</h3>
-          </div>
-          <div class="pillar-body">
-            <p class="pillar-lead">Une maison qui devient <em>une histoire</em>.</p>
-            <p class="pillar-text">Atmosphère, lumière, volumes, style de vie&nbsp;: chaque détail nourrit l'émotion. La maison n'est plus simplement montrée&nbsp;— elle est <em>mise en récit</em>, comme une expérience que le visiteur traverse.</p>
-          </div>
-        </article>
-
-        <article class="method-pillar">
-          <div class="pillar-head">
-            <span class="pillar-num">02</span>
-            <h3 class="pillar-title">Doser<br>le mystère</h3>
-          </div>
-          <div class="pillar-body">
-            <p class="pillar-lead">Le manque révèle <em>l'envie</em>.</p>
-            <p class="pillar-text">Une page DWELL donne assez d'informations pour créer la confiance et la projection — mais garde une part d'inconnu. La visite physique reste <em>indispensable</em>, jamais remplaçable par l'écran.</p>
-          </div>
-        </article>
-
-        <article class="method-pillar">
-          <div class="pillar-head">
-            <span class="pillar-num">03</span>
-            <h3 class="pillar-title">Déclencher<br>l'action</h3>
-          </div>
-          <div class="pillar-body">
-            <p class="pillar-lead">L'intérêt devient <em>un geste</em>.</p>
-            <p class="pillar-text">Une demande d'information. Une visite réservée. Un bien partagé. Une page DWELL transforme l'<em>attention</em> en conversion réelle&nbsp;: c'est ce qui sépare la vitrine du véritable outil de vente.</p>
-          </div>
-        </article>
+  <div class="method-list">
+    <article class="method-pillar">
+      <div class="pillar-head">
+        <span class="pillar-num">01</span>
+        <h3 class="pillar-title">Raconter<br>le lieu</h3>
       </div>
-    </div>
+      <div class="pillar-body">
+        <p class="pillar-lead">Une maison qui devient <em>une histoire</em>.</p>
+        <p class="pillar-text">Atmosphère, lumière, volumes, style de vie&nbsp;: chaque détail nourrit l'émotion. La maison n'est plus simplement montrée&nbsp;— elle est <em>mise en récit</em>, comme une expérience que le visiteur traverse.</p>
+      </div>
+    </article>
 
-    <div class="method-progress" aria-hidden="true">
-      <div class="method-progress-bar"></div>
-    </div>
+    <article class="method-pillar">
+      <div class="pillar-head">
+        <span class="pillar-num">02</span>
+        <h3 class="pillar-title">Doser<br>le mystère</h3>
+      </div>
+      <div class="pillar-body">
+        <p class="pillar-lead">Le manque révèle <em>l'envie</em>.</p>
+        <p class="pillar-text">Une page DWELL donne assez d'informations pour créer la confiance et la projection — mais garde une part d'inconnu. La visite physique reste <em>indispensable</em>, jamais remplaçable par l'écran.</p>
+      </div>
+    </article>
+
+    <article class="method-pillar">
+      <div class="pillar-head">
+        <span class="pillar-num">03</span>
+        <h3 class="pillar-title">Déclencher<br>l'action</h3>
+      </div>
+      <div class="pillar-body">
+        <p class="pillar-lead">L'intérêt devient <em>un geste</em>.</p>
+        <p class="pillar-text">Une demande d'information. Une visite réservée. Un bien partagé. Une page DWELL transforme l'<em>attention</em> en conversion réelle&nbsp;: c'est ce qui sépare la vitrine du véritable outil de vente.</p>
+      </div>
+    </article>
   </div>
 </section>
 
@@ -2038,54 +1978,23 @@
     );
   });
 
-  // ─── METHOD — horizontal-scroll pinned (page-wide animation) ───
-  const methodPin = document.querySelector('.method-pin');
-  const methodTrack = document.querySelector('.method-track');
-  const methodPillarsAll = document.querySelectorAll('.method-pin .method-pillar');
-  const methodProgressBar = document.querySelector('.method-progress-bar');
-
-  if (methodPin && methodTrack && methodPillarsAll.length > 1 && window.innerWidth > 760) {
-    const getDistance = () => {
-      const trackRect = methodTrack.getBoundingClientRect();
-      return Math.max(0, trackRect.width - window.innerWidth);
-    };
-    // Initial state: pillars dimmed except first
-    gsap.set(methodPillarsAll, { opacity: 0.55, scale: 0.96 });
-    gsap.set(methodPillarsAll[0], { opacity: 1, scale: 1 });
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: methodPin,
-        start: 'top top',
-        end: () => '+=' + getDistance(),
-        pin: true,
-        scrub: 0.9,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          if (methodProgressBar) {
-            methodProgressBar.style.width = (self.progress * 100) + '%';
-          }
+  // ─── METHOD — smooth scroll-controlled pillar reveals ───
+  const methodPillarsAll = document.querySelectorAll('.method-pillar');
+  methodPillarsAll.forEach((p) => {
+    gsap.fromTo(p,
+      { opacity: 0, y: 60, scale: 0.96 },
+      {
+        opacity: 1, y: 0, scale: 1,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: p,
+          start: 'top 85%',
+          end: 'top 40%',
+          scrub: 1
         }
       }
-    });
-
-    // Horizontal slide of the track
-    tl.to(methodTrack, {
-      x: () => -getDistance(),
-      ease: 'none'
-    }, 0);
-
-    // Pillars light up sequentially
-    methodPillarsAll.forEach((p, i) => {
-      if (i === 0) return;
-      tl.to(p, { opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' }, i / methodPillarsAll.length);
-    });
-    methodPillarsAll.forEach((p, i) => {
-      if (i === methodPillarsAll.length - 1) return;
-      tl.to(p, { opacity: 0.55, scale: 0.96, duration: 0.4, ease: 'power2.in' }, (i + 1) / methodPillarsAll.length);
-    });
-  }
+    );
+  });
 
   // ─── ABOUT TIMELINE — scroll-drawn vertical line + dot activations ───
   const aboutTL = document.querySelector('.about-timeline');
