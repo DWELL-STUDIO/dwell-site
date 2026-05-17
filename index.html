@@ -2054,57 +2054,56 @@
       workTitleWords = workTitleEl.querySelectorAll('.word-inner');
     }
 
-    // Initial states — image and header visible from the start
-    const workHead = document.querySelector('.work-head');
+    // Initial states — image and header visible (no fullscreen zoom anymore)
     gsap.set(workEyebrow,    { opacity: 1, y: 0 });
     gsap.set(workLede,       { opacity: 1, y: 0 });
     gsap.set(workTitleWords, { yPercent: 0, opacity: 1 });
-    gsap.set(workHead, {
-      opacity: 1, scale: 1, y: 0,
-      transformOrigin: 'center center',
-      force3D: true
-    });
     gsap.set(workImg, {
-      scale: 0.88,
-      opacity: 1,
-      borderRadius: '28px',
+      scale: 0.94,
+      opacity: 0,
       transformOrigin: 'center center',
       force3D: true
     });
-    gsap.set(workBtns, { xPercent: -50, opacity: 0, scale: 0.7, y: 0 });
+    gsap.set(workBtns, { xPercent: -50, opacity: 0, scale: 0.85, y: 0 });
 
-    // Pinned timeline — fast zoom, title travels WITH the camera
-    const workTL = gsap.timeline({
-      defaults: { ease: 'none' },
+    // Subtle image reveal as it enters the viewport
+    gsap.to(workImg, {
+      scale: 1,
+      opacity: 1,
+      ease: 'power2.out',
       scrollTrigger: {
-        trigger: '.work',
-        start: 'top top',
-        end: '+=90%',
-        pin: true,
-        scrub: 1,
-        anticipatePin: 1,
-        invalidateOnRefresh: true
+        trigger: workImg,
+        start: 'top 85%',
+        end: 'top 45%',
+        scrub: 1
       }
     });
 
-    // Image zooms in → fullscreen
-    workTL.to(workImg, {
-      scale: 1.5,
-      borderRadius: '0px',
-      duration: 2
-    }, 0);
+    // Gentle parallax while the user scrolls past
+    gsap.to(workImg, {
+      yPercent: -6,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: workImg,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1
+      }
+    });
 
-    // Title FOLLOWS the zoom — scales up + rises out of frame
-    workTL.to(workHead, {
-      scale: 1.45,
-      y: -160,
-      opacity: 0,
-      duration: 2
-    }, 0);
-
-    // Buttons rise into the fullscreen frame at the end
-    workTL.to('.work-btn--left',  { opacity: 1, scale: 1, duration: 0.4 }, 1.6);
-    workTL.to('.work-btn--right', { opacity: 1, scale: 1, duration: 0.4 }, 1.7);
+    // Buttons fade in once the image is well in view
+    gsap.to(workBtns, {
+      opacity: 1,
+      scale: 1,
+      stagger: 0.15,
+      duration: 0.7,
+      ease: 'back.out(1.5)',
+      scrollTrigger: {
+        trigger: workImg,
+        start: 'top 55%',
+        toggleActions: 'play none none reverse'
+      }
+    });
 
     // Hover handled in JS to compose cleanly with GSAP timeline state
     workBtns.forEach(btn => {
