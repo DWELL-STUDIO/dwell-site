@@ -1448,7 +1448,8 @@
     display: block;
     border-radius: 24px;
     box-shadow: var(--shadow-lg);
-    will-change: transform, opacity;
+    will-change: transform, opacity, filter, border-radius;
+    transform-origin: center center;
   }
 
   /* DYNAMIC BUTTONS — pulsing halo + shimmer + dramatic hover */
@@ -2057,15 +2058,21 @@
     gsap.set(workEyebrow,  { opacity: 0, y: 30 });
     gsap.set(workLede,     { opacity: 0, y: 30 });
     gsap.set(workTitleWords, { yPercent: 110, opacity: 0 });
-    gsap.set(workImg,      { scale: 0.55, opacity: 0, filter: 'brightness(0.78) saturate(0.85)' });
+    gsap.set(workImg,      {
+      scale: 0.55,
+      opacity: 0,
+      filter: 'brightness(0.78) saturate(0.85)',
+      borderRadius: '24px',
+      transformOrigin: 'center center'
+    });
     gsap.set(workBtns,     { xPercent: -50, opacity: 0, scale: 0.6, y: 0 });
 
-    // Pinned scroll-controlled timeline
+    // Pinned scroll-controlled timeline — header → image reveal → FULLSCREEN immersion → buttons
     const workTL = gsap.timeline({
       scrollTrigger: {
         trigger: '.work',
         start: 'top top',
-        end: '+=180%',
+        end: '+=280%',
         pin: true,
         scrub: 1,
         anticipatePin: 1,
@@ -2073,25 +2080,43 @@
       }
     });
 
-    // Phase 1 — header enters (0 → ~25%)
+    // Phase 1 — header enters (0 → ~20%)
     workTL
       .to(workEyebrow,    { opacity: 1, y: 0, duration: 0.5, ease: 'expo.out' }, 0)
       .to(workTitleWords, { yPercent: 0, opacity: 1, stagger: 0.06, duration: 0.7, ease: 'expo.out' }, 0.15)
       .to(workLede,       { opacity: 1, y: 0, duration: 0.5, ease: 'expo.out' }, 0.55);
 
-    // Phase 2 — image scales up dramatically (~25% → 65%)
+    // Phase 2 — image reveals at natural size (~20% → 45%)
     workTL.to(workImg, {
       scale: 1,
       opacity: 1,
       filter: 'brightness(1) saturate(1)',
-      duration: 1.8,
+      duration: 1.4,
       ease: 'power3.out'
     }, 1.0);
 
-    // Phase 3 — buttons pop in with back-out elasticity (~65% → 95%)
+    // Phase 3 — IMMERSIVE FULLSCREEN — image scales up to fill viewport (~45% → 75%)
+    workTL.to(workImg, {
+      scale: 1.55,
+      borderRadius: '0px',
+      filter: 'brightness(1.02) saturate(1.04) contrast(1.02)',
+      duration: 1.6,
+      ease: 'power2.inOut'
+    }, 2.5);
+
+    // Concurrent — header fades out during the immersion (frees the screen)
+    workTL.to([workEyebrow, workTitleEl, workLede], {
+      opacity: 0,
+      y: -30,
+      filter: 'blur(8px)',
+      duration: 1,
+      ease: 'power2.in'
+    }, 2.5);
+
+    // Phase 4 — buttons rise into view over the fullscreen image (~75% → 100%)
     workTL
-      .to('.work-btn--left',  { opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(1.7)' }, 2.5)
-      .to('.work-btn--right', { opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(1.7)' }, 2.7);
+      .to('.work-btn--left',  { opacity: 1, scale: 1, duration: 0.7, ease: 'back.out(1.7)' }, 4.0)
+      .to('.work-btn--right', { opacity: 1, scale: 1, duration: 0.7, ease: 'back.out(1.7)' }, 4.2);
 
     // Hover handled in JS to compose cleanly with GSAP timeline state
     workBtns.forEach(btn => {
