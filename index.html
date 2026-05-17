@@ -1266,6 +1266,88 @@
   /* ─────────── REVEAL UTIL ─────────── */
   .reveal { opacity: 0; transform: translateY(24px); }
 
+  /* ─────────── CUSTOM CURSOR ─────────── */
+  @media (hover: hover) and (pointer: fine) {
+    html, body { cursor: none; }
+    a, button, input, textarea, .work-btn, .cta-btn, .plan-btn,
+    .about-cta, .nav-cta, .channel, .occasional-btn { cursor: none; }
+    .cursor-dot {
+      position: fixed;
+      top: 0; left: 0;
+      width: 8px; height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99998;
+      mix-blend-mode: multiply;
+      will-change: transform, width, height, opacity;
+      transform: translate3d(-100px, -100px, 0);
+      transition: width .35s var(--ease-apple), height .35s var(--ease-apple),
+                  background .35s, opacity .25s, border-radius .35s;
+    }
+    .cursor-dot.is-hover {
+      width: 44px; height: 44px;
+      background: rgba(184,148,110,0.35);
+      mix-blend-mode: multiply;
+    }
+    .cursor-dot.is-text {
+      width: 4px; height: 28px;
+      border-radius: 2px;
+      background: var(--ink);
+    }
+  }
+
+  /* ─────────── MARQUEE — brand keywords ─────────── */
+  .marquee {
+    overflow: hidden;
+    padding: clamp(2rem, 4vw, 3.5rem) 0;
+    position: relative;
+    pointer-events: none;
+  }
+  .marquee-track {
+    display: flex;
+    align-items: center;
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+    white-space: nowrap;
+    animation: marqueeRoll 38s linear infinite;
+    will-change: transform;
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: clamp(2rem, 4.5vw, 3.8rem);
+    letter-spacing: -0.025em;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .marquee-track > span {
+    display: inline-flex;
+    align-items: center;
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+  }
+  .marquee-track .word {
+    /* preserve normal flow */
+  }
+  .marquee-track em {
+    font-style: italic;
+    color: var(--accent-3);
+    font-weight: 400;
+  }
+  .marquee-track .glyph {
+    color: var(--accent);
+    font-weight: 200;
+    opacity: 0.6;
+    font-style: normal;
+  }
+  @keyframes marqueeRoll {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-50%, 0, 0); }
+  }
+
+  /* ─────────── 3D TILT helper class ─────────── */
+  .tilt {
+    will-change: transform;
+    transform-style: preserve-3d;
+  }
+
   /* ─────────── ELYSE-STYLE WORD REVEAL (masked rise) ─────────── */
   .split-words .word {
     display: inline-block;
@@ -1522,6 +1604,18 @@
   </div>
 </section>
 
+<!-- ─────────── MARQUEE — brand keywords rolling ─────────── -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>
+      <em>Envie</em><span class="glyph">✦</span>Mise&nbsp;en&nbsp;scène<span class="glyph">·</span>Mystère<span class="glyph">·</span><em>Désir</em><span class="glyph">✦</span>Conversion<span class="glyph">·</span>Atmosphère<span class="glyph">·</span><em>Lumière</em><span class="glyph">✦</span>Récit<span class="glyph">·</span>Visite&nbsp;réelle<span class="glyph">·</span>
+    </span>
+    <span>
+      <em>Envie</em><span class="glyph">✦</span>Mise&nbsp;en&nbsp;scène<span class="glyph">·</span>Mystère<span class="glyph">·</span><em>Désir</em><span class="glyph">✦</span>Conversion<span class="glyph">·</span>Atmosphère<span class="glyph">·</span><em>Lumière</em><span class="glyph">✦</span>Récit<span class="glyph">·</span>Visite&nbsp;réelle<span class="glyph">·</span>
+    </span>
+  </div>
+</div>
+
 <!-- ─────────── METHOD — 3 columns ─────────── -->
 <section class="section method" id="method">
   <div class="method-head">
@@ -1733,6 +1827,9 @@
     </div>
   </div>
 </section>
+
+<!-- ─────────── CUSTOM CURSOR ─────────── -->
+<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
 
 <!-- ─────────── FOOTER ─────────── -->
 <footer>
@@ -1959,6 +2056,84 @@
         scrollTrigger: { trigger: '.founders', start: 'top bottom', end: 'bottom top', scrub: 1.2 }
       }
     );
+  }
+
+  // ─── CUSTOM CURSOR — lerped dot that grows on interactive elements ───
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    const cursorEl = document.getElementById('cursorDot');
+    if (cursorEl) {
+      let mx = -100, my = -100;
+      let cx = -100, cy = -100;
+      window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+      gsap.ticker.add(() => {
+        cx += (mx - cx) * 0.22;
+        cy += (my - cy) * 0.22;
+        cursorEl.style.transform = `translate3d(${cx - 4}px, ${cy - 4}px, 0)`;
+      });
+      const hoverables = document.querySelectorAll(
+        'a, button, .work-btn, .cta-btn, .plan-btn, .about-cta, .nav-cta, .channel, .occasional-btn, .method-pillar, .plan, .about-block, .founder, [data-hover]'
+      );
+      hoverables.forEach(el => {
+        el.addEventListener('mouseenter', () => cursorEl.classList.add('is-hover'));
+        el.addEventListener('mouseleave', () => cursorEl.classList.remove('is-hover'));
+      });
+      document.querySelectorAll('p, h1, h2, h3, h4, .lede, .pillar-text, .founder-bio, .about-block p').forEach(el => {
+        el.addEventListener('mouseenter', () => cursorEl.classList.add('is-text'));
+        el.addEventListener('mouseleave', () => cursorEl.classList.remove('is-text'));
+      });
+    }
+  }
+
+  // ─── MAGNETIC HOVER — buttons subtly follow the cursor when nearby ───
+  function magnetize(el, strength = 0.28) {
+    el.addEventListener('mousemove', e => {
+      const r = el.getBoundingClientRect();
+      const x = e.clientX - (r.left + r.width / 2);
+      const y = e.clientY - (r.top + r.height / 2);
+      gsap.to(el, { x: x * strength, y: y * strength, duration: 0.55, ease: 'power2.out', overwrite: 'auto' });
+    });
+    el.addEventListener('mouseleave', () => {
+      gsap.to(el, { x: 0, y: 0, duration: 0.55, ease: 'elastic.out(1, 0.6)', overwrite: 'auto' });
+    });
+  }
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    document.querySelectorAll('.cta-btn, .about-cta, .nav-cta, .occasional-btn').forEach(el => magnetize(el, 0.32));
+    document.querySelectorAll('.plan-btn, .channel').forEach(el => magnetize(el, 0.18));
+  }
+
+  // ─── 3D TILT — cards rotate slightly toward cursor ───
+  function tiltCard(el, max = 6) {
+    el.classList.add('tilt');
+    let rx = 0, ry = 0;
+    let mx = 0, my = 0;
+    let rect = null;
+    let raf = null;
+    const update = () => {
+      rx += (my - rx) * 0.15;
+      ry += (mx - ry) * 0.15;
+      el.style.transform = `perspective(1100px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+      if (Math.abs(rx - my) > 0.01 || Math.abs(ry - mx) > 0.01) {
+        raf = requestAnimationFrame(update);
+      } else { raf = null; }
+    };
+    el.addEventListener('mouseenter', () => { rect = el.getBoundingClientRect(); });
+    el.addEventListener('mousemove', e => {
+      if (!rect) rect = el.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = (e.clientY - rect.top) / rect.height;
+      mx = (x - 0.5) * max * 2;
+      my = (y - 0.5) * -max * 2;
+      if (!raf) raf = requestAnimationFrame(update);
+    });
+    el.addEventListener('mouseleave', () => {
+      mx = 0; my = 0;
+      if (!raf) raf = requestAnimationFrame(update);
+    });
+  }
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    document.querySelectorAll('.method-pillar').forEach(el => tiltCard(el, 4));
+    document.querySelectorAll('.plan').forEach(el => tiltCard(el, 5));
+    document.querySelectorAll('.channel').forEach(el => tiltCard(el, 6));
   }
 
   // Anchor links
