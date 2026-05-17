@@ -398,6 +398,39 @@
     text-transform: uppercase;
   }
 
+  /* ─────────── INTRO VIDEO — rendered with Remotion ─────────── */
+  .intro-video {
+    background: var(--paper);
+    padding: clamp(4rem, 8vw, 7rem) var(--pad-x);
+    position: relative;
+    overflow: hidden;
+  }
+  .intro-video-frame {
+    position: relative;
+    max-width: 1280px;
+    margin: 0 auto;
+    aspect-ratio: 16 / 9;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    background: var(--bg-2);
+  }
+  .intro-video-frame video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .intro-video-caption {
+    text-align: center;
+    margin-top: clamp(2rem, 3vw, 2.5rem);
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+  }
+
   /* ─────────── ABOUT — narrated concept, clean & developed ─────────── */
   .about {
     background: transparent;
@@ -1685,6 +1718,16 @@
     <p class="hero-tag" id="heroTag">Pages immobilières <em class="italic-accent">d'exception</em></p>
   </div>
   <div class="hero-scroll" id="heroScroll">Découvrir</div>
+</section>
+
+<!-- ─────────── INTRO VIDEO — generated with Remotion ─────────── -->
+<section class="intro-video" id="intro-video">
+  <div class="intro-video-frame reveal">
+    <video src="VIDEOS/dwell-intro.mp4"
+           autoplay muted loop playsinline preload="auto"
+           poster="IMAGES/HERO-DWELL.png"></video>
+  </div>
+  <p class="intro-video-caption reveal">DWELL — en quatorze secondes</p>
 </section>
 
 <!-- ─────────── ABOUT — narrated concept ─────────── -->
