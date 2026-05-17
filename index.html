@@ -1950,17 +1950,21 @@
     scrollTrigger: { trigger: '.hero', start: 'top top', end: '60% top', scrub: 1 }
   });
 
-  // ─── Elyse-style WORD REVEAL — split into masked words that rise from below ───
-  gsap.utils.toArray('.split-words').forEach((el) => {
-    // Already split? skip
-    if (el.dataset.split) return;
-    const raw = el.innerHTML;
-    // Split by spaces, preserving italic <em> tags as whole units
-    const parts = raw.split(/(\s+)/);
-    el.innerHTML = parts.map(p => {
-      if (/^\s+$/.test(p)) return p;
-      return `<span class="word"><span class="word-inner">${p}</span></span>`;
+  // ─── Word-by-word reveal — preserves nested HTML tags (em, span) ───
+  function splitIntoWordsHTML(html) {
+    // Tokenize: each <em>...</em> stays a single unit; text gets split by spaces
+    const tokenRegex = /<[a-z][^>]*>[\s\S]*?<\/[a-z]+>|<[a-z][^>]*\/?>|[^<\s]+|\s+/gi;
+    const tokens = html.match(tokenRegex) || [];
+    return tokens.map(t => {
+      if (/^\s+$/.test(t)) return t;
+      // It's a word OR a complete HTML tag — wrap it in our reveal spans
+      return `<span class="word"><span class="word-inner">${t}</span></span>`;
     }).join('');
+  }
+
+  gsap.utils.toArray('.split-words').forEach((el) => {
+    if (el.dataset.split) return;
+    el.innerHTML = splitIntoWordsHTML(el.innerHTML);
     el.dataset.split = '1';
 
     gsap.fromTo(el.querySelectorAll('.word-inner'),
@@ -2044,13 +2048,10 @@
   const workTitleEl  = document.querySelector('.work-head .h-display');
 
   if (workSection && workImg) {
-    // Pre-split the title manually (skip the global split-words handler on it)
+    // Pre-split the title — HTML-safe (preserves <em>)
     let workTitleWords = workTitleEl ? workTitleEl.querySelectorAll('.word-inner') : [];
     if (workTitleEl && workTitleWords.length === 0 && !workTitleEl.dataset.split) {
-      const parts = workTitleEl.innerHTML.split(/(\s+)/);
-      workTitleEl.innerHTML = parts.map(p =>
-        /^\s+$/.test(p) ? p : `<span class="word"><span class="word-inner">${p}</span></span>`
-      ).join('');
+      workTitleEl.innerHTML = splitIntoWordsHTML(workTitleEl.innerHTML);
       workTitleEl.dataset.split = '1';
       workTitleWords = workTitleEl.querySelectorAll('.word-inner');
     }
