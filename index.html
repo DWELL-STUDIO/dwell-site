@@ -43,6 +43,9 @@
 
     --pad-x: clamp(1.5rem, 6vw, 6rem);
     --ease-apple: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
 
     /* ─── DEPTH SYSTEM — warm-tinted, intensified ─── */
     --shadow-xs:   0 1px 2px rgba(50,32,12,0.08);
@@ -92,7 +95,22 @@
     background-size: 240px 240px;
     pointer-events: none;
     z-index: 9999;
-    opacity: 0.35;
+    opacity: 0.32;
+    mix-blend-mode: multiply;
+  }
+  /* Atmospheric depth — soft vignette darkens viewport edges,
+     creating the sense of looking INTO the page rather than AT it */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9996;
+    background:
+      radial-gradient(130% 95% at 50% 50%,
+        transparent 55%,
+        rgba(40, 28, 15, 0.10) 80%,
+        rgba(40, 28, 15, 0.22) 100%);
     mix-blend-mode: multiply;
   }
 
@@ -1395,6 +1413,30 @@
 
   /* (split-words now reveals the whole element — no per-word wrapping) */
 
+  /* ─────────── ANIMATION BEST PRACTICES — GPU promotion ─────────── */
+  .method-pillar, .plan, .channel, .work-btn,
+  .cta-btn, .about-cta, .nav-cta, .occasional-btn,
+  .work-showcase-img, .founders-photos img,
+  .plan-btn, .project, .about-block, .founder {
+    will-change: transform;
+  }
+  /* Buttons feel responsive — instant scale on press (touch + mouse) */
+  @media (hover: hover) and (pointer: fine) {
+    .cta-btn:active, .plan-btn:active, .work-btn:active,
+    .about-cta:active, .nav-cta:active, .channel:active,
+    .occasional-btn:active, .cta-link:active, .nav-links a:active {
+      transition: transform 80ms ease-out;
+    }
+  }
+  /* Touch devices — disable hover effects that depend on cursor */
+  @media (hover: none) {
+    .method-pillar:hover, .plan:hover, .channel:hover,
+    .project:hover, .occasional:hover {
+      transform: none;
+      box-shadow: var(--shadow-md);
+    }
+  }
+
   /* ─────────── WORK / REALISATIONS — full-screen showcase + dynamic CTAs ─────────── */
   .work {
     background: transparent;
@@ -2091,6 +2133,74 @@
         scrollTrigger: { trigger: '.founders', start: 'top bottom', end: 'bottom top', scrub: 1.2 }
       }
     );
+  }
+
+  // ─── TAP FEEDBACK — instant scale 0.97 on press (animation best practice) ───
+  function addTapFeedback(el, restScale = 1) {
+    let down = false;
+    const press = () => {
+      down = true;
+      gsap.to(el, { scale: restScale * 0.97, duration: 0.1, ease: 'power2.out', overwrite: 'auto' });
+    };
+    const release = () => {
+      if (!down) return;
+      down = false;
+      gsap.to(el, { scale: restScale, duration: 0.18, ease: 'power2.out', overwrite: 'auto' });
+    };
+    el.addEventListener('pointerdown', press);
+    el.addEventListener('pointerup', release);
+    el.addEventListener('pointerleave', release);
+    el.addEventListener('pointercancel', release);
+  }
+  [
+    '.cta-btn', '.plan-btn', '.work-btn',
+    '.about-cta', '.nav-cta', '.occasional-btn',
+    '.channel', '.cta-link'
+  ].forEach(sel => document.querySelectorAll(sel).forEach(el => addTapFeedback(el)));
+
+  // ─── DEPTH PARALLAX — multiple layers move at different speeds ───
+  // (creates the perceived depth from the depth-estimation concept)
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    // Method pillars — subtle Y parallax based on viewport position
+    gsap.utils.toArray('.method-pillar').forEach((p, i) => {
+      gsap.to(p, {
+        yPercent: -4 - i * 1.5,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: p,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.2
+        }
+      });
+    });
+    // Pricing cards — featured (middle) lifts more, creating "z-depth"
+    gsap.utils.toArray('.plan').forEach((card, i) => {
+      const featured = card.classList.contains('featured');
+      gsap.to(card, {
+        yPercent: featured ? -6 : -3,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: card,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.5
+        }
+      });
+    });
+    // About blocks — alternating depth (right blocks deeper than left)
+    gsap.utils.toArray('.about-block').forEach((b, i) => {
+      gsap.to(b, {
+        yPercent: i % 2 === 0 ? -3 : -5,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: b,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.3
+        }
+      });
+    });
   }
 
   // ─── CUSTOM CURSOR — lerped dot that grows on interactive elements ───
