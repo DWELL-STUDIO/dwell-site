@@ -258,7 +258,7 @@
     display: inline-block;
   }
   .hero-tag .italic-accent {
-    color: var(--accent-3);
+    color: inherit;
     font-size: 1.15em;
     letter-spacing: -0.01em;
     text-transform: none;
@@ -307,7 +307,7 @@
     font-style: italic;
     font-weight: 700;
     letter-spacing: -0.045em;
-    color: var(--accent-3);
+    color: inherit;
   }
   .h-display.light { font-weight: 500; }
   .lede {
@@ -320,7 +320,7 @@
   .lede em {
     font-style: italic;
     font-weight: 600;
-    color: var(--accent-3);
+    color: inherit;
   }
   .small-caps {
     font-size: 0.78rem;
@@ -447,7 +447,7 @@
   .about-block em {
     font-style: italic;
     font-weight: 600;
-    color: var(--accent-3);
+    color: inherit;
   }
   .about-block strong {
     font-weight: 600;
@@ -503,7 +503,7 @@
   }
   .about-quote em {
     font-weight: 700;
-    color: var(--accent-3);
+    color: inherit;
     font-style: italic;
   }
   .about-quote::before,
@@ -682,7 +682,7 @@
   .pillar-lead em {
     font-style: italic;
     font-weight: 600;
-    color: var(--accent-3);
+    color: inherit;
   }
 
   @media (max-width: 760px) {
@@ -813,7 +813,7 @@
   .founder-bio em {
     font-style: italic;
     font-weight: 600;
-    color: var(--accent-3);
+    color: inherit;
   }
 
   @media (max-width: 980px) {
@@ -1142,7 +1142,7 @@
   }
   .cta .h-display em,
   .cta .h-display .italic-accent {
-    color: var(--accent-2);
+    color: inherit;
   }
   .cta-lede {
     margin: 1.8rem auto 0;
@@ -1328,7 +1328,7 @@
   }
   .marquee-track em {
     font-style: italic;
-    color: var(--accent-3);
+    color: inherit;
     font-weight: 400;
   }
   .marquee-track .glyph {
@@ -1558,7 +1558,7 @@
     .work-btn--right { left: 74%; bottom: 5%; }
   }
 
-  /* ─────────── ITALIC ACCENT — hero-bold character ─────────── */
+  /* ─────────── ITALIC ACCENT — italic only, no color change ─────────── */
   .italic-accent,
   .h-display em,
   .h-display .italic-accent {
@@ -1567,11 +1567,12 @@
     font-weight: 700;
     letter-spacing: -0.04em;
     text-transform: none;
-    color: var(--accent-3);
+    color: inherit;
   }
   .lede em {
-    color: var(--accent-3);
     font-weight: 600;
+    font-style: italic;
+    color: inherit;
   }
 </style>
 </head>
