@@ -2067,15 +2067,15 @@
     });
     gsap.set(workBtns,     { xPercent: -50, opacity: 0, scale: 0.7, y: 0 });
 
-    // Pinned scroll-controlled timeline — buttery fluid (linear eases, generous scrub)
+    // Pinned scroll-controlled timeline — shorter & smoother
     const workTL = gsap.timeline({
       defaults: { ease: 'none' },
       scrollTrigger: {
         trigger: '.work',
         start: 'top top',
-        end: '+=320%',
+        end: '+=160%',
         pin: true,
-        scrub: 2,
+        scrub: 1.2,
         anticipatePin: 1,
         invalidateOnRefresh: true
       }
@@ -2085,19 +2085,19 @@
     workTL.to(workImg, {
       scale: 1.5,
       borderRadius: '0px',
-      duration: 5
+      duration: 3
     }, 0);
 
     // ─ Header exits gracefully halfway as the image takes over ─
     workTL.to([workEyebrow, workTitleEl, workLede], {
       opacity: 0,
       y: -24,
-      duration: 1.4
-    }, 1.8);
+      duration: 0.9
+    }, 1.0);
 
     // ─ Buttons rise into the fullscreen frame at the end ─
-    workTL.to('.work-btn--left',  { opacity: 1, scale: 1, duration: 0.8 }, 3.8);
-    workTL.to('.work-btn--right', { opacity: 1, scale: 1, duration: 0.8 }, 4.0);
+    workTL.to('.work-btn--left',  { opacity: 1, scale: 1, duration: 0.5 }, 2.3);
+    workTL.to('.work-btn--right', { opacity: 1, scale: 1, duration: 0.5 }, 2.4);
 
     // Hover handled in JS to compose cleanly with GSAP timeline state
     workBtns.forEach(btn => {
