@@ -730,8 +730,6 @@
     z-index: 1;
     user-select: none;
   }
-  .founders-title .word,
-  .founders-title .word-inner { line-height: 1; }
 
   /* Photos rise into the title — heads sit visually IN FRONT of UNE VISION */
   .founders-photos {
@@ -1395,18 +1393,7 @@
     z-index: 1;
   }
 
-  /* ─────────── ELYSE-STYLE WORD REVEAL (masked rise) ─────────── */
-  .split-words .word {
-    display: inline-block;
-    overflow: hidden;
-    vertical-align: bottom;
-    line-height: inherit;
-  }
-  .split-words .word-inner {
-    display: inline-block;
-    will-change: transform, opacity;
-    padding: 0.04em 0;
-  }
+  /* (split-words now reveals the whole element — no per-word wrapping) */
 
   /* ─────────── WORK / REALISATIONS — full-screen showcase + dynamic CTAs ─────────── */
   .work {
@@ -1938,26 +1925,13 @@
     scrollTrigger: { trigger: '.hero', start: 'top top', end: '60% top', scrub: 1 }
   });
 
-  // ─── Word-by-word reveal — preserves nested HTML tags (em, span) ───
-  function splitIntoWordsHTML(html) {
-    // Tokenize: each <em>...</em> stays a single unit; text gets split by spaces
-    const tokenRegex = /<[a-z][^>]*>[\s\S]*?<\/[a-z]+>|<[a-z][^>]*\/?>|[^<\s]+|\s+/gi;
-    const tokens = html.match(tokenRegex) || [];
-    return tokens.map(t => {
-      if (/^\s+$/.test(t)) return t;
-      // It's a word OR a complete HTML tag — wrap it in our reveal spans
-      return `<span class="word"><span class="word-inner">${t}</span></span>`;
-    }).join('');
-  }
-
+  // ─── Title reveal — clean fade-up on the whole element (no word splitting) ───
   gsap.utils.toArray('.split-words').forEach((el) => {
     if (el.dataset.split) return;
-    el.innerHTML = splitIntoWordsHTML(el.innerHTML);
     el.dataset.split = '1';
-
-    gsap.fromTo(el.querySelectorAll('.word-inner'),
-      { yPercent: 110, opacity: 0 },
-      { yPercent: 0, opacity: 1, duration: 1.4, stagger: 0.08, ease: 'expo.out',
+    gsap.fromTo(el,
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 1.2, ease: 'expo.out',
         scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none none' }
       }
     );
@@ -2036,18 +2010,10 @@
   const workTitleEl  = document.querySelector('.work-head .h-display');
 
   if (workSection && workImg) {
-    // Pre-split the title — HTML-safe (preserves <em>)
-    let workTitleWords = workTitleEl ? workTitleEl.querySelectorAll('.word-inner') : [];
-    if (workTitleEl && workTitleWords.length === 0 && !workTitleEl.dataset.split) {
-      workTitleEl.innerHTML = splitIntoWordsHTML(workTitleEl.innerHTML);
-      workTitleEl.dataset.split = '1';
-      workTitleWords = workTitleEl.querySelectorAll('.word-inner');
-    }
-
-    // Initial states — image and header visible (no fullscreen zoom anymore)
-    gsap.set(workEyebrow,    { opacity: 1, y: 0 });
-    gsap.set(workLede,       { opacity: 1, y: 0 });
-    gsap.set(workTitleWords, { yPercent: 0, opacity: 1 });
+    // Initial states — image and header visible (clean HTML, no word splitting)
+    gsap.set(workEyebrow, { opacity: 1, y: 0 });
+    gsap.set(workLede,    { opacity: 1, y: 0 });
+    if (workTitleEl) gsap.set(workTitleEl, { opacity: 1, y: 0 });
     gsap.set(workImg, {
       scale: 0.94,
       opacity: 0,
