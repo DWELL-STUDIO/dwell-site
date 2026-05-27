@@ -15,9 +15,9 @@
       --muted:    #aeaeb2;
       --border:   #d2d2d7;
       --blue:     #0071e3;
-      --blue-bg:  #e8f0fe;
       --green:    #34c759;
       --green-bg: #e9f9ee;
+      --green-tx: #248a3d;
       --shadow:   0 2px 20px rgba(0,0,0,0.06);
       --r:        18px;
       --font:     -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
@@ -32,7 +32,7 @@
       min-height: 100vh;
     }
 
-    /* ── Header ─────────────────────── */
+    /* ── Header ─────────────────── */
     header {
       background: rgba(255,255,255,0.85);
       backdrop-filter: blur(20px);
@@ -49,392 +49,181 @@
     }
 
     .h-left { display: flex; align-items: center; gap: 8px; }
-
-    .h-brand {
-      font-size: 15px;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      color: var(--text);
-    }
-
+    .h-brand { font-size: 15px; font-weight: 600; letter-spacing: -0.02em; }
     .h-sep { color: var(--muted); font-size: 13px; font-weight: 300; }
+    .h-prop { font-size: 14px; font-weight: 400; color: var(--sub); }
 
-    .h-prop {
-      font-size: 14px;
-      font-weight: 400;
-      color: var(--sub);
-    }
-
-    .h-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+    .h-right { display: flex; align-items: center; gap: 12px; }
 
     .live-badge {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      background: var(--green-bg);
-      color: #248a3d;
-      font-size: 11px;
-      font-weight: 500;
-      padding: 4px 10px;
-      border-radius: 20px;
+      display: flex; align-items: center; gap: 5px;
+      background: var(--green-bg); color: var(--green-tx);
+      font-size: 11px; font-weight: 500;
+      padding: 4px 10px; border-radius: 20px;
     }
-
     .live-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
+      width: 6px; height: 6px; border-radius: 50%;
       background: var(--green);
       animation: pulse 2s ease-in-out infinite;
     }
-
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
 
-    .h-updated {
-      font-size: 12px;
-      color: var(--muted);
-    }
+    .h-updated { font-size: 12px; color: var(--muted); }
 
     .btn {
-      background: var(--card);
-      border: 0.5px solid var(--border);
-      color: var(--sub);
-      font-family: var(--font);
-      font-size: 12px;
-      font-weight: 500;
-      padding: 6px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background .15s;
+      background: var(--card); border: 0.5px solid var(--border);
+      color: var(--sub); font-family: var(--font);
+      font-size: 12px; font-weight: 500;
+      padding: 6px 14px; border-radius: 8px;
+      cursor: pointer; transition: background .15s;
     }
     .btn:hover { background: var(--bg); }
-
-    .btn-blue {
-      background: var(--blue);
-      border-color: var(--blue);
-      color: white;
-    }
+    .btn-blue { background: var(--blue); border-color: var(--blue); color: white; }
     .btn-blue:hover { background: #0077ed; }
 
-    /* ── Layout ─────────────────────── */
+    /* ── Layout ─────────────────── */
     main {
-      max-width: 960px;
+      max-width: 1000px;
       margin: 0 auto;
-      padding: 32px 24px;
+      padding: 28px 24px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
 
-    /* ── Filter bar ─────────────────── */
+    /* ── Filter bar ─────────────── */
     .filter-bar {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--card);
-      border-radius: 12px;
-      padding: 12px 16px;
-      box-shadow: var(--shadow);
+      display: flex; align-items: center; gap: 10px;
+      background: var(--card); border-radius: 12px;
+      padding: 10px 16px; box-shadow: var(--shadow);
+      flex-wrap: wrap;
     }
-
-    .filter-label {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--sub);
-      white-space: nowrap;
-    }
-
+    .filter-label { font-size: 12px; font-weight: 500; color: var(--sub); white-space: nowrap; }
     .filter-date {
-      font-family: var(--font);
-      font-size: 13px;
-      color: var(--text);
-      border: 0.5px solid var(--border);
-      border-radius: 8px;
-      padding: 5px 10px;
-      background: var(--bg);
-      cursor: pointer;
-      outline: none;
+      font-family: var(--font); font-size: 13px; color: var(--text);
+      border: 0.5px solid var(--border); border-radius: 8px;
+      padding: 5px 10px; background: var(--bg); cursor: pointer; outline: none;
     }
     .filter-date:focus { border-color: var(--blue); }
+    .filter-div { width: 1px; height: 20px; background: var(--border); }
+    .filter-note { font-size: 11px; color: var(--muted); margin-left: auto; }
 
-    .filter-divider {
-      width: 1px;
-      height: 20px;
-      background: var(--border);
-      margin: 0 4px;
-    }
-
-    .clear-note {
-      font-size: 11px;
-      color: var(--muted);
-      margin-left: auto;
-    }
-
-    /* ── Metrics ─────────────────────── */
+    /* ── Metrics ────────────────── */
     .metrics-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 12px;
     }
-
-    .metric-card {
-      background: var(--card);
-      border-radius: var(--r);
-      padding: 22px 22px 18px;
-      box-shadow: var(--shadow);
+    .mc {
+      background: var(--card); border-radius: var(--r);
+      padding: 22px 22px 18px; box-shadow: var(--shadow);
     }
-
-    .metric-card.accent-blue { background: var(--blue); }
-    .metric-card.accent-blue .mc-val,
-    .metric-card.accent-blue .mc-label,
-    .metric-card.accent-blue .mc-sub { color: white; }
-    .metric-card.accent-blue .mc-label { opacity: 0.75; }
-    .metric-card.accent-blue .mc-sub { opacity: 0.6; }
+    .mc.blue { background: var(--blue); }
+    .mc.blue .mc-val, .mc.blue .mc-lbl, .mc.blue .mc-sub { color: white; }
+    .mc.blue .mc-lbl { opacity: .75; }
+    .mc.blue .mc-sub { opacity: .6; }
 
     .mc-val {
-      font-size: 42px;
-      font-weight: 200;
-      letter-spacing: -0.03em;
-      line-height: 1;
-      color: var(--text);
-      margin-bottom: 6px;
+      font-size: 44px; font-weight: 200;
+      letter-spacing: -0.03em; line-height: 1;
+      color: var(--text); margin-bottom: 6px;
+    }
+    .mc-lbl { font-size: 12px; font-weight: 500; color: var(--sub); }
+    .mc-sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+    /* ── Two col ────────────────── */
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    /* ── Info card ──────────────── */
+    .ic {
+      background: var(--card); border-radius: var(--r);
+      padding: 22px; box-shadow: var(--shadow);
+    }
+    .ic-title {
+      font-size: 11px; font-weight: 600;
+      color: var(--sub); letter-spacing: 0.06em;
+      text-transform: uppercase; margin-bottom: 20px;
     }
 
-    .mc-label {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--sub);
-      letter-spacing: 0;
-    }
-
-    .mc-sub {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 3px;
-    }
-
-    /* ── Two-col row ─────────────────── */
-    .row-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    /* ── Device card ─────────────────── */
-    .info-card {
-      background: var(--card);
-      border-radius: var(--r);
-      padding: 22px;
-      box-shadow: var(--shadow);
-    }
-
-    .card-title {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--sub);
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-    }
-
-    .device-bars { display: flex; flex-direction: column; gap: 14px; }
-
+    /* ── Bars ───────────────────── */
+    .bars { display: flex; flex-direction: column; gap: 14px; }
     .bar-row { display: flex; align-items: center; gap: 10px; }
+    .bar-lbl { font-size: 13px; color: var(--text); width: 64px; flex-shrink: 0; }
+    .bar-track { flex: 1; height: 6px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 3px; background: var(--blue); transition: width .8s cubic-bezier(.4,0,.2,1); }
+    .bar-fill.mobile { background: #34aadc; }
+    .bar-fill.tablet { background: #5ac8fa; }
+    .bar-r { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .bar-n { font-size: 13px; font-weight: 500; color: var(--text); width: 28px; text-align: right; }
+    .bar-pct { font-size: 12px; color: var(--muted); width: 34px; text-align: right; }
 
-    .bar-label {
-      font-size: 13px;
-      color: var(--text);
-      width: 64px;
-      flex-shrink: 0;
+    /* ── Visitor split ──────────── */
+    .vs { display: flex; flex-direction: column; gap: 18px; }
+    .vs-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+    .vs-lbl { font-size: 13px; color: var(--text); }
+    .vs-n { font-size: 22px; font-weight: 300; color: var(--text); letter-spacing: -0.02em; }
+    .vs-track { width: 100%; height: 4px; background: var(--bg); border-radius: 2px; overflow: hidden; }
+    .vs-fill { height: 100%; border-radius: 2px; }
+    .vs-note { font-size: 11px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+
+    /* ── Table card ─────────────── */
+    .tc {
+      background: var(--card); border-radius: var(--r);
+      box-shadow: var(--shadow); overflow: hidden;
     }
-
-    .bar-track {
-      flex: 1;
-      height: 6px;
-      background: var(--bg);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-
-    .bar-fill {
-      height: 100%;
-      border-radius: 3px;
-      background: var(--blue);
-      transition: width .8s cubic-bezier(.4,0,.2,1);
-    }
-    .bar-fill.mobile  { background: #34aadc; }
-    .bar-fill.tablet  { background: #5ac8fa; }
-
-    .bar-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-
-    .bar-n {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text);
-      width: 28px;
-      text-align: right;
-    }
-
-    .bar-pct {
-      font-size: 12px;
-      color: var(--muted);
-      width: 34px;
-      text-align: right;
-    }
-
-    /* ── Visitor split ───────────────── */
-    .visitor-split { display: flex; flex-direction: column; gap: 16px; }
-
-    .vs-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .vs-label { font-size: 13px; color: var(--text); }
-    .vs-count { font-size: 20px; font-weight: 300; color: var(--text); letter-spacing: -0.02em; }
-
-    .vs-bar-track {
-      width: 100%;
-      height: 4px;
-      background: var(--bg);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-
-    .vs-bar-fill {
-      height: 100%;
-      border-radius: 2px;
-      background: var(--blue);
-    }
-
-    .vs-note {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 8px;
-    }
-
-    /* ── Activity ───────────────────── */
-    .activity-card {
-      background: var(--card);
-      border-radius: var(--r);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .ac-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 22px 14px;
+    .tc-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 22px 12px;
       border-bottom: 0.5px solid var(--border);
     }
-
-    .ac-title {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--sub);
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-    }
-
-    .ac-count { font-size: 12px; color: var(--muted); }
+    .tc-title { font-size: 11px; font-weight: 600; color: var(--sub); letter-spacing: 0.06em; text-transform: uppercase; }
+    .tc-count { font-size: 12px; color: var(--muted); }
 
     table { width: 100%; border-collapse: collapse; }
-
     thead th {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--muted);
-      padding: 8px 22px;
-      text-align: left;
+      font-size: 11px; font-weight: 500; color: var(--muted);
+      padding: 8px 22px; text-align: left;
       border-bottom: 0.5px solid var(--bg);
       background: #fafafa;
     }
-
     tbody tr { border-bottom: 0.5px solid var(--bg); }
     tbody tr:last-child { border-bottom: none; }
     tbody tr:hover { background: #fafafa; }
-
-    tbody td {
-      padding: 10px 22px;
-      font-size: 13px;
-      color: var(--sub);
-    }
-
+    tbody td { padding: 10px 22px; font-size: 13px; color: var(--sub); }
     .td-time { color: var(--muted); font-size: 12px; white-space: nowrap; }
-    .td-new  { color: var(--text); font-size: 12px; }
+    .td-main { color: var(--text); font-weight: 500; }
+    .td-msg { font-size: 12px; color: var(--sub); max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
     .tag {
-      display: inline-flex;
-      align-items: center;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 500;
+      display: inline-flex; align-items: center;
+      padding: 3px 10px; border-radius: 20px;
+      font-size: 11px; font-weight: 500;
     }
-    .tag-view    { background: var(--bg); color: var(--sub); }
-    .tag-booking { background: var(--green-bg); color: #248a3d; }
-    .tag-device  { background: var(--bg); color: var(--sub); }
+    .tag-view     { background: var(--bg); color: var(--sub); }
+    .tag-booking  { background: var(--green-bg); color: var(--green-tx); }
+    .tag-form     { background: #fff3e0; color: #b45000; }
+    .tag-device   { background: var(--bg); color: var(--sub); }
 
-    /* ── Clear test data box ─────────── */
+    /* ── SQL box ────────────────── */
     .sql-box {
-      background: var(--card);
-      border-radius: var(--r);
-      padding: 20px 22px;
-      box-shadow: var(--shadow);
+      background: var(--card); border-radius: var(--r);
+      padding: 20px 22px; box-shadow: var(--shadow);
     }
-
-    .sql-box-title {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--sub);
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      margin-bottom: 12px;
-    }
-
-    .sql-desc {
-      font-size: 13px;
-      color: var(--sub);
-      margin-bottom: 14px;
-      line-height: 1.5;
-    }
-
+    .sql-title { font-size: 11px; font-weight: 600; color: var(--sub); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+    .sql-desc { font-size: 13px; color: var(--sub); margin-bottom: 14px; line-height: 1.5; }
     .sql-code {
-      background: #1d1d1f;
-      color: #f5f5f7;
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 12px;
-      padding: 14px 16px;
-      border-radius: 10px;
-      line-height: 1.6;
-      white-space: pre;
-      overflow-x: auto;
+      background: #1d1d1f; color: #f5f5f7;
+      font-family: 'SF Mono', 'Fira Code', 'Menlo', monospace;
+      font-size: 12px; padding: 14px 16px;
+      border-radius: 10px; line-height: 1.6;
+      white-space: pre; overflow-x: auto;
     }
 
-    /* ── Empty / error ───────────────── */
-    .state-empty {
-      padding: 40px;
-      text-align: center;
-      font-size: 13px;
-      color: var(--muted);
-    }
-
+    .state-empty { padding: 36px; text-align: center; font-size: 13px; color: var(--muted); }
     .error-bar {
-      background: #fff2f2;
-      border: 0.5px solid #ffb3b3;
-      border-radius: 12px;
-      padding: 14px 18px;
-      font-size: 13px;
-      color: #c00;
+      background: #fff2f2; border: 0.5px solid #ffb3b3;
+      border-radius: 12px; padding: 14px 18px;
+      font-size: 13px; color: #c00;
     }
   </style>
 </head>
@@ -449,7 +238,7 @@
     <div class="h-right">
       <span class="live-badge"><span class="live-dot"></span>Live</span>
       <span class="h-updated" id="updated">—</span>
-      <button class="btn" onclick="load()">Refresh</button>
+      <button class="btn" onclick="loadAll()">Refresh</button>
     </div>
   </header>
 
@@ -459,55 +248,61 @@
 
     <!-- Date filter -->
     <div class="filter-bar">
-      <span class="filter-label">Show from</span>
-      <input type="date" class="filter-date" id="date-from" onchange="load()">
-      <div class="filter-divider"></div>
+      <span class="filter-label">From</span>
+      <input type="date" class="filter-date" id="date-from" onchange="loadAll()">
       <span class="filter-label">to</span>
-      <input type="date" class="filter-date" id="date-to" onchange="load()">
-      <button class="btn btn-blue" onclick="resetFilter()" style="margin-left:4px">All time</button>
-      <span class="clear-note" id="filter-note"></span>
+      <input type="date" class="filter-date" id="date-to" onchange="loadAll()">
+      <button class="btn btn-blue" onclick="resetFilter()">All time</button>
+      <span class="filter-note" id="filter-note"></span>
     </div>
 
     <!-- Metrics -->
     <div class="metrics-grid" id="metrics">
-      <div class="metric-card"><div class="mc-val">—</div><div class="mc-label">Total Visits</div></div>
-      <div class="metric-card"><div class="mc-val">—</div><div class="mc-label">Unique Visitors</div></div>
-      <div class="metric-card accent-blue"><div class="mc-val">—</div><div class="mc-label">Enquiries</div></div>
-      <div class="metric-card"><div class="mc-val">—</div><div class="mc-label">Conversion</div></div>
+      <div class="mc"><div class="mc-val">—</div><div class="mc-lbl">Total Visits</div></div>
+      <div class="mc"><div class="mc-val">—</div><div class="mc-lbl">Unique Visitors</div></div>
+      <div class="mc blue"><div class="mc-val">—</div><div class="mc-lbl">Leads</div></div>
+      <div class="mc"><div class="mc-val">—</div><div class="mc-lbl">Conversion</div></div>
     </div>
 
-    <!-- Device + Visitor split -->
-    <div class="row-2">
-      <div class="info-card">
-        <div class="card-title">Device — Visits</div>
-        <div class="device-bars" id="devices"><div class="state-empty" style="padding:20px 0">Loading…</div></div>
+    <!-- Device + Visitors -->
+    <div class="row2">
+      <div class="ic">
+        <div class="ic-title">Device — Visits</div>
+        <div class="bars" id="devices"><div class="state-empty" style="padding:16px 0">—</div></div>
       </div>
-      <div class="info-card">
-        <div class="card-title">New vs Returning</div>
-        <div class="visitor-split" id="visitor-split"><div class="state-empty" style="padding:20px 0">Loading…</div></div>
+      <div class="ic">
+        <div class="ic-title">New vs Returning</div>
+        <div class="vs" id="vs-split"><div class="state-empty" style="padding:16px 0">—</div></div>
       </div>
     </div>
 
-    <!-- Activity -->
-    <div class="activity-card">
-      <div class="ac-head">
-        <span class="ac-title">Recent Activity</span>
-        <span class="ac-count" id="ac-count">—</span>
+    <!-- Leads table -->
+    <div class="tc">
+      <div class="tc-head">
+        <span class="tc-title">Leads — Form submissions</span>
+        <span class="tc-count" id="leads-count">—</span>
       </div>
-      <div id="activity"><div class="state-empty">Loading…</div></div>
+      <div id="leads-table"><div class="state-empty">No leads yet.</div></div>
+    </div>
+
+    <!-- Events table -->
+    <div class="tc">
+      <div class="tc-head">
+        <span class="tc-title">Recent Activity</span>
+        <span class="tc-count" id="events-count">—</span>
+      </div>
+      <div id="events-table"><div class="state-empty">—</div></div>
     </div>
 
     <!-- Clear test data -->
     <div class="sql-box">
-      <div class="sql-box-title">Clear test data</div>
-      <div class="sql-desc">Run this in <strong>Supabase → SQL Editor</strong> to delete all test events before going live. This cannot be undone.</div>
-      <div class="sql-code">-- Delete all Villa Espinette events (run before launch)
+      <div class="sql-title">Clear test data — run in Supabase SQL Editor</div>
+      <div class="sql-desc">Run before going live to start with clean data.</div>
+      <div class="sql-code">-- Delete all test events
 DELETE FROM events WHERE page_id = 'villa-espinette';
 
--- Or delete everything older than a specific date
-DELETE FROM events
-WHERE page_id = 'villa-espinette'
-  AND created_at &lt; '2026-06-01';</div>
+-- Delete all test leads
+DELETE FROM leads  WHERE page_id = 'villa-espinette';</div>
     </div>
 
   </main>
@@ -516,180 +311,173 @@ WHERE page_id = 'villa-espinette'
   const SB   = 'https://kdzkffcqmutwojyauqtj.supabase.co';
   const KEY  = 'sb_publishable_XtBrgzqzM2GBOa-RNVH8uA_qfrPEaTd';
   const PAGE = 'villa-espinette';
+  const H    = { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY };
 
   function resetFilter() {
     document.getElementById('date-from').value = '';
     document.getElementById('date-to').value   = '';
     document.getElementById('filter-note').textContent = '';
-    load();
+    loadAll();
   }
 
-  async function load() {
-    document.getElementById('error').style.display = 'none';
+  function dateParams() {
     const from = document.getElementById('date-from').value;
     const to   = document.getElementById('date-to').value;
+    let p = '';
+    if (from) p += `&created_at=gte.${from}T00:00:00`;
+    if (to)   p += `&created_at=lte.${to}T23:59:59`;
+    document.getElementById('filter-note').textContent =
+      (from || to) ? `${from || '…'} → ${to || 'now'}` : '';
+    return p;
+  }
 
-    let url = `${SB}/rest/v1/events?select=*&page_id=eq.${PAGE}&order=created_at.desc&limit=1000`;
-    if (from) url += `&created_at=gte.${from}T00:00:00`;
-    if (to)   url += `&created_at=lte.${to}T23:59:59`;
-
-    const note = from || to
-      ? `Showing ${from || '…'} → ${to || 'now'}`
-      : '';
-    document.getElementById('filter-note').textContent = note;
-
+  async function loadAll() {
+    document.getElementById('error').style.display = 'none';
+    const dp = dateParams();
     try {
-      const r = await fetch(url, {
-        headers: {
-          'apikey': KEY,
-          'Authorization': 'Bearer ' + KEY
-        }
-      });
-      if (!r.ok) throw new Error('HTTP ' + r.status + ' — run the SQL setup in Supabase first.');
-      const ev = await r.json();
-      render(ev);
+      const [evR, ldR] = await Promise.all([
+        fetch(`${SB}/rest/v1/events?select=*&page_id=eq.${PAGE}&order=created_at.desc&limit=500${dp}`, { headers: H }),
+        fetch(`${SB}/rest/v1/leads?select=*&page_id=eq.${PAGE}&order=created_at.desc${dp}`, { headers: H }),
+      ]);
+      if (!evR.ok) throw new Error('events HTTP ' + evR.status + ' — run SQL setup first.');
+      if (!ldR.ok) throw new Error('leads HTTP ' + ldR.status + ' — run leads SQL setup first.');
+      const [events, leads] = await Promise.all([evR.json(), ldR.json()]);
+      render(events, leads);
       document.getElementById('updated').textContent =
-        new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        new Date().toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
     } catch(e) {
       document.getElementById('error').textContent = '⚠ ' + e.message;
       document.getElementById('error').style.display = 'block';
     }
   }
 
-  function render(ev) {
-    const views    = ev.filter(e => e.event_type === 'page_view');
-    const bookings = ev.filter(e => e.event_type === 'demander_visite');
-
-    // Unique visitors via visitor_id (fallback: count page_views)
-    const vids = views.map(e => e.visitor_id).filter(Boolean);
-    const unique = vids.length
-      ? new Set(vids).size
-      : views.length;
+  function render(events, leads) {
+    const views = events.filter(e => e.event_type === 'page_view');
+    const vids  = views.map(e => e.visitor_id).filter(Boolean);
+    const unique = vids.length ? new Set(vids).size : views.length;
     const hasVids = vids.length > 0;
+    const conv = unique ? (leads.length / unique * 100).toFixed(1) + '%' : '—';
 
-    // Returning visitors
-    const vidCounts = {};
-    vids.forEach(v => { vidCounts[v] = (vidCounts[v] || 0) + 1; });
-    const newV  = Object.values(vidCounts).filter(c => c === 1).length;
-    const retV  = Object.values(vidCounts).filter(c => c >  1).length;
-
-    const conv = unique
-      ? (bookings.length / unique * 100).toFixed(1) + '%'
-      : '—';
-
-    // ── Metrics ─────────────────
+    // ── Metrics
     document.getElementById('metrics').innerHTML = `
-      <div class="metric-card">
+      <div class="mc">
         <div class="mc-val">${views.length}</div>
-        <div class="mc-label">Total Visits</div>
+        <div class="mc-lbl">Total Visits</div>
         <div class="mc-sub">page loads</div>
       </div>
-      <div class="metric-card">
+      <div class="mc">
         <div class="mc-val">${unique}</div>
-        <div class="mc-label">Unique Visitors</div>
+        <div class="mc-lbl">Unique Visitors</div>
         <div class="mc-sub">${hasVids ? 'by visitor ID' : 'estimated'}</div>
       </div>
-      <div class="metric-card accent-blue">
-        <div class="mc-val">${bookings.length}</div>
-        <div class="mc-label">Enquiries</div>
-        <div class="mc-sub">contact CTA only</div>
+      <div class="mc blue">
+        <div class="mc-val">${leads.length}</div>
+        <div class="mc-lbl">Leads</div>
+        <div class="mc-sub">form submissions</div>
       </div>
-      <div class="metric-card">
+      <div class="mc">
         <div class="mc-val">${conv}</div>
-        <div class="mc-label">Conversion</div>
-        <div class="mc-sub">enquiries / unique</div>
+        <div class="mc-lbl">Conversion</div>
+        <div class="mc-sub">leads / unique visitors</div>
       </div>`;
 
-    // ── Devices ──────────────────
+    // ── Devices
     const dc = { desktop: 0, mobile: 0, tablet: 0 };
     views.forEach(e => { dc[e.device || 'desktop']++; });
     const tot = views.length || 1;
-    const pct = n => Math.round(n / tot * 100);
-
     document.getElementById('devices').innerHTML = [
-      ['Desktop', 'desktop', dc.desktop],
-      ['Mobile',  'mobile',  dc.mobile],
-      ['Tablet',  'tablet',  dc.tablet],
-    ].map(([name, cls, n]) => `
+      ['Desktop','desktop',dc.desktop],
+      ['Mobile','mobile',dc.mobile],
+      ['Tablet','tablet',dc.tablet],
+    ].map(([n,cls,v]) => `
       <div class="bar-row">
-        <span class="bar-label">${name}</span>
-        <div class="bar-track">
-          <div class="bar-fill ${cls}" style="width:${pct(n)}%"></div>
-        </div>
-        <div class="bar-right">
-          <span class="bar-n">${n}</span>
-          <span class="bar-pct">${tot > 0 ? pct(n) + '%' : '—'}</span>
+        <span class="bar-lbl">${n}</span>
+        <div class="bar-track"><div class="bar-fill ${cls}" style="width:${Math.round(v/tot*100)}%"></div></div>
+        <div class="bar-r">
+          <span class="bar-n">${v}</span>
+          <span class="bar-pct">${Math.round(v/tot*100)}%</span>
         </div>
       </div>`).join('');
 
-    // ── New vs Returning ─────────
+    // ── New vs Returning
     if (!hasVids) {
-      document.getElementById('visitor-split').innerHTML = `
-        <div class="vs-note">Visitor ID tracking not yet active.<br>Open the live page to start collecting data.</div>`;
+      document.getElementById('vs-split').innerHTML =
+        '<div class="vs-note">Open the live page to start collecting visitor IDs.</div>';
     } else {
-      const total = newV + retV || 1;
-      document.getElementById('visitor-split').innerHTML = `
+      const vc = {};
+      vids.forEach(v => { vc[v] = (vc[v]||0)+1; });
+      const nw = Object.values(vc).filter(c=>c===1).length;
+      const rt = Object.values(vc).filter(c=>c>1).length;
+      const vt = nw + rt || 1;
+      document.getElementById('vs-split').innerHTML = `
         <div>
-          <div class="vs-row" style="margin-bottom:6px">
-            <span class="vs-label">New</span>
-            <span class="vs-count">${newV}</span>
-          </div>
-          <div class="vs-bar-track">
-            <div class="vs-bar-fill" style="width:${Math.round(newV/total*100)}%;background:var(--blue)"></div>
-          </div>
+          <div class="vs-row"><span class="vs-lbl">New</span><span class="vs-n">${nw}</span></div>
+          <div class="vs-track"><div class="vs-fill" style="width:${Math.round(nw/vt*100)}%;background:var(--blue)"></div></div>
         </div>
         <div>
-          <div class="vs-row" style="margin-bottom:6px">
-            <span class="vs-label">Returning</span>
-            <span class="vs-count">${retV}</span>
-          </div>
-          <div class="vs-bar-track">
-            <div class="vs-bar-fill" style="width:${Math.round(retV/total*100)}%;background:#34aadc"></div>
-          </div>
+          <div class="vs-row"><span class="vs-lbl">Returning</span><span class="vs-n">${rt}</span></div>
+          <div class="vs-track"><div class="vs-fill" style="width:${Math.round(rt/vt*100)}%;background:#34aadc"></div></div>
         </div>
-        <div class="vs-note">Same browser = same visitor. Private browsing creates a new ID.</div>`;
+        <div class="vs-note">Same browser = same visitor. Private mode creates a new ID each session.</div>`;
     }
 
-    // ── Activity ─────────────────
-    document.getElementById('ac-count').textContent = ev.length + ' events';
+    // ── Leads table
+    document.getElementById('leads-count').textContent = leads.length + ' total';
+    if (!leads.length) {
+      document.getElementById('leads-table').innerHTML =
+        '<div class="state-empty">No form submissions yet.</div>';
+    } else {
+      const rows = leads.map(l => {
+        const d = new Date(l.created_at);
+        const time = d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})
+                   + ' · ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+        return `<tr>
+          <td class="td-time">${time}</td>
+          <td class="td-main">${l.name || '—'}</td>
+          <td><a href="mailto:${l.email||''}" style="color:var(--blue);text-decoration:none">${l.email||'—'}</a></td>
+          <td>${l.phone || '—'}</td>
+          <td class="td-msg" title="${(l.message||'').replace(/"/g,'&quot;')}">${l.message || '—'}</td>
+        </tr>`;
+      }).join('');
+      document.getElementById('leads-table').innerHTML = `
+        <table>
+          <thead><tr><th>Date</th><th>Name</th><th>Email</th><th>Phone</th><th>Message</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+    }
 
-    if (!ev.length) {
-      document.getElementById('activity').innerHTML =
-        '<div class="state-empty">No events in this period.</div>';
+    // ── Events table
+    document.getElementById('events-count').textContent = events.length + ' events';
+    if (!events.length) {
+      document.getElementById('events-table').innerHTML = '<div class="state-empty">No events yet.</div>';
       return;
     }
-
-    const rows = ev.slice(0, 50).map(e => {
-      const isBooking = e.event_type === 'demander_visite';
+    const evRows = events.slice(0,30).map(e => {
       const d = new Date(e.created_at);
-      const time = d.toLocaleDateString('en-GB', { day:'2-digit', month:'short' })
-                 + ' · ' + d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
-      const label = {
-        page_view:       'Page view',
-        demander_visite: 'Enquiry — contact CTA',
-        nav_cta_click:   'Nav click',
-      }[e.event_type] || e.event_type.replace(/_/g,' ');
-
+      const time = d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'})
+                 + ' · ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+      const tagCls = e.event_type === 'form_submit' ? 'tag-form'
+                   : e.event_type === 'demander_visite' ? 'tag-booking'
+                   : 'tag-view';
+      const label = { page_view:'Page view', demander_visite:'CTA click', form_submit:'Form submit' }[e.event_type]
+                  || e.event_type.replace(/_/g,' ');
       return `<tr>
         <td class="td-time">${time}</td>
-        <td><span class="tag ${isBooking ? 'tag-booking' : 'tag-view'}">${label}</span></td>
-        <td><span class="tag tag-device">${e.device || '—'}</span></td>
-        <td class="td-time">${e.visitor_id ? '<span class="td-new">●</span> ' + e.visitor_id.slice(-6) : '—'}</td>
-        <td class="td-time">${e.referrer === 'direct' ? '—' : (e.referrer||'').slice(0,30)}</td>
+        <td><span class="tag ${tagCls}">${label}</span></td>
+        <td><span class="tag tag-device">${e.device||'—'}</span></td>
+        <td class="td-time">${e.visitor_id ? e.visitor_id.slice(-6) : '—'}</td>
+        <td class="td-time">${e.referrer==='direct'?'—':(e.referrer||'').slice(0,28)}</td>
       </tr>`;
     }).join('');
-
-    document.getElementById('activity').innerHTML = `
+    document.getElementById('events-table').innerHTML = `
       <table>
-        <thead><tr>
-          <th>Time</th><th>Event</th><th>Device</th><th>Visitor</th><th>Referrer</th>
-        </tr></thead>
-        <tbody>${rows}</tbody>
+        <thead><tr><th>Time</th><th>Event</th><th>Device</th><th>Visitor</th><th>Referrer</th></tr></thead>
+        <tbody>${evRows}</tbody>
       </table>`;
   }
 
-  load();
-  setInterval(load, 30000);
+  loadAll();
+  setInterval(loadAll, 30000);
   </script>
 
 </body>
