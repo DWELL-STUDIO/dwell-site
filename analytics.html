@@ -3,302 +3,438 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DWELL · Villa Espinette — Analytics</title>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <title>DWELL · Analytics</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:     #0a0a0a;
-      --s1:     #111111;
-      --s2:     #161616;
-      --border: #1f1f1f;
-      --text:   #f0ede8;
-      --muted:  #55534f;
-      --sub:    #888580;
-      --gold:   #c9a96e;
-      --green:  #6bab8a;
-      --red:    #b06060;
-      --serif:  'Instrument Serif', Georgia, serif;
-      --mono:   'DM Mono', monospace;
-      --sans:   'DM Sans', system-ui, sans-serif;
+      --bg:       #f5f5f7;
+      --card:     #ffffff;
+      --text:     #1d1d1f;
+      --sub:      #6e6e73;
+      --muted:    #aeaeb2;
+      --border:   #d2d2d7;
+      --blue:     #0071e3;
+      --blue-bg:  #e8f0fe;
+      --green:    #34c759;
+      --green-bg: #e9f9ee;
+      --shadow:   0 2px 20px rgba(0,0,0,0.06);
+      --r:        18px;
+      --font:     -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
     }
 
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: var(--sans);
-      font-size: 13px;
+      font-family: var(--font);
+      font-size: 14px;
+      -webkit-font-smoothing: antialiased;
       min-height: 100vh;
     }
 
     /* ── Header ─────────────────────── */
     header {
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 0.5px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      padding: 0 32px;
+      height: 52px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 18px 28px;
-      border-bottom: 1px solid var(--border);
     }
 
-    .h-left { display: flex; align-items: baseline; gap: 10px; }
+    .h-left { display: flex; align-items: center; gap: 8px; }
 
     .h-brand {
-      font-family: var(--serif);
-      font-size: 17px;
-      letter-spacing: 0.05em;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text);
     }
 
-    .h-sep { color: var(--muted); font-size: 11px; }
+    .h-sep { color: var(--muted); font-size: 13px; font-weight: 300; }
 
     .h-prop {
-      font-size: 11px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
+      font-size: 14px;
+      font-weight: 400;
       color: var(--sub);
     }
 
-    .h-right { display: flex; align-items: center; gap: 16px; }
+    .h-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-    .live-pill {
+    .live-badge {
       display: flex;
       align-items: center;
       gap: 5px;
-      font-family: var(--mono);
-      font-size: 9px;
-      letter-spacing: 0.1em;
-      color: var(--green);
-      text-transform: uppercase;
+      background: var(--green-bg);
+      color: #248a3d;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 20px;
     }
 
-    .live-pill::before {
-      content: '';
-      width: 5px; height: 5px;
+    .live-dot {
+      width: 6px; height: 6px;
       border-radius: 50%;
       background: var(--green);
-      animation: blink 2s ease-in-out infinite;
+      animation: pulse 2s ease-in-out infinite;
     }
 
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
 
     .h-updated {
-      font-family: var(--mono);
-      font-size: 10px;
+      font-size: 12px;
       color: var(--muted);
     }
 
-    .btn-refresh {
-      background: none;
-      border: 1px solid var(--border);
+    .btn {
+      background: var(--card);
+      border: 0.5px solid var(--border);
       color: var(--sub);
-      font-family: var(--mono);
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      padding: 5px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      text-transform: uppercase;
-      transition: border-color .2s, color .2s;
-    }
-    .btn-refresh:hover { border-color: var(--gold); color: var(--gold); }
-
-    /* ── Main ───────────────────────── */
-    main { padding: 28px; display: flex; flex-direction: column; gap: 20px; }
-
-    .label {
-      font-family: var(--mono);
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 12px;
-    }
-
-    /* ── Metric strip ───────────────── */
-    .metrics-strip {
-      background: var(--s1);
-      border: 1px solid var(--border);
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 14px;
       border-radius: 8px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .btn:hover { background: var(--bg); }
+
+    .btn-blue {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: white;
+    }
+    .btn-blue:hover { background: #0077ed; }
+
+    /* ── Layout ─────────────────────── */
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* ── Filter bar ─────────────────── */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--card);
+      border-radius: 12px;
+      padding: 12px 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .filter-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--sub);
+      white-space: nowrap;
+    }
+
+    .filter-date {
+      font-family: var(--font);
+      font-size: 13px;
+      color: var(--text);
+      border: 0.5px solid var(--border);
+      border-radius: 8px;
+      padding: 5px 10px;
+      background: var(--bg);
+      cursor: pointer;
+      outline: none;
+    }
+    .filter-date:focus { border-color: var(--blue); }
+
+    .filter-divider {
+      width: 1px;
+      height: 20px;
+      background: var(--border);
+      margin: 0 4px;
+    }
+
+    .clear-note {
+      font-size: 11px;
+      color: var(--muted);
+      margin-left: auto;
+    }
+
+    /* ── Metrics ─────────────────────── */
+    .metrics-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
     }
 
-    .metric {
-      padding: 24px 24px 20px;
-      border-right: 1px solid var(--border);
+    .metric-card {
+      background: var(--card);
+      border-radius: var(--r);
+      padding: 22px 22px 18px;
+      box-shadow: var(--shadow);
     }
-    .metric:last-child { border-right: none; }
 
-    .metric-val {
-      font-family: var(--mono);
-      font-size: 40px;
-      font-weight: 300;
+    .metric-card.accent-blue { background: var(--blue); }
+    .metric-card.accent-blue .mc-val,
+    .metric-card.accent-blue .mc-label,
+    .metric-card.accent-blue .mc-sub { color: white; }
+    .metric-card.accent-blue .mc-label { opacity: 0.75; }
+    .metric-card.accent-blue .mc-sub { opacity: 0.6; }
+
+    .mc-val {
+      font-size: 42px;
+      font-weight: 200;
+      letter-spacing: -0.03em;
       line-height: 1;
+      color: var(--text);
       margin-bottom: 6px;
     }
-    .metric-val.gold  { color: var(--gold); }
-    .metric-val.green { color: var(--green); }
-    .metric-val.muted { color: var(--sub); }
 
-    .metric-label {
-      font-family: var(--mono);
-      font-size: 9px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    .metric-sub {
-      font-family: var(--mono);
-      font-size: 10px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-
-    /* ── Device bars ────────────────── */
-    .device-card {
-      background: var(--s1);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 20px 24px;
-    }
-
-    .device-bars { display: flex; flex-direction: column; gap: 10px; margin-top: 0; }
-
-    .bar-row { display: flex; align-items: center; gap: 12px; }
-
-    .bar-name {
-      font-family: var(--mono);
-      font-size: 10px;
+    .mc-label {
+      font-size: 12px;
+      font-weight: 500;
       color: var(--sub);
+      letter-spacing: 0;
+    }
+
+    .mc-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* ── Two-col row ─────────────────── */
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* ── Device card ─────────────────── */
+    .info-card {
+      background: var(--card);
+      border-radius: var(--r);
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--sub);
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .device-bars { display: flex; flex-direction: column; gap: 14px; }
+
+    .bar-row { display: flex; align-items: center; gap: 10px; }
+
+    .bar-label {
+      font-size: 13px;
+      color: var(--text);
       width: 64px;
       flex-shrink: 0;
-      letter-spacing: 0.06em;
-    }
-
-    .bar-count {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--sub);
-      width: 28px;
-      flex-shrink: 0;
-      text-align: right;
     }
 
     .bar-track {
       flex: 1;
-      height: 2px;
-      background: var(--border);
-      border-radius: 1px;
+      height: 6px;
+      background: var(--bg);
+      border-radius: 3px;
       overflow: hidden;
     }
 
     .bar-fill {
       height: 100%;
-      border-radius: 1px;
-      background: var(--gold);
-      transition: width .7s ease;
+      border-radius: 3px;
+      background: var(--blue);
+      transition: width .8s cubic-bezier(.4,0,.2,1);
     }
-    .bar-fill.mobile  { background: var(--sub); }
-    .bar-fill.tablet  { background: var(--muted); }
+    .bar-fill.mobile  { background: #34aadc; }
+    .bar-fill.tablet  { background: #5ac8fa; }
+
+    .bar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .bar-n {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      width: 28px;
+      text-align: right;
+    }
 
     .bar-pct {
-      font-family: var(--mono);
-      font-size: 10px;
+      font-size: 12px;
       color: var(--muted);
-      width: 36px;
+      width: 34px;
       text-align: right;
-      flex-shrink: 0;
+    }
+
+    /* ── Visitor split ───────────────── */
+    .visitor-split { display: flex; flex-direction: column; gap: 16px; }
+
+    .vs-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .vs-label { font-size: 13px; color: var(--text); }
+    .vs-count { font-size: 20px; font-weight: 300; color: var(--text); letter-spacing: -0.02em; }
+
+    .vs-bar-track {
+      width: 100%;
+      height: 4px;
+      background: var(--bg);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .vs-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: var(--blue);
+    }
+
+    .vs-note {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 8px;
     }
 
     /* ── Activity ───────────────────── */
     .activity-card {
-      background: var(--s1);
-      border: 1px solid var(--border);
-      border-radius: 8px;
+      background: var(--card);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
       overflow: hidden;
     }
 
-    .ac-header {
+    .ac-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 20px;
-      border-bottom: 1px solid var(--border);
+      padding: 18px 22px 14px;
+      border-bottom: 0.5px solid var(--border);
     }
 
     .ac-title {
-      font-family: var(--mono);
-      font-size: 9px;
-      letter-spacing: 0.2em;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--sub);
+      letter-spacing: 0.02em;
       text-transform: uppercase;
-      color: var(--muted);
     }
 
-    .ac-total {
-      font-family: var(--mono);
-      font-size: 9px;
-      color: var(--muted);
-    }
+    .ac-count { font-size: 12px; color: var(--muted); }
 
     table { width: 100%; border-collapse: collapse; }
 
     thead th {
-      font-family: var(--mono);
-      font-size: 9px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
+      font-size: 11px;
+      font-weight: 500;
       color: var(--muted);
-      padding: 9px 20px;
+      padding: 8px 22px;
       text-align: left;
-      border-bottom: 1px solid var(--border);
-      font-weight: 400;
+      border-bottom: 0.5px solid var(--bg);
+      background: #fafafa;
     }
 
-    tbody tr { border-bottom: 1px solid var(--border); }
+    tbody tr { border-bottom: 0.5px solid var(--bg); }
     tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: var(--s2); }
+    tbody tr:hover { background: #fafafa; }
 
     tbody td {
-      padding: 9px 20px;
-      font-family: var(--mono);
-      font-size: 11px;
+      padding: 10px 22px;
+      font-size: 13px;
       color: var(--sub);
     }
 
-    .td-time { color: var(--muted); font-size: 10px; white-space: nowrap; }
+    .td-time { color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .td-new  { color: var(--text); font-size: 12px; }
 
-    .badge {
+    .tag {
       display: inline-flex;
       align-items: center;
-      padding: 2px 8px;
-      border-radius: 3px;
-      font-size: 9px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-    .badge-view { background: rgba(255,255,255,.04); color: var(--muted); }
-    .badge-cta  { background: rgba(201,169,110,.12); color: var(--gold); }
-    .badge-dev  { background: rgba(255,255,255,.04); color: var(--sub); }
-
-    /* ── States ─────────────────────── */
-    .state {
-      padding: 36px 20px;
-      text-align: center;
-      font-family: var(--mono);
+      padding: 3px 10px;
+      border-radius: 20px;
       font-size: 11px;
+      font-weight: 500;
+    }
+    .tag-view    { background: var(--bg); color: var(--sub); }
+    .tag-booking { background: var(--green-bg); color: #248a3d; }
+    .tag-device  { background: var(--bg); color: var(--sub); }
+
+    /* ── Clear test data box ─────────── */
+    .sql-box {
+      background: var(--card);
+      border-radius: var(--r);
+      padding: 20px 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .sql-box-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--sub);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      margin-bottom: 12px;
+    }
+
+    .sql-desc {
+      font-size: 13px;
+      color: var(--sub);
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+
+    .sql-code {
+      background: #1d1d1f;
+      color: #f5f5f7;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 12px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      line-height: 1.6;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    /* ── Empty / error ───────────────── */
+    .state-empty {
+      padding: 40px;
+      text-align: center;
+      font-size: 13px;
       color: var(--muted);
-      letter-spacing: 0.08em;
     }
 
     .error-bar {
-      padding: 14px 20px;
-      background: rgba(176,96,96,.08);
-      border: 1px solid rgba(176,96,96,.2);
-      border-radius: 6px;
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--red);
+      background: #fff2f2;
+      border: 0.5px solid #ffb3b3;
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: #c00;
     }
   </style>
 </head>
@@ -306,14 +442,14 @@
 
   <header>
     <div class="h-left">
-      <span class="h-brand">DWELL<sup style="font-size:10px;vertical-align:super">®</sup></span>
+      <span class="h-brand">DWELL</span>
       <span class="h-sep">·</span>
       <span class="h-prop">Villa Espinette</span>
     </div>
     <div class="h-right">
-      <span class="live-pill">Live</span>
+      <span class="live-badge"><span class="live-dot"></span>Live</span>
       <span class="h-updated" id="updated">—</span>
-      <button class="btn-refresh" onclick="load()">↺ Refresh</button>
+      <button class="btn" onclick="load()">Refresh</button>
     </div>
   </header>
 
@@ -321,36 +457,57 @@
 
     <div id="error" class="error-bar" style="display:none"></div>
 
-    <!-- Metrics -->
-    <div>
-      <div class="label">Overview</div>
-      <div class="metrics-strip" id="metrics">
-        <div class="metric"><div class="metric-val muted">—</div><div class="metric-label">Visits</div></div>
-        <div class="metric"><div class="metric-val muted">—</div><div class="metric-label">Enquiries</div></div>
-        <div class="metric"><div class="metric-val muted">—</div><div class="metric-label">Conversion</div></div>
-        <div class="metric"><div class="metric-val muted">—</div><div class="metric-label">Unique Days</div></div>
-      </div>
+    <!-- Date filter -->
+    <div class="filter-bar">
+      <span class="filter-label">Show from</span>
+      <input type="date" class="filter-date" id="date-from" onchange="load()">
+      <div class="filter-divider"></div>
+      <span class="filter-label">to</span>
+      <input type="date" class="filter-date" id="date-to" onchange="load()">
+      <button class="btn btn-blue" onclick="resetFilter()" style="margin-left:4px">All time</button>
+      <span class="clear-note" id="filter-note"></span>
     </div>
 
-    <!-- Devices -->
-    <div>
-      <div class="label">Device Breakdown — Visits</div>
-      <div class="device-card">
-        <div class="device-bars" id="devices">
-          <div class="state">Loading…</div>
-        </div>
+    <!-- Metrics -->
+    <div class="metrics-grid" id="metrics">
+      <div class="metric-card"><div class="mc-val">—</div><div class="mc-label">Total Visits</div></div>
+      <div class="metric-card"><div class="mc-val">—</div><div class="mc-label">Unique Visitors</div></div>
+      <div class="metric-card accent-blue"><div class="mc-val">—</div><div class="mc-label">Enquiries</div></div>
+      <div class="metric-card"><div class="mc-val">—</div><div class="mc-label">Conversion</div></div>
+    </div>
+
+    <!-- Device + Visitor split -->
+    <div class="row-2">
+      <div class="info-card">
+        <div class="card-title">Device — Visits</div>
+        <div class="device-bars" id="devices"><div class="state-empty" style="padding:20px 0">Loading…</div></div>
+      </div>
+      <div class="info-card">
+        <div class="card-title">New vs Returning</div>
+        <div class="visitor-split" id="visitor-split"><div class="state-empty" style="padding:20px 0">Loading…</div></div>
       </div>
     </div>
 
     <!-- Activity -->
-    <div>
-      <div class="activity-card">
-        <div class="ac-header">
-          <span class="ac-title">Recent Activity</span>
-          <span class="ac-total" id="total-count">—</span>
-        </div>
-        <div id="activity"><div class="state">Loading…</div></div>
+    <div class="activity-card">
+      <div class="ac-head">
+        <span class="ac-title">Recent Activity</span>
+        <span class="ac-count" id="ac-count">—</span>
       </div>
+      <div id="activity"><div class="state-empty">Loading…</div></div>
+    </div>
+
+    <!-- Clear test data -->
+    <div class="sql-box">
+      <div class="sql-box-title">Clear test data</div>
+      <div class="sql-desc">Run this in <strong>Supabase → SQL Editor</strong> to delete all test events before going live. This cannot be undone.</div>
+      <div class="sql-code">-- Delete all Villa Espinette events (run before launch)
+DELETE FROM events WHERE page_id = 'villa-espinette';
+
+-- Or delete everything older than a specific date
+DELETE FROM events
+WHERE page_id = 'villa-espinette'
+  AND created_at &lt; '2026-06-01';</div>
     </div>
 
   </main>
@@ -359,60 +516,95 @@
   const SB   = 'https://kdzkffcqmutwojyauqtj.supabase.co';
   const KEY  = 'sb_publishable_XtBrgzqzM2GBOa-RNVH8uA_qfrPEaTd';
   const PAGE = 'villa-espinette';
-  const CTA  = ['nav_cta_click','demander_visite'];
 
-  const hdrs = { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY };
+  function resetFilter() {
+    document.getElementById('date-from').value = '';
+    document.getElementById('date-to').value   = '';
+    document.getElementById('filter-note').textContent = '';
+    load();
+  }
 
   async function load() {
     document.getElementById('error').style.display = 'none';
+    const from = document.getElementById('date-from').value;
+    const to   = document.getElementById('date-to').value;
+
+    let url = `${SB}/rest/v1/events?select=*&page_id=eq.${PAGE}&order=created_at.desc&limit=1000`;
+    if (from) url += `&created_at=gte.${from}T00:00:00`;
+    if (to)   url += `&created_at=lte.${to}T23:59:59`;
+
+    const note = from || to
+      ? `Showing ${from || '…'} → ${to || 'now'}`
+      : '';
+    document.getElementById('filter-note').textContent = note;
+
     try {
-      const r = await fetch(
-        `${SB}/rest/v1/events?select=*&page_id=eq.${PAGE}&order=created_at.desc&limit=500`,
-        { headers: hdrs }
-      );
-      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const r = await fetch(url, {
+        headers: {
+          'apikey': KEY,
+          'Authorization': 'Bearer ' + KEY
+        }
+      });
+      if (!r.ok) throw new Error('HTTP ' + r.status + ' — run the SQL setup in Supabase first.');
       const ev = await r.json();
       render(ev);
       document.getElementById('updated').textContent =
-        'Updated ' + new Date().toLocaleTimeString('en-GB');
+        new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     } catch(e) {
-      document.getElementById('error').textContent = '⚠ ' + e.message + ' — Run the SQL setup in Supabase first.';
+      document.getElementById('error').textContent = '⚠ ' + e.message;
       document.getElementById('error').style.display = 'block';
     }
   }
 
   function render(ev) {
-    const views   = ev.filter(e => e.event_type === 'page_view');
-    const ctas    = ev.filter(e => CTA.includes(e.event_type));
-    const conv    = views.length ? (ctas.length / views.length * 100).toFixed(1) + '%' : '—';
-    const days    = new Set(ev.map(e => e.created_at.slice(0,10))).size;
+    const views    = ev.filter(e => e.event_type === 'page_view');
+    const bookings = ev.filter(e => e.event_type === 'demander_visite');
 
-    // Metrics
+    // Unique visitors via visitor_id (fallback: count page_views)
+    const vids = views.map(e => e.visitor_id).filter(Boolean);
+    const unique = vids.length
+      ? new Set(vids).size
+      : views.length;
+    const hasVids = vids.length > 0;
+
+    // Returning visitors
+    const vidCounts = {};
+    vids.forEach(v => { vidCounts[v] = (vidCounts[v] || 0) + 1; });
+    const newV  = Object.values(vidCounts).filter(c => c === 1).length;
+    const retV  = Object.values(vidCounts).filter(c => c >  1).length;
+
+    const conv = unique
+      ? (bookings.length / unique * 100).toFixed(1) + '%'
+      : '—';
+
+    // ── Metrics ─────────────────
     document.getElementById('metrics').innerHTML = `
-      <div class="metric">
-        <div class="metric-val">${views.length}</div>
-        <div class="metric-label">Visits</div>
+      <div class="metric-card">
+        <div class="mc-val">${views.length}</div>
+        <div class="mc-label">Total Visits</div>
+        <div class="mc-sub">page loads</div>
       </div>
-      <div class="metric">
-        <div class="metric-val gold">${ctas.length}</div>
-        <div class="metric-label">Enquiries</div>
-        <div class="metric-sub">nav + contact CTA</div>
+      <div class="metric-card">
+        <div class="mc-val">${unique}</div>
+        <div class="mc-label">Unique Visitors</div>
+        <div class="mc-sub">${hasVids ? 'by visitor ID' : 'estimated'}</div>
       </div>
-      <div class="metric">
-        <div class="metric-val green">${conv}</div>
-        <div class="metric-label">Conversion</div>
-        <div class="metric-sub">enquiries / visits</div>
+      <div class="metric-card accent-blue">
+        <div class="mc-val">${bookings.length}</div>
+        <div class="mc-label">Enquiries</div>
+        <div class="mc-sub">contact CTA only</div>
       </div>
-      <div class="metric">
-        <div class="metric-val muted">${days || '—'}</div>
-        <div class="metric-label">Active Days</div>
+      <div class="metric-card">
+        <div class="mc-val">${conv}</div>
+        <div class="mc-label">Conversion</div>
+        <div class="mc-sub">enquiries / unique</div>
       </div>`;
 
-    // Devices (from page views only)
+    // ── Devices ──────────────────
     const dc = { desktop: 0, mobile: 0, tablet: 0 };
-    views.forEach(e => { dc[e.device || 'desktop'] = (dc[e.device || 'desktop'] || 0) + 1; });
+    views.forEach(e => { dc[e.device || 'desktop']++; });
     const tot = views.length || 1;
-    const pct = n => tot ? Math.round(n/tot*100) : 0;
+    const pct = n => Math.round(n / tot * 100);
 
     document.getElementById('devices').innerHTML = [
       ['Desktop', 'desktop', dc.desktop],
@@ -420,39 +612,77 @@
       ['Tablet',  'tablet',  dc.tablet],
     ].map(([name, cls, n]) => `
       <div class="bar-row">
-        <span class="bar-name">${name}</span>
-        <span class="bar-count">${n}</span>
-        <div class="bar-track"><div class="bar-fill ${cls}" style="width:${pct(n)}%"></div></div>
-        <span class="bar-pct">${tot > 1 ? pct(n) + '%' : '—'}</span>
+        <span class="bar-label">${name}</span>
+        <div class="bar-track">
+          <div class="bar-fill ${cls}" style="width:${pct(n)}%"></div>
+        </div>
+        <div class="bar-right">
+          <span class="bar-n">${n}</span>
+          <span class="bar-pct">${tot > 0 ? pct(n) + '%' : '—'}</span>
+        </div>
       </div>`).join('');
 
-    // Activity
-    document.getElementById('total-count').textContent = ev.length + ' events total';
+    // ── New vs Returning ─────────
+    if (!hasVids) {
+      document.getElementById('visitor-split').innerHTML = `
+        <div class="vs-note">Visitor ID tracking not yet active.<br>Open the live page to start collecting data.</div>`;
+    } else {
+      const total = newV + retV || 1;
+      document.getElementById('visitor-split').innerHTML = `
+        <div>
+          <div class="vs-row" style="margin-bottom:6px">
+            <span class="vs-label">New</span>
+            <span class="vs-count">${newV}</span>
+          </div>
+          <div class="vs-bar-track">
+            <div class="vs-bar-fill" style="width:${Math.round(newV/total*100)}%;background:var(--blue)"></div>
+          </div>
+        </div>
+        <div>
+          <div class="vs-row" style="margin-bottom:6px">
+            <span class="vs-label">Returning</span>
+            <span class="vs-count">${retV}</span>
+          </div>
+          <div class="vs-bar-track">
+            <div class="vs-bar-fill" style="width:${Math.round(retV/total*100)}%;background:#34aadc"></div>
+          </div>
+        </div>
+        <div class="vs-note">Same browser = same visitor. Private browsing creates a new ID.</div>`;
+    }
+
+    // ── Activity ─────────────────
+    document.getElementById('ac-count').textContent = ev.length + ' events';
 
     if (!ev.length) {
       document.getElementById('activity').innerHTML =
-        '<div class="state">No events yet — open the page to start tracking.</div>';
+        '<div class="state-empty">No events in this period.</div>';
       return;
     }
 
     const rows = ev.slice(0, 50).map(e => {
-      const isCta = CTA.includes(e.event_type);
+      const isBooking = e.event_type === 'demander_visite';
       const d = new Date(e.created_at);
-      const time = d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'})
-                 + ' · ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-      const label = e.event_type.replace(/_/g,' ');
+      const time = d.toLocaleDateString('en-GB', { day:'2-digit', month:'short' })
+                 + ' · ' + d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
+      const label = {
+        page_view:       'Page view',
+        demander_visite: 'Enquiry — contact CTA',
+        nav_cta_click:   'Nav click',
+      }[e.event_type] || e.event_type.replace(/_/g,' ');
+
       return `<tr>
         <td class="td-time">${time}</td>
-        <td><span class="badge ${isCta ? 'badge-cta' : 'badge-view'}">${label}</span></td>
-        <td><span class="badge badge-dev">${e.device || '—'}</span></td>
-        <td class="td-time" style="font-size:9px">${e.referrer === 'direct' ? '—' : (e.referrer||'').slice(0,35)}</td>
+        <td><span class="tag ${isBooking ? 'tag-booking' : 'tag-view'}">${label}</span></td>
+        <td><span class="tag tag-device">${e.device || '—'}</span></td>
+        <td class="td-time">${e.visitor_id ? '<span class="td-new">●</span> ' + e.visitor_id.slice(-6) : '—'}</td>
+        <td class="td-time">${e.referrer === 'direct' ? '—' : (e.referrer||'').slice(0,30)}</td>
       </tr>`;
     }).join('');
 
     document.getElementById('activity').innerHTML = `
       <table>
         <thead><tr>
-          <th>Time</th><th>Event</th><th>Device</th><th>Referrer</th>
+          <th>Time</th><th>Event</th><th>Device</th><th>Visitor</th><th>Referrer</th>
         </tr></thead>
         <tbody>${rows}</tbody>
       </table>`;
