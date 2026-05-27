@@ -234,6 +234,54 @@
       white-space: pre; overflow-x: auto;
     }
 
+    /* ── Live now ───────────────── */
+    .live-now-bar {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--card); border-radius: 14px;
+      padding: 14px 20px; box-shadow: var(--shadow);
+      border-left: 3px solid var(--green);
+    }
+    .ln-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--green); flex-shrink: 0;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    .ln-count {
+      font-size: 28px; font-weight: 200; color: var(--text);
+      letter-spacing: -0.03em; line-height: 1;
+    }
+    .ln-label { font-size: 13px; color: var(--sub); flex: 1; }
+    .ln-updated { font-size: 11px; color: var(--muted); }
+
+    /* ── Peak hours ─────────────── */
+    .hours-wrap {
+      background: var(--card); border-radius: var(--r);
+      padding: 22px; box-shadow: var(--shadow);
+    }
+    .hours-title {
+      font-size: 11px; font-weight: 600; color: var(--sub);
+      letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 20px;
+    }
+    .hours-chart {
+      display: flex; align-items: flex-end; gap: 3px;
+      height: 72px;
+    }
+    .h-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .h-bar {
+      width: 100%; border-radius: 3px 3px 0 0;
+      background: var(--blue); opacity: .75;
+      transition: height .6s cubic-bezier(.4,0,.2,1), opacity .2s;
+      min-height: 2px;
+    }
+    .h-bar:hover { opacity: 1; }
+    .h-bar.peak { background: var(--green); opacity: 1; }
+    .h-label { font-size: 9px; color: var(--muted); }
+    .hours-foot {
+      display: flex; justify-content: space-between;
+      margin-top: 6px; padding: 0 2px;
+      font-size: 10px; color: var(--muted);
+    }
+
     .state-empty { padding: 36px; text-align: center; font-size: 13px; color: var(--muted); }
     .error-bar {
       background: #fff2f2; border: 0.5px solid #ffb3b3;
@@ -267,6 +315,14 @@
       <button class="prop-tab" data-page="maison-erpicum-percke" data-label="Maison Erpicum · Percke">Maison Erpicum · Percke</button>
     </div>
 
+    <!-- Live now -->
+    <div class="live-now-bar">
+      <span class="ln-dot"></span>
+      <span class="ln-count" id="ln-count">—</span>
+      <span class="ln-label">personne<span id="ln-plural"></span> sur la page en ce moment</span>
+      <span class="ln-updated" id="ln-updated"></span>
+    </div>
+
     <!-- Date filter -->
     <div class="filter-bar">
       <span class="filter-label">From</span>
@@ -294,6 +350,17 @@
       <div class="ic">
         <div class="ic-title">New vs Returning</div>
         <div class="vs" id="vs-split"><div class="state-empty" style="padding:16px 0">—</div></div>
+      </div>
+    </div>
+
+    <!-- Peak hours -->
+    <div class="hours-wrap">
+      <div class="hours-title">Heures de pointe — Visites par heure</div>
+      <div class="hours-chart" id="hours-chart">
+        <div class="state-empty" style="padding:0;width:100%;font-size:12px">—</div>
+      </div>
+      <div class="hours-foot">
+        <span>0h</span><span>6h</span><span>12h</span><span>18h</span><span>23h</span>
       </div>
     </div>
 
@@ -377,6 +444,7 @@ DELETE FROM leads  WHERE page_id = 'villa-espinette';</div>
       if (!ldR.ok) throw new Error('leads HTTP ' + ldR.status + ' — run leads SQL setup first.');
       const [events, leads] = await Promise.all([evR.json(), ldR.json()]);
       render(events, leads);
+      renderPeakHours(events);
       document.getElementById('updated').textContent =
         new Date().toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
     } catch(e) {
@@ -510,8 +578,42 @@ DELETE FROM leads  WHERE page_id = 'villa-espinette';</div>
       </table>`;
   }
 
+  // ── Live now: count distinct visitors with heartbeat in last 90s
+  async function loadLiveNow() {
+    const since = new Date(Date.now() - 90000).toISOString();
+    try {
+      const r = await fetch(
+        `${SB}/rest/v1/events?select=visitor_id&page_id=eq.${PAGE}&event_type=eq.heartbeat&created_at=gte.${since}`,
+        { headers: H }
+      );
+      if (!r.ok) return;
+      const rows = await r.json();
+      const n = new Set(rows.map(e => e.visitor_id).filter(Boolean)).size;
+      document.getElementById('ln-count').textContent = n;
+      document.getElementById('ln-plural').textContent = n !== 1 ? 's' : '';
+      document.getElementById('ln-updated').textContent =
+        'mis à jour ' + new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    } catch(_) {}
+  }
+
+  // ── Peak hours: called from render() with fetched page_view events
+  function renderPeakHours(events) {
+    const views = events.filter(e => e.event_type === 'page_view');
+    if (!views.length) return;
+    const counts = Array(24).fill(0);
+    views.forEach(e => { counts[new Date(e.created_at).getHours()]++; });
+    const max = Math.max(...counts) || 1;
+    const peakH = counts.indexOf(max);
+    document.getElementById('hours-chart').innerHTML = counts.map((c, h) => `
+      <div class="h-bar-wrap" title="${h}h — ${c} visite${c !== 1 ? 's' : ''}">
+        <div class="h-bar${h === peakH ? ' peak' : ''}" style="height:${Math.round(c / max * 72)}px"></div>
+      </div>`).join('');
+  }
+
   loadAll();
+  loadLiveNow();
   setInterval(loadAll, 30000);
+  setInterval(loadLiveNow, 15000);
   </script>
 
 </body>
