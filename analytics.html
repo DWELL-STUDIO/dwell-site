@@ -92,6 +92,21 @@
     }
 
     /* ── Filter bar ─────────────── */
+    /* ── Property tabs ──────────────── */
+    .prop-tabs {
+      display: flex; gap: 8px; padding: 20px 32px 0;
+    }
+    .prop-tab {
+      font-size: 13px; font-weight: 500; padding: 7px 16px;
+      border-radius: 20px; border: 0.5px solid var(--border);
+      background: var(--card); color: var(--sub); cursor: pointer;
+      transition: all .15s; white-space: nowrap;
+    }
+    .prop-tab:hover { border-color: #aaa; color: var(--text); }
+    .prop-tab.active {
+      background: var(--text); color: #fff; border-color: var(--text);
+    }
+
     .filter-bar {
       display: flex; align-items: center; gap: 10px;
       background: var(--card); border-radius: 12px;
@@ -233,7 +248,7 @@
     <div class="h-left">
       <span class="h-brand">DWELL</span>
       <span class="h-sep">·</span>
-      <span class="h-prop">Villa Espinette</span>
+      <span class="h-prop" id="h-prop-name">Villa Espinette</span>
     </div>
     <div class="h-right">
       <span class="live-badge"><span class="live-dot"></span>Live</span>
@@ -245,6 +260,12 @@
   <main>
 
     <div id="error" class="error-bar" style="display:none"></div>
+
+    <!-- Property tabs -->
+    <div class="prop-tabs">
+      <button class="prop-tab active" data-page="villa-espinette" data-label="Villa Espinette">Villa Espinette</button>
+      <button class="prop-tab" data-page="maison-erpicum-percke" data-label="Maison Erpicum · Percke">Maison Erpicum · Percke</button>
+    </div>
 
     <!-- Date filter -->
     <div class="filter-bar">
@@ -298,7 +319,7 @@
     <div class="sql-box">
       <div class="sql-title">Clear test data — run in Supabase SQL Editor</div>
       <div class="sql-desc">Run before going live to start with clean data.</div>
-      <div class="sql-code">-- Delete all test events
+      <div class="sql-code" id="sql-snippet">-- Delete all test events
 DELETE FROM events WHERE page_id = 'villa-espinette';
 
 -- Delete all test leads
@@ -308,10 +329,23 @@ DELETE FROM leads  WHERE page_id = 'villa-espinette';</div>
   </main>
 
   <script>
-  const SB   = 'https://kdzkffcqmutwojyauqtj.supabase.co';
-  const KEY  = 'sb_publishable_XtBrgzqzM2GBOa-RNVH8uA_qfrPEaTd';
-  const PAGE = 'villa-espinette';
-  const H    = { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY };
+  const SB  = 'https://kdzkffcqmutwojyauqtj.supabase.co';
+  const KEY = 'sb_publishable_XtBrgzqzM2GBOa-RNVH8uA_qfrPEaTd';
+  const H   = { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY };
+  let   PAGE = 'villa-espinette';
+
+  // ── Property tab switcher
+  document.querySelectorAll('.prop-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.prop-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      PAGE = btn.dataset.page;
+      document.getElementById('h-prop-name').textContent = btn.dataset.label;
+      document.getElementById('sql-snippet').textContent =
+        `-- Delete all test events\nDELETE FROM events WHERE page_id = '${PAGE}';\n\n-- Delete all test leads\nDELETE FROM leads  WHERE page_id = '${PAGE}';`;
+      loadAll();
+    });
+  });
 
   function resetFilter() {
     document.getElementById('date-from').value = '';
