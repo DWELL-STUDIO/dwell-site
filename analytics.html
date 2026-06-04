@@ -253,34 +253,61 @@
     .ln-label { font-size: 13px; color: var(--sub); flex: 1; }
     .ln-updated { font-size: 11px; color: var(--muted); }
 
-    /* ── Peak hours ─────────────── */
-    .hours-wrap {
+    /* ── Time chart ─────────────── */
+    .tc-wrap {
       background: var(--card); border-radius: var(--r);
       padding: 22px; box-shadow: var(--shadow);
     }
-    .hours-title {
+    .tc-top {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .tc-wrap-title {
       font-size: 11px; font-weight: 600; color: var(--sub);
-      letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 20px;
+      letter-spacing: 0.06em; text-transform: uppercase;
     }
-    .hours-chart {
-      display: flex; align-items: flex-end; gap: 3px;
-      height: 72px;
+    .time-tabs {
+      display: flex; gap: 4px;
     }
-    .h-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-    .h-bar {
+    .time-tab {
+      font-size: 11px; font-weight: 500; padding: 4px 12px;
+      border-radius: 20px; border: 0.5px solid var(--border);
+      background: var(--bg); color: var(--sub);
+      cursor: pointer; transition: all .15s;
+    }
+    .time-tab:hover { border-color: #aaa; color: var(--text); }
+    .time-tab.active { background: var(--text); color: #fff; border-color: var(--text); }
+    .time-chart {
+      display: flex; align-items: flex-end; gap: 2px;
+      height: 80px;
+    }
+    .tb-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0; position: relative; }
+    .tb-bar {
       width: 100%; border-radius: 3px 3px 0 0;
-      background: var(--blue); opacity: .75;
-      transition: height .6s cubic-bezier(.4,0,.2,1), opacity .2s;
-      min-height: 2px;
+      background: var(--blue); opacity: .7;
+      transition: height .5s cubic-bezier(.4,0,.2,1), opacity .2s;
+      min-height: 2px; cursor: default;
     }
-    .h-bar:hover { opacity: 1; }
-    .h-bar.peak { background: var(--green); opacity: 1; }
-    .h-label { font-size: 9px; color: var(--muted); }
-    .hours-foot {
+    .tb-bar:hover { opacity: 1; }
+    .tb-bar.peak { background: var(--green); opacity: 1; }
+    .time-foot {
       display: flex; justify-content: space-between;
-      margin-top: 6px; padding: 0 2px;
+      margin-top: 8px; padding: 0 1px;
       font-size: 10px; color: var(--muted);
     }
+
+    /* ── Message expand ──────────── */
+    .msg-expand { color: var(--blue); cursor: pointer; font-size: 11px; white-space: nowrap; background: none; border: none; padding: 0; }
+    .msg-full-row td { background: #fafafa; font-size: 13px; color: var(--sub); padding: 10px 22px 14px; line-height: 1.6; border-bottom: 0.5px solid var(--bg); }
+
+    /* ── Prop URL link ───────────── */
+    .prop-url {
+      display: inline-flex; align-items: center; justify-content: center;
+      margin-left: 6px; color: inherit; opacity: .5;
+      font-size: 11px; text-decoration: none; vertical-align: middle;
+      transition: opacity .15s;
+    }
+    .prop-tab:hover .prop-url, .prop-tab.active .prop-url { opacity: 1; }
 
     .state-empty { padding: 36px; text-align: center; font-size: 13px; color: var(--muted); }
     .error-bar {
@@ -311,8 +338,14 @@
 
     <!-- Property tabs -->
     <div class="prop-tabs">
-      <button class="prop-tab active" data-page="villa-espinette" data-label="Villa Espinette">Villa Espinette</button>
-      <button class="prop-tab" data-page="maison-erpicum-percke" data-label="Maison Erpicum · Percke">Maison Erpicum · Percke</button>
+      <button class="prop-tab active" data-page="villa-espinette" data-label="Villa Espinette">
+        Villa Espinette
+        <a class="prop-url" href="https://dwell-studio.github.io/villa-espinette/" target="_blank" title="Ouvrir le site" onclick="event.stopPropagation()">↗</a>
+      </button>
+      <button class="prop-tab" data-page="maison-erpicum-percke" data-label="Maison Erpicum · Percke">
+        Maison Erpicum · Percke
+        <a class="prop-url" href="https://dwell-studio.github.io/maison-erpicum-percke/" target="_blank" title="Ouvrir le site" onclick="event.stopPropagation()">↗</a>
+      </button>
     </div>
 
     <!-- Live now -->
@@ -353,15 +386,21 @@
       </div>
     </div>
 
-    <!-- Peak hours -->
-    <div class="hours-wrap">
-      <div class="hours-title">Heures de pointe — Visites par heure</div>
-      <div class="hours-chart" id="hours-chart">
+    <!-- Time chart -->
+    <div class="tc-wrap">
+      <div class="tc-top">
+        <span class="tc-wrap-title">Visites dans le temps</span>
+        <div class="time-tabs">
+          <button class="time-tab" data-mode="month">Mois</button>
+          <button class="time-tab" data-mode="week">Semaine</button>
+          <button class="time-tab active" data-mode="day">Jour</button>
+          <button class="time-tab" data-mode="hour">Heure</button>
+        </div>
+      </div>
+      <div class="time-chart" id="time-chart">
         <div class="state-empty" style="padding:0;width:100%;font-size:12px">—</div>
       </div>
-      <div class="hours-foot">
-        <span>0h</span><span>6h</span><span>12h</span><span>18h</span><span>23h</span>
-      </div>
+      <div class="time-foot" id="time-foot"></div>
     </div>
 
     <!-- Leads table -->
@@ -444,7 +483,7 @@ DELETE FROM leads  WHERE page_id = 'villa-espinette';</div>
       if (!ldR.ok) throw new Error('leads HTTP ' + ldR.status + ' — run leads SQL setup first.');
       const [events, leads] = await Promise.all([evR.json(), ldR.json()]);
       render(events, leads);
-      renderPeakHours(events);
+      renderTimeChart(events);
       document.getElementById('updated').textContent =
         new Date().toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
     } catch(e) {
@@ -529,17 +568,21 @@ DELETE FROM leads  WHERE page_id = 'villa-espinette';</div>
       document.getElementById('leads-table').innerHTML =
         '<div class="state-empty">No form submissions yet.</div>';
     } else {
-      const rows = leads.map(l => {
+      const rows = leads.map((l, i) => {
         const d = new Date(l.created_at);
         const time = d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})
                    + ' · ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+        const msg = l.message || '';
+        const short = msg.length > 55 ? msg.slice(0, 55) + '…' : msg;
+        const hasMore = msg.length > 55;
         return `<tr>
           <td class="td-time">${time}</td>
           <td class="td-main">${l.name || '—'}</td>
           <td><a href="mailto:${l.email||''}" style="color:var(--blue);text-decoration:none">${l.email||'—'}</a></td>
           <td>${l.phone || '—'}</td>
-          <td class="td-msg" title="${(l.message||'').replace(/"/g,'&quot;')}">${l.message || '—'}</td>
-        </tr>`;
+          <td class="td-msg">${short || '—'}${hasMore ? ` <button class="msg-expand" data-row="${i}" onclick="toggleMsg(this,'${msg.replace(/'/g,'&#39;').replace(/\n/g,'<br>')}')">lire +</button>` : ''}</td>
+        </tr>
+        <tr class="msg-full-row" id="msg-row-${i}" style="display:none"><td colspan="5">${msg.replace(/\n/g,'<br>')}</td></tr>`;
       }).join('');
       document.getElementById('leads-table').innerHTML = `
         <table>
@@ -596,19 +639,95 @@ DELETE FROM leads  WHERE page_id = 'villa-espinette';</div>
     } catch(_) {}
   }
 
-  // ── Peak hours: called from render() with fetched page_view events
-  function renderPeakHours(events) {
+  // ── Time chart
+  let timeMode = 'day';
+  let _cachedEvents = [];
+
+  function renderTimeChart(events) {
+    _cachedEvents = events;
     const views = events.filter(e => e.event_type === 'page_view');
-    if (!views.length) return;
-    const counts = Array(24).fill(0);
-    views.forEach(e => { counts[new Date(e.created_at).getHours()]++; });
-    const max = Math.max(...counts) || 1;
-    const peakH = counts.indexOf(max);
-    document.getElementById('hours-chart').innerHTML = counts.map((c, h) => `
-      <div class="h-bar-wrap" title="${h}h — ${c} visite${c !== 1 ? 's' : ''}">
-        <div class="h-bar${h === peakH ? ' peak' : ''}" style="height:${Math.round(c / max * 72)}px"></div>
-      </div>`).join('');
+    let buckets = [], labels = [], footLabels = [];
+
+    if (timeMode === 'hour') {
+      buckets = Array(24).fill(0);
+      views.forEach(e => buckets[new Date(e.created_at).getHours()]++);
+      labels = buckets.map((c,h) => `${h}h — ${c} visite${c!==1?'s':''}`);
+      footLabels = ['0h','','','','','','6h','','','','','','12h','','','','','','18h','','','','','23h'];
+    } else if (timeMode === 'day') {
+      const map = {};
+      for (let i = 29; i >= 0; i--) {
+        const d = new Date(); d.setDate(d.getDate() - i);
+        map[d.toISOString().slice(0,10)] = 0;
+      }
+      views.forEach(e => { const k = e.created_at.slice(0,10); if (k in map) map[k]++; });
+      const keys = Object.keys(map);
+      buckets = keys.map(k => map[k]);
+      labels = keys.map((k,i) => {
+        const d = new Date(k); return `${d.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'})} — ${map[k]} visite${map[k]!==1?'s':''}`;
+      });
+      footLabels = keys.map((k,i) => {
+        if (i===0||i===7||i===14||i===21||i===29) return new Date(k).toLocaleDateString('fr-FR',{day:'2-digit',month:'short'});
+        return '';
+      });
+    } else if (timeMode === 'week') {
+      const map = {};
+      for (let i = 11; i >= 0; i--) {
+        const d = new Date(); d.setDate(d.getDate() - i*7);
+        const mon = new Date(d); mon.setDate(d.getDate() - ((d.getDay()+6)%7));
+        map[mon.toISOString().slice(0,10)] = 0;
+      }
+      views.forEach(e => {
+        const d = new Date(e.created_at);
+        const mon = new Date(d); mon.setDate(d.getDate() - ((d.getDay()+6)%7));
+        const k = mon.toISOString().slice(0,10);
+        if (k in map) map[k]++;
+      });
+      const keys = Object.keys(map);
+      buckets = keys.map(k => map[k]);
+      labels = keys.map(k => `Sem. ${new Date(k).toLocaleDateString('fr-FR',{day:'2-digit',month:'short'})} — ${map[k]} visite${map[k]!==1?'s':''}`);
+      footLabels = keys.map((k,i) => i%3===0 ? new Date(k).toLocaleDateString('fr-FR',{day:'2-digit',month:'short'}) : '');
+    } else if (timeMode === 'month') {
+      const map = {};
+      for (let i = 11; i >= 0; i--) {
+        const d = new Date(); d.setMonth(d.getMonth() - i);
+        map[d.toISOString().slice(0,7)] = 0;
+      }
+      views.forEach(e => { const k = e.created_at.slice(0,7); if (k in map) map[k]++; });
+      const keys = Object.keys(map);
+      buckets = keys.map(k => map[k]);
+      labels = keys.map(k => `${k} — ${map[k]} visite${map[k]!==1?'s':''}`);
+      footLabels = keys.map(k => new Date(k+'-01').toLocaleDateString('fr-FR',{month:'short'}));
+    }
+
+    if (!buckets.length) return;
+    const max = Math.max(...buckets) || 1;
+    const peakI = buckets.indexOf(max);
+    document.getElementById('time-chart').innerHTML = buckets.map((c,i) =>
+      `<div class="tb-wrap" title="${labels[i]}"><div class="tb-bar${i===peakI?' peak':''}" style="height:${Math.round(c/max*80)}px"></div></div>`
+    ).join('');
+    document.getElementById('time-foot').innerHTML = footLabels.map(l => `<span>${l}</span>`).join('');
   }
+
+  // ── Toggle full message
+  function toggleMsg(btn, full) {
+    const i = btn.dataset.row;
+    const row = document.getElementById('msg-row-' + i);
+    if (row.style.display === 'none') {
+      row.style.display = ''; btn.textContent = 'fermer';
+    } else {
+      row.style.display = 'none'; btn.textContent = 'lire +';
+    }
+  }
+
+  // ── Time tab switcher
+  document.querySelectorAll('.time-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.time-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      timeMode = btn.dataset.mode;
+      renderTimeChart(_cachedEvents);
+    });
+  });
 
   loadAll();
   loadLiveNow();
