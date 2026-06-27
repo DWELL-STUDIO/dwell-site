@@ -194,6 +194,17 @@
 
     .state-empty { padding:36px; text-align:center; font-size:13px; color:var(--muted); }
     .error-bar { background:#fff2f2; border:.5px solid #ffb3b3; border-radius:12px; padding:14px 18px; font-size:13px; color:#c00; }
+
+    /* Platform chart */
+    .plat-chart { display:flex; align-items:center; gap:24px; flex-wrap:wrap; }
+    .plat-donut { flex-shrink:0; }
+    .plat-legend { display:flex; flex-direction:column; gap:10px; flex:1; min-width:140px; }
+    .plat-row { display:flex; align-items:center; gap:8px; }
+    .plat-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+    .plat-name { font-size:13px; color:var(--text); flex:1; }
+    .plat-n { font-size:13px; font-weight:500; color:var(--text); min-width:28px; text-align:right; }
+    .plat-pct { font-size:12px; color:var(--muted); min-width:32px; text-align:right; }
+    .tag-hb { background:#f0f0f5; color:#636366; }
   </style>
 </head>
 <body>
@@ -238,9 +249,9 @@
     <!-- Date filter -->
     <div class="filter-bar">
       <span class="filter-label">From</span>
-      <input type="date" class="filter-date" id="date-from" onchange="loadAll()">
+      <input type="date" class="filter-date" id="date-from" autocomplete="off" onchange="loadAll()">
       <span class="filter-label">to</span>
-      <input type="date" class="filter-date" id="date-to" onchange="loadAll()">
+      <input type="date" class="filter-date" id="date-to" autocomplete="off" onchange="loadAll()">
       <button class="btn btn-blue" onclick="resetFilter()">All time</button>
       <span class="filter-note" id="filter-note"></span>
     </div>
@@ -263,6 +274,12 @@
         <div class="ic-title">New vs Returning</div>
         <div class="vs" id="vs-split"><div class="state-empty" style="padding:16px 0">—</div></div>
       </div>
+    </div>
+
+    <!-- Traffic sources -->
+    <div class="ic">
+      <div class="ic-title">Traffic Sources — Unique Visitors</div>
+      <div class="plat-chart" id="platform-chart"><div class="state-empty" style="padding:16px 0">—</div></div>
     </div>
 
     <!-- Time chart -->
@@ -368,6 +385,84 @@ DELETE FROM leads  WHERE page_id = 'villa-espinette';</div>
   const KEY = 'sb_publishable_XtBrgzqzM2GBOa-RNVH8uA_qfrPEaTd';
   const H   = { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY };
   let PAGE  = 'villa-espinette';
+  let _allEvents = [];
+
+  const PLATFORM_COLORS = {
+    'Facebook':   '#1877F2',
+    'Instagram':  '#E4405F',
+    'LinkedIn':   '#003366',
+    'Direct':     '#FF9500',
+    'Google':     '#34C759',
+    'Twitter/X':  '#14171A',
+    'TikTok':     '#69C9D0',
+    'Pinterest':  '#BD081C',
+    'Other':      '#8E8E93'
+  };
+
+  function detectPlatform(referrer) {
+    const r = (referrer || '').toLowerCase();
+    if (!r || r === 'direct') return 'Direct';
+    if (r.includes('fbclid'))                                return 'Facebook';
+    if (r.includes('instagram'))                             return 'Instagram';
+    if (r.includes('facebook') || r.includes('fb.com'))     return 'Facebook';
+    if (r.includes('linkedin'))                              return 'LinkedIn';
+    if (r.includes('google'))                                return 'Google';
+    if (r.includes('twitter') || r.includes('t.co') || r.includes('x.com')) return 'Twitter/X';
+    if (r.includes('tiktok'))                                return 'TikTok';
+    if (r.includes('pinterest') || r.includes('pin.it'))    return 'Pinterest';
+    return 'Other';
+  }
+
+  function renderPlatformChart(views) {
+    const counts = {};
+    const seen = new Set();
+    // Iterate oldest-first so first visit wins for attribution
+    [...views].reverse().forEach(e => {
+      const vid = e.visitor_id;
+      if (vid && seen.has(vid)) return;
+      if (vid) seen.add(vid);
+      const p = detectPlatform(e.referrer);
+      counts[p] = (counts[p] || 0) + 1;
+    });
+    const total = Object.values(counts).reduce((a, b) => a + b, 0);
+    if (!total) {
+      document.getElementById('platform-chart').innerHTML =
+        '<div class="state-empty" style="padding:16px 0;width:100%">No visit data yet.</div>';
+      return;
+    }
+    const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    const cx = 70, cy = 70, R = 56, r = 34;
+    let angle = -Math.PI / 2, paths = '';
+    entries.forEach(([platform, count]) => {
+      const sweep = Math.max((count / total) * 2 * Math.PI, 0.001);
+      const end = angle + sweep;
+      const x1 = cx + R * Math.cos(angle), y1 = cy + R * Math.sin(angle);
+      const x2 = cx + R * Math.cos(end),   y2 = cy + R * Math.sin(end);
+      const ix1 = cx + r * Math.cos(end),  iy1 = cy + r * Math.sin(end);
+      const ix2 = cx + r * Math.cos(angle),iy2 = cy + r * Math.sin(angle);
+      const large = sweep > Math.PI ? 1 : 0;
+      const color = PLATFORM_COLORS[platform] || '#8E8E93';
+      paths += `<path d="M${x1.toFixed(2)},${y1.toFixed(2)} A${R},${R} 0 ${large},1 ${x2.toFixed(2)},${y2.toFixed(2)} L${ix1.toFixed(2)},${iy1.toFixed(2)} A${r},${r} 0 ${large},0 ${ix2.toFixed(2)},${iy2.toFixed(2)} Z" fill="${color}" opacity="0.9" stroke="white" stroke-width="1.5"/>`;
+      angle = end;
+    });
+    const svg = `<svg width="140" height="140" viewBox="0 0 140 140">${paths}
+      <circle cx="${cx}" cy="${cy}" r="${r - 2}" fill="white"/>
+      <text x="${cx}" y="${cy - 6}" text-anchor="middle" font-size="20" font-weight="200" fill="#1d1d1f" font-family="-apple-system,sans-serif">${total}</text>
+      <text x="${cx}" y="${cy + 10}" text-anchor="middle" font-size="9" fill="#6e6e73" font-family="-apple-system,sans-serif" letter-spacing="0.04em">PEOPLE</text>
+    </svg>`;
+    const legend = entries.map(([p, c]) => {
+      const color = PLATFORM_COLORS[p] || '#8E8E93';
+      const pct = Math.round(c / total * 100);
+      return `<div class="plat-row">
+        <span class="plat-dot" style="background:${color}"></span>
+        <span class="plat-name">${p}</span>
+        <span class="plat-n">${c}</span>
+        <span class="plat-pct">${pct}%</span>
+      </div>`;
+    }).join('');
+    document.getElementById('platform-chart').innerHTML =
+      `<div class="plat-donut">${svg}</div><div class="plat-legend">${legend}</div>`;
+  }
 
   // ── Property tabs
   const PROPS = {
@@ -412,15 +507,17 @@ DELETE FROM leads  WHERE page_id = 'villa-espinette';</div>
     document.getElementById('error').style.display = 'none';
     const dp = dateParams();
     try {
-      const [evR, ldR] = await Promise.all([
-        fetch(`${SB}/rest/v1/events?select=*&page_id=eq.${PAGE}&order=created_at.desc&limit=500${dp}`, { headers: H }),
+      const [pvR, ldR, hbR] = await Promise.all([
+        fetch(`${SB}/rest/v1/events?select=*&page_id=eq.${PAGE}&event_type=eq.page_view&order=created_at.desc${dp}`, { headers: H }),
         fetch(`${SB}/rest/v1/leads?select=*&page_id=eq.${PAGE}&order=created_at.desc${dp}`, { headers: H }),
+        fetch(`${SB}/rest/v1/events?select=id,event_type,visitor_id,device,referrer,created_at&page_id=eq.${PAGE}&event_type=eq.heartbeat&order=created_at.desc&limit=300${dp}`, { headers: H }),
       ]);
-      if (!evR.ok) throw new Error('events HTTP ' + evR.status);
+      if (!pvR.ok) throw new Error('events HTTP ' + pvR.status);
       if (!ldR.ok) throw new Error('leads HTTP ' + ldR.status);
-      const [events, leads] = await Promise.all([evR.json(), ldR.json()]);
-      render(events, leads);
-      renderTimeChart(events);
+      const [pageViews, leads, heartbeats] = await Promise.all([pvR.json(), ldR.json(), hbR.ok ? hbR.json() : []]);
+      _allEvents = [...pageViews, ...heartbeats].sort((a, b) => b.created_at.localeCompare(a.created_at));
+      render(pageViews, leads);
+      renderTimeChart(pageViews);
       document.getElementById('updated').textContent =
         new Date().toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
     } catch(e) {
@@ -429,8 +526,7 @@ DELETE FROM leads  WHERE page_id = 'villa-espinette';</div>
     }
   }
 
-  function render(events, leads) {
-    const views  = events.filter(e => e.event_type === 'page_view');
+  function render(views, leads) {
     const vids   = views.map(e => e.visitor_id).filter(Boolean);
     const unique = vids.length ? new Set(vids).size : views.length;
     const hasVids = vids.length > 0;
@@ -467,6 +563,9 @@ DELETE FROM leads  WHERE page_id = 'villa-espinette';</div>
         <div class="vs-note">Same browser = same visitor.</div>`;
     }
 
+    // Platform chart
+    renderPlatformChart(views);
+
     // Leads table
     document.getElementById('leads-count').textContent = leads.length + ' total';
     if (!leads.length) {
@@ -489,17 +588,20 @@ DELETE FROM leads  WHERE page_id = 'villa-espinette';</div>
       window._leads = leads;
     }
 
-    // Events table
-    document.getElementById('events-count').textContent = events.length + ' events';
-    if (!events.length) { document.getElementById('events-table').innerHTML = '<div class="state-empty">No events yet.</div>'; return; }
-    const evRows = events.slice(0,30).map(e => {
+    // Events table — show from _allEvents (page_views + heartbeats)
+    const evAll = _allEvents.length ? _allEvents : views;
+    document.getElementById('events-count').textContent = views.length + ' page views';
+    if (!evAll.length) { document.getElementById('events-table').innerHTML = '<div class="state-empty">No events yet.</div>'; return; }
+    const evRows = evAll.slice(0, 30).map(e => {
       const d = new Date(e.created_at);
       const time = d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}) + ' · ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-      const tagCls = e.event_type==='form_submit'?'tag-form':e.event_type==='demander_visite'?'tag-booking':'tag-view';
-      const label = {page_view:'Page view',demander_visite:'CTA click',form_submit:'Form submit',modal_open:'Modal open',heartbeat:'Heartbeat'}[e.event_type]||e.event_type.replace(/_/g,' ');
-      return `<tr><td class="td-time">${time}</td><td><span class="tag ${tagCls}">${label}</span></td><td><span class="tag tag-device">${e.device||'—'}</span></td><td class="td-time">${e.visitor_id?e.visitor_id.slice(-6):'—'}</td><td class="td-time">${e.referrer==='direct'?'—':(e.referrer||'').slice(0,28)}</td></tr>`;
+      const tagCls = e.event_type==='form_submit'?'tag-form':e.event_type==='demander_visite'?'tag-booking':e.event_type==='heartbeat'?'tag-hb':'tag-view';
+      const label = {page_view:'Page view',demander_visite:'CTA click',form_submit:'Form submit',modal_open:'Modal open',heartbeat:'Heartbeat ♡'}[e.event_type]||e.event_type.replace(/_/g,' ');
+      const plat = detectPlatform(e.referrer);
+      const platColor = PLATFORM_COLORS[plat] || '#8E8E93';
+      return `<tr><td class="td-time">${time}</td><td><span class="tag ${tagCls}">${label}</span></td><td><span class="tag tag-device">${e.device||'—'}</span></td><td class="td-time">${e.visitor_id?e.visitor_id.slice(-6):'—'}</td><td><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--sub)"><span style="width:7px;height:7px;border-radius:50%;background:${platColor};display:inline-block"></span>${plat}</span></td></tr>`;
     }).join('');
-    document.getElementById('events-table').innerHTML = `<table><thead><tr><th>Time</th><th>Event</th><th>Device</th><th>Visitor</th><th>Referrer</th></tr></thead><tbody>${evRows}</tbody></table>`;
+    document.getElementById('events-table').innerHTML = `<table><thead><tr><th>Time</th><th>Event</th><th>Device</th><th>Visitor</th><th>Source</th></tr></thead><tbody>${evRows}</tbody></table>`;
   }
 
   // ── Message modal
