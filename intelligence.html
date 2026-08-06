@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DWELL® Intelligence — Des process augmentés, chez vous.</title>
+<meta name="description" content="DWELL® Intelligence — Audit de vos flux, automatisations sur mesure et outils d'IA intégrés à vos systèmes existants. Sans dépendance nouvelle : la connaissance reste chez vous.">
+<meta name="theme-color" content="#0F1728">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0F1728; --bg2:#0A101E; --surface:#17223B; --surface2:#1C2A49;
+  --ink:#ECEFE8; --muted:#98A2BD; --muted2:#7C87A4;
+  --sage:#C5C8B6; --accent:#7FA6DD; --accent-2:#A9C3EC;
+  --line:rgba(190,205,235,.12); --line2:rgba(190,205,235,.22); --hair:rgba(190,205,235,.07);
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'SF Pro Display',system-ui,sans-serif;
+  --display:'Quicksand',var(--sans);
+  --ease-expo:cubic-bezier(.16,1,.3,1); --ease:cubic-bezier(.4,0,.2,1);
+  --sh-md:0 8px 20px rgba(2,6,16,.4),0 30px 60px -16px rgba(2,6,16,.55);
+  --sh-lg:0 18px 40px rgba(2,6,16,.46),0 60px 120px -30px rgba(2,6,16,.6);
+  --sh-xl:0 26px 54px rgba(2,6,16,.5),0 110px 220px -50px rgba(2,6,16,.68);
+  --edge:inset 0 1px 0 rgba(255,255,255,.06),inset 0 0 0 1px rgba(255,255,255,.02);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:400;letter-spacing:-.011em;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden}
+/* mesh tech + grille subtile */
+.bgfx{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+   radial-gradient(50% 40% at 15% 12%,rgba(127,166,221,.14),transparent 60%),
+   radial-gradient(46% 42% at 88% 82%,rgba(60,90,150,.16),transparent 62%),
+   linear-gradient(180deg,var(--bg),var(--bg2))}
+.bgfx::after{content:"";position:absolute;inset:0;opacity:.5;
+  background-image:linear-gradient(rgba(160,185,230,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(160,185,230,.05) 1px,transparent 1px);
+  background-size:64px 64px;-webkit-mask-image:radial-gradient(70% 60% at 50% 30%,#000,transparent 80%);mask-image:radial-gradient(70% 60% at 50% 30%,#000,transparent 80%)}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+::selection{background:var(--accent);color:#0B111F}
+.wrap{max-width:1240px;margin:0 auto;padding:0 clamp(20px,4vw,44px)}
+.eyebrow{display:inline-flex;align-items:center;gap:11px;font-family:var(--display);font-size:12px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--accent)}
+.eyebrow::before{content:"";width:26px;height:1px;background:currentColor;opacity:.6}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease-expo),transform .9s var(--ease-expo)}
+.reveal.vis{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+/* NAV */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 clamp(20px,4vw,44px);color:var(--ink);transition:background .5s,backdrop-filter .5s,border-color .5s;border-bottom:1px solid transparent;background:linear-gradient(180deg,rgba(10,16,30,.55),transparent);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+.nav.scr{background:rgba(12,18,34,.72);backdrop-filter:saturate(160%) blur(20px);-webkit-backdrop-filter:saturate(160%) blur(20px);border-bottom-color:var(--line)}
+.brand{display:inline-flex;align-items:center;gap:11px;font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:.16em;color:#EEF2EA}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 14px 1px rgba(127,166,221,.7)}
+.brand b{font-weight:600}.brand span{color:var(--accent);font-weight:600}
+.nav-links{display:flex;gap:clamp(16px,2vw,30px);font-family:var(--display);font-size:13px;font-weight:500}
+.nav-links a{opacity:.82;transition:opacity .25s;position:relative;padding:4px 0}
+.nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1.5px;background:var(--accent);transform:scaleX(0);transform-origin:0;transition:transform .4s var(--ease)}
+.nav-links a:hover{opacity:1}.nav-links a:hover::after{transform:scaleX(1)}
+@media(max-width:860px){.nav-links{display:none}}
+
+/* BUTTONS */
+.btn{position:relative;display:inline-flex;align-items:center;gap:11px;padding:15px 26px;border-radius:999px;font-weight:600;font-size:15px;overflow:hidden;isolation:isolate;background:var(--sage);color:#1A2033;box-shadow:var(--sh-md),var(--edge);transition:transform .5s var(--ease-expo),box-shadow .5s}
+.btn::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(120deg,#dfe2d2,#b4b8a2);transform:translateY(102%);transition:transform .55s var(--ease-expo)}
+.btn:hover{transform:translateY(-3px);box-shadow:var(--sh-lg),var(--edge)}.btn:hover::before{transform:translateY(0)}
+.btn svg{width:18px;height:18px;fill:currentColor}
+.btn-ghost{display:inline-flex;align-items:center;gap:10px;padding:14px 24px;border-radius:999px;border:1px solid var(--line2);font-size:14px;font-weight:600;color:var(--ink);transition:color .4s,border-color .4s,background .4s,transform .5s var(--ease-expo)}
+.btn-ghost:hover{border-color:var(--accent);color:#fff;background:rgba(127,166,221,.12);transform:translateY(-2px)}
+.btn-ghost .ar{transition:transform .4s}.btn-ghost:hover .ar{transform:translateX(4px)}
+
+/* HERO */
+.hero{position:relative;min-height:100svh;overflow:hidden}
+.hero-media{position:absolute;inset:0;z-index:0;background:linear-gradient(rgba(15,23,40,.5) 0%,rgba(15,23,40,0) 24%,rgba(15,23,40,0) 62%,var(--bg) 100%),url('IMAGES/hero-intelligence.jpg') center/cover no-repeat}
+.hero-media::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 0%,transparent 22%,transparent 78%,var(--bg) 100%)}
+.hero-scroll{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);z-index:2;display:inline-flex;flex-direction:column;align-items:center;gap:11px;font-family:var(--display);font-size:11px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);transition:color .3s}
+.hero-scroll:hover{color:var(--ink)}
+.hero-scroll .ln{width:1px;height:36px;background:linear-gradient(var(--accent),transparent)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.hero .wrap{position:relative;z-index:1}
+.hero-eye{margin-bottom:26px}
+.hero h1{margin:0;font-size:clamp(40px,7vw,88px);font-weight:700;letter-spacing:-.04em;line-height:1.02;max-width:16ch}
+.hero h1 em{font-style:italic;color:var(--accent-2)}
+.hero-sub{margin:26px 0 0;max-width:60ch;font-size:clamp(16px,1.4vw,19px);line-height:1.7;color:var(--muted)}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:38px}
+.hero-badges{display:flex;gap:26px;flex-wrap:wrap;margin-top:48px;padding-top:26px;border-top:1px solid var(--line)}
+.hero-badge{font-family:var(--display);font-size:12.5px;font-weight:600;letter-spacing:.04em;color:var(--muted);display:inline-flex;align-items:center;gap:9px}
+.hero-badge b{color:var(--ink);font-weight:700}
+.hero-badge .d{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+
+/* SECTIONS */
+.section{padding:clamp(80px,11vw,140px) 0;position:relative}
+.sec-head{max-width:760px;margin:0 auto clamp(46px,6vw,70px);text-align:center}
+.sec-head .eyebrow{justify-content:center;margin-bottom:18px}
+.h2{margin:0 auto;font-size:clamp(30px,4.4vw,50px);font-weight:700;letter-spacing:-.033em;line-height:1.08;max-width:18ch}
+.h2 em{font-style:italic;color:var(--accent-2)}
+.sec-head p{margin:20px auto 0;max-width:56ch;font-size:16px;line-height:1.7;color:var(--muted)}
+
+/* SERVICES */
+.svc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(16px,1.8vw,24px)}
+@media(max-width:760px){.svc-grid{grid-template-columns:1fr}}
+.svc{position:relative;padding:clamp(30px,3.4vw,44px);border-radius:24px;background:linear-gradient(165deg,var(--surface),rgba(17,26,44,.7));border:1px solid var(--hair);box-shadow:var(--edge);transition:transform .5s var(--ease-expo),box-shadow .5s,border-color .5s}
+.svc:hover{transform:translateY(-6px);box-shadow:var(--sh-md),var(--edge);border-color:var(--line2)}
+.svc-ic{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:rgba(127,166,221,.14);border:1px solid rgba(127,166,221,.28);margin-bottom:22px;color:var(--accent-2)}
+.svc-ic svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7}
+.svc h3{margin:0 0 10px;font-size:21px;font-weight:600;letter-spacing:-.02em}
+.svc p{margin:0;font-size:14.5px;line-height:1.68;color:var(--muted)}
+
+/* PRINCIPE */
+.principe{position:relative}
+.principe-card{max-width:1000px;margin:0 auto;text-align:center;padding:clamp(40px,5vw,72px) clamp(24px,4vw,64px);border-radius:30px;background:radial-gradient(80% 120% at 50% 0%,rgba(127,166,221,.14),transparent 60%),linear-gradient(160deg,var(--surface2),var(--surface));border:1px solid var(--line);box-shadow:var(--sh-lg),var(--edge)}
+.principe-card h2{font-size:clamp(26px,3.6vw,42px);font-weight:700;letter-spacing:-.03em;line-height:1.12;margin:0 auto;max-width:20ch}
+.principe-card p{margin:24px auto 0;max-width:60ch;font-size:16.5px;line-height:1.75;color:var(--muted)}
+.principe-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1000px;margin:clamp(30px,4vw,44px) auto 0}
+@media(max-width:760px){.principe-3{grid-template-columns:1fr}}
+.pr{padding:24px 22px;border-radius:18px;border:1px solid var(--hair);background:rgba(23,34,59,.5);text-align:left}
+.pr h4{margin:0 0 6px;font-size:15px;font-weight:600;color:var(--accent-2)}
+.pr p{margin:0;font-size:13.5px;line-height:1.6;color:var(--muted)}
+
+/* PROCESS */
+.steps{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:2px}
+.step{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,3vw,44px);align-items:start;padding:clamp(24px,3vw,36px) 0;border-top:1px solid var(--line);transition:padding-left .4s var(--ease)}
+.step:last-child{border-bottom:1px solid var(--line)}
+.step:hover{padding-left:12px}
+.step-n{font-family:var(--display);font-size:clamp(24px,3vw,38px);font-weight:600;color:var(--accent);opacity:.85;line-height:1;min-width:2.4ch}
+.step h3{margin:0 0 8px;font-size:clamp(19px,2vw,25px);font-weight:600;letter-spacing:-.02em}
+.step p{margin:0;font-size:15px;line-height:1.7;color:var(--muted);max-width:60ch}
+
+/* CONTACT */
+.contact{text-align:center;position:relative}
+.contact-card{position:relative;max-width:640px;margin:0 auto;padding:clamp(42px,6vw,66px) clamp(26px,5vw,58px);border-radius:30px;background:linear-gradient(165deg,var(--surface2),var(--surface));border:1px solid var(--line);box-shadow:var(--sh-lg),var(--edge);overflow:hidden}
+.contact-card::before{content:"";position:absolute;left:50%;top:0;transform:translateX(-50%);width:56%;height:1px;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--accent) 60%,transparent),transparent)}
+.contact h2{margin:0 auto;font-size:clamp(29px,4.2vw,46px);font-weight:700;letter-spacing:-.033em;max-width:16ch}
+.contact p{margin:16px auto 0;max-width:34ch;font-size:16px;line-height:1.65;color:var(--muted)}
+.contact-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+.contact-mail{margin:24px 0 0;font-size:13.5px;color:var(--muted2)}
+.contact-mail a{text-decoration:underline;text-underline-offset:3px}
+
+/* FOOTER */
+.footer{border-top:1px solid var(--line);padding:40px 0;color:var(--muted2);font-size:12px}
+.footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer .brand{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="bgfx" aria-hidden="true"></div>
+
+<nav class="nav" id="nav">
+  <a class="brand" href="#top"><span class="dot"></span><b>DWELL</b><span>Intelligence</span></a>
+  <div class="nav-links">
+    <a href="#services">Ce que nous faisons</a><a href="#principe">Notre principe</a><a href="#methode">Méthode</a><a href="#contact">Contact</a>
+  </div>
+  <a class="btn-ghost" href="#contact"><span>Nous parler</span><span class="ar">→</span></a>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-media" aria-hidden="true"></div>
+  <h1 class="sr-only">DWELL Intelligence — Des process augmentés, chez vous.</h1>
+  <a class="hero-scroll" href="#services" aria-label="Découvrir"><span>Découvrir</span><span class="ln"></span></a>
+</header>
+
+<section class="section" id="services">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Ce que nous faisons</span>
+      <h2 class="h2">Quatre leviers, <em>un même but</em> : vous faire gagner du temps.</h2>
+      <p>Nous n'ajoutons pas une couche de logiciels que vous ne maîtrisez pas — nous améliorons ce que vous utilisez déjà.</p>
+    </div>
+    <div class="svc-grid">
+      <article class="svc reveal">
+        <div class="svc-ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+        <h3>Audit des flux</h3>
+        <p>Nous cartographions votre façon de travailler et repérons précisément ce qui vous coûte du temps. Pas un rapport dans un tiroir : des priorités claires.</p>
+      </article>
+      <article class="svc reveal">
+        <div class="svc-ic"><svg viewBox="0 0 24 24"><path d="M4 7h10M4 12h16M4 17h7"/><circle cx="18" cy="7" r="2"/><circle cx="14" cy="17" r="2"/></svg></div>
+        <h3>Automatisations sur mesure</h3>
+        <p>Des automatisations conçues pour vos outils, qui font disparaître les tâches répétitives — sans bouleverser vos habitudes.</p>
+      </article>
+      <article class="svc reveal">
+        <div class="svc-ic"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6H9zM4 10h-1M4 14h-1M21 10h-1M21 14h-1M10 4V3M14 4V3M10 21v-1M14 21v-1"/></svg></div>
+        <h3>Outils d'IA intégrés</h3>
+        <p>L'intelligence artificielle branchée sur vos systèmes existants — pas une plateforme de plus à apprendre, mais un renfort discret dans vos outils.</p>
+      </article>
+      <article class="svc reveal">
+        <div class="svc-ic"><svg viewBox="0 0 24 24"><path d="M12 14c3.3 0 6 1.6 6 3.6V20H6v-2.4C6 15.6 8.7 14 12 14z"/><circle cx="12" cy="8" r="4"/></svg></div>
+        <h3>Formation &amp; transfert</h3>
+        <p>Votre équipe est formée et autonome. La documentation, les outils et la connaissance restent chez vous — pour toujours.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section principe" id="principe">
+  <div class="wrap">
+    <div class="principe-card reveal">
+      <span class="eyebrow" style="justify-content:center;margin-bottom:22px">Notre principe</span>
+      <h2>Aucune dépendance nouvelle. <em>La connaissance reste chez vous.</em></h2>
+      <p>Nous améliorons ce que vous utilisez déjà, nous formons vos équipes, et nous documentons tout. À la fin de la mission, vous êtes plus rapides — et parfaitement autonomes. C'est notre définition d'un travail bien fait.</p>
+    </div>
+    <div class="principe-3">
+      <div class="pr reveal"><h4>Sur vos outils</h4><p>On s'intègre à votre stack existant, pas l'inverse. Zéro migration forcée.</p></div>
+      <div class="pr reveal"><h4>Mesurable</h4><p>Chaque gain de temps est chiffré, avant et après. Vous voyez le retour.</p></div>
+      <div class="pr reveal"><h4>Confidentiel</h4><p>Vos données restent les vôtres. Accords stricts, aucune fuite vers l'extérieur.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="methode">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Méthode</span>
+      <h2 class="h2">Comment ça se passe, <em>concrètement</em>.</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><span class="step-n">01</span><div><h3>Audit</h3><p>On observe, on écoute, on cartographie vos flux. On identifie où l'automatisation et l'IA créent le plus de valeur, vite.</p></div></div>
+      <div class="step reveal"><span class="step-n">02</span><div><h3>Prototype</h3><p>On construit une première automatisation en quelques jours, pour prouver la valeur sur un cas réel avant d'aller plus loin.</p></div></div>
+      <div class="step reveal"><span class="step-n">03</span><div><h3>Intégration</h3><p>On déploie proprement dans vos systèmes existants — sans casser ce qui marche, sans dépendance nouvelle.</p></div></div>
+      <div class="step reveal"><span class="step-n">04</span><div><h3>Formation</h3><p>On forme vos équipes jusqu'à l'autonomie complète, avec une documentation claire qui reste chez vous.</p></div></div>
+      <div class="step reveal"><span class="step-n">05</span><div><h3>Suivi</h3><p>On reste disponibles. Ce qui est en place vous appartient — nous, on veille à ce que ça continue de tourner.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section contact" id="contact">
+  <div class="wrap">
+    <div class="contact-card reveal">
+      <span class="eyebrow" style="justify-content:center;margin-bottom:20px">Contact</span>
+      <h2>Parlons de vos process.</h2>
+      <p>Un audit d'une heure, sans engagement.</p>
+      <div class="contact-actions">
+        <a class="btn" href="https://wa.me/32489041516" target="_blank" rel="noopener"><span>Écrire sur WhatsApp</span><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.031-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg></a>
+      </div>
+      <p class="contact-mail"><a href="mailto:dwellstudio.rm@gmail.com">dwellstudio.rm@gmail.com</a></p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <span class="brand"><b>DWELL®</b> Intelligence — un pôle de l'écosystème DWELL®</span>
+    <span>© 2026 DWELL®</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els=document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)||reduce){els.forEach(function(e){e.classList.add('vis')});}
+  else{var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target);}})},{threshold:.14,rootMargin:'0px 0px -40px 0px'});els.forEach(function(e){io.observe(e)});}
+  var nav=document.getElementById('nav');addEventListener('scroll',function(){nav.classList.toggle('scr',scrollY>40)},{passive:true});
+})();
+</script>
+</body>
+</html>
