@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DWELL · Analytics</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f5f5f7; --card: #ffffff; --text: #1d1d1f; --sub: #6e6e73;
+      --muted: #aeaeb2; --border: #d2d2d7; --blue: #0071e3;
+      --green: #34c759; --green-bg: #e9f9ee; --green-tx: #248a3d;
+      --shadow: 0 2px 20px rgba(0,0,0,0.06); --r: 18px;
+      --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+    }
+    body { background:var(--bg); color:var(--text); font-family:var(--font); font-size:14px; -webkit-font-smoothing:antialiased; min-height:100vh; }
+
+    /* Header */
+    header { background:rgba(255,255,255,.85); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:.5px solid var(--border); position:sticky; top:0; z-index:10; padding:0 32px; height:52px; display:flex; align-items:center; justify-content:space-between; }
+    .h-left { display:flex; align-items:center; gap:8px; }
+    .h-brand { font-size:15px; font-weight:600; letter-spacing:-.02em; }
+    .h-sep { color:var(--muted); font-size:13px; font-weight:300; }
+    .h-prop { font-size:14px; font-weight:400; color:var(--sub); }
+    .h-right { display:flex; align-items:center; gap:12px; }
+    .live-badge { display:flex; align-items:center; gap:5px; background:var(--green-bg); color:var(--green-tx); font-size:11px; font-weight:500; padding:4px 10px; border-radius:20px; }
+    .live-dot { width:6px; height:6px; border-radius:50%; background:var(--green); animation:pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .h-updated { font-size:12px; color:var(--muted); }
+    .btn { background:var(--card); border:.5px solid var(--border); color:var(--sub); font-family:var(--font); font-size:12px; font-weight:500; padding:6px 14px; border-radius:8px; cursor:pointer; transition:background .15s; }
+    .btn:hover { background:var(--bg); }
+    .btn-blue { background:var(--blue); border-color:var(--blue); color:#fff; }
+    .btn-blue:hover { background:#0077ed; }
+
+    /* Layout */
+    main { max-width:1000px; margin:0 auto; padding:28px 24px; display:flex; flex-direction:column; gap:14px; }
+
+    /* Property tabs */
+    .prop-tabs { display:flex; gap:8px; padding:20px 32px 0; }
+    .prop-tab { font-size:13px; font-weight:500; padding:7px 16px; border-radius:20px; border:.5px solid var(--border); background:var(--card); color:var(--sub); cursor:pointer; transition:all .15s; white-space:nowrap; }
+    .prop-tab:hover { border-color:#aaa; color:var(--text); }
+    .prop-tab.active { background:var(--text); color:#fff; border-color:var(--text); }
+
+    /* Property URL bar (below tabs) */
+    .prop-url-bar { padding:8px 32px 0; }
+    .prop-url-link { font-size:12px; color:var(--blue); text-decoration:none; display:inline-flex; align-items:center; gap:4px; opacity:.8; transition:opacity .15s; }
+    .prop-url-link:hover { opacity:1; text-decoration:underline; }
+
+    /* Filter bar */
+    .filter-bar { display:flex; align-items:center; gap:10px; background:var(--card); border-radius:12px; padding:10px 16px; box-shadow:var(--shadow); flex-wrap:wrap; }
+    .filter-label { font-size:12px; font-weight:500; color:var(--sub); white-space:nowrap; }
+    .filter-date { font-family:var(--font); font-size:13px; color:var(--text); border:.5px solid var(--border); border-radius:8px; padding:5px 10px; background:var(--bg); cursor:pointer; outline:none; }
+    .filter-date:focus { border-color:var(--blue); }
+    .filter-note { font-size:11px; color:var(--muted); margin-left:auto; }
+
+    /* Live now */
+    .live-now-bar { display:flex; align-items:center; gap:14px; background:var(--card); border-radius:14px; padding:14px 20px; box-shadow:var(--shadow); border-left:3px solid var(--green); }
+    .ln-dot { width:10px; height:10px; border-radius:50%; background:var(--green); flex-shrink:0; animation:pulse 1.5s ease-in-out infinite; }
+    .ln-count { font-size:28px; font-weight:200; color:var(--text); letter-spacing:-.03em; line-height:1; }
+    .ln-label { font-size:13px; color:var(--sub); flex:1; }
+    .ln-updated { font-size:11px; color:var(--muted); }
+
+    /* Metrics */
+    .metrics-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+    .mc { background:var(--card); border-radius:var(--r); padding:22px 22px 18px; box-shadow:var(--shadow); }
+    .mc.blue { background:var(--blue); }
+    .mc.blue .mc-val,.mc.blue .mc-lbl,.mc.blue .mc-sub { color:#fff; }
+    .mc.blue .mc-lbl { opacity:.75; } .mc.blue .mc-sub { opacity:.6; }
+    .mc-val { font-size:44px; font-weight:200; letter-spacing:-.03em; line-height:1; color:var(--text); margin-bottom:6px; }
+    .mc-lbl { font-size:12px; font-weight:500; color:var(--sub); }
+    .mc-sub { font-size:11px; color:var(--muted); margin-top:3px; }
+
+    /* Two col */
+    .row2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .ic { background:var(--card); border-radius:var(--r); padding:22px; box-shadow:var(--shadow); }
+    .ic-title { font-size:11px; font-weight:600; color:var(--sub); letter-spacing:.06em; text-transform:uppercase; margin-bottom:20px; }
+
+    /* Device bars */
+    .bars { display:flex; flex-direction:column; gap:14px; }
+    .bar-row { display:flex; align-items:center; gap:10px; }
+    .bar-lbl { font-size:13px; color:var(--text); width:64px; flex-shrink:0; }
+    .bar-track { flex:1; height:6px; background:var(--bg); border-radius:3px; overflow:hidden; }
+    .bar-fill { height:100%; border-radius:3px; background:var(--blue); transition:width .8s cubic-bezier(.4,0,.2,1); }
+    .bar-fill.mobile { background:#34aadc; } .bar-fill.tablet { background:#5ac8fa; }
+    .bar-r { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+    .bar-n { font-size:13px; font-weight:500; color:var(--text); width:28px; text-align:right; }
+    .bar-pct { font-size:12px; color:var(--muted); width:34px; text-align:right; }
+
+    /* Visitor split */
+    .vs { display:flex; flex-direction:column; gap:18px; }
+    .vs-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+    .vs-lbl { font-size:13px; color:var(--text); }
+    .vs-n { font-size:22px; font-weight:300; color:var(--text); letter-spacing:-.02em; }
+    .vs-track { width:100%; height:4px; background:var(--bg); border-radius:2px; overflow:hidden; }
+    .vs-fill { height:100%; border-radius:2px; }
+    .vs-note { font-size:11px; color:var(--muted); margin-top:6px; line-height:1.5; }
+
+    /* Time chart */
+    .tc-wrap { background:var(--card); border-radius:var(--r); padding:22px; box-shadow:var(--shadow); }
+    .tc-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+    .tc-wrap-title { font-size:11px; font-weight:600; color:var(--sub); letter-spacing:.06em; text-transform:uppercase; }
+    .time-tabs { display:flex; gap:4px; }
+    .time-tab { font-size:11px; font-weight:500; padding:4px 12px; border-radius:20px; border:.5px solid var(--border); background:var(--bg); color:var(--sub); cursor:pointer; transition:all .15s; }
+    .time-tab:hover { border-color:#aaa; color:var(--text); }
+    .time-tab.active { background:var(--text); color:#fff; border-color:var(--text); }
+    .time-chart { display:flex; align-items:flex-end; gap:2px; height:80px; }
+    .tb-wrap { flex:1; display:flex; flex-direction:column; align-items:center; position:relative; }
+    .tb-bar { width:100%; border-radius:3px 3px 0 0; background:var(--blue); opacity:.7; transition:height .5s cubic-bezier(.4,0,.2,1),opacity .2s; min-height:2px; cursor:default; }
+    .tb-bar:hover { opacity:1; }
+    .tb-bar.peak { background:var(--green); opacity:1; }
+    .time-foot { display:flex; justify-content:space-between; margin-top:8px; padding:0 1px; font-size:10px; color:var(--muted); }
+
+    /* Calendar */
+    .cal-wrap { background:var(--card); border-radius:var(--r); padding:22px; box-shadow:var(--shadow); }
+    .cal-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+    .cal-title-label { font-size:11px; font-weight:600; color:var(--sub); letter-spacing:.06em; text-transform:uppercase; }
+    .cal-nav { display:flex; align-items:center; gap:12px; }
+    .cal-month-label { font-size:14px; font-weight:500; color:var(--text); min-width:110px; text-align:center; }
+    .cal-nav-btn { background:none; border:.5px solid var(--border); border-radius:8px; width:28px; height:28px; cursor:pointer; font-size:14px; color:var(--sub); display:flex; align-items:center; justify-content:center; transition:background .15s; }
+    .cal-nav-btn:hover { background:var(--bg); }
+    .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+    .cal-dow { font-size:10px; font-weight:500; color:var(--muted); text-align:center; padding:4px 0 8px; letter-spacing:.06em; text-transform:uppercase; }
+    .cal-day { min-height:52px; border-radius:8px; padding:6px; cursor:pointer; position:relative; border:.5px solid transparent; transition:background .15s, border-color .15s; display:flex; flex-direction:column; gap:3px; }
+    .cal-day:hover { background:var(--bg); border-color:var(--border); }
+    .cal-day.other-month .cal-day-num { color:var(--muted); }
+    .cal-day.today { background:var(--green-bg); border-color:var(--green); }
+    .cal-day.today .cal-day-num { color:var(--green-tx); font-weight:600; }
+    .cal-day.has-tour { border-color:var(--blue); }
+    .cal-day-num { font-size:12px; color:var(--text); line-height:1; }
+    .cal-tour-dot { font-size:10px; color:var(--blue); font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; background:var(--bg); border-radius:4px; padding:1px 4px; }
+
+    /* Table card */
+    .tcard { background:var(--card); border-radius:var(--r); box-shadow:var(--shadow); overflow:hidden; }
+    .tcard-head { display:flex; align-items:center; justify-content:space-between; padding:16px 22px 12px; border-bottom:.5px solid var(--border); }
+    .tcard-title { font-size:11px; font-weight:600; color:var(--sub); letter-spacing:.06em; text-transform:uppercase; }
+    .tcard-count { font-size:12px; color:var(--muted); }
+    table { width:100%; border-collapse:collapse; }
+    thead th { font-size:11px; font-weight:500; color:var(--muted); padding:8px 22px; text-align:left; border-bottom:.5px solid var(--bg); background:#fafafa; }
+    tbody tr { border-bottom:.5px solid var(--bg); }
+    tbody tr:last-child { border-bottom:none; }
+    tbody tr:hover { background:#fafafa; }
+    tbody td { padding:10px 22px; font-size:13px; color:var(--sub); }
+    .td-time { color:var(--muted); font-size:12px; white-space:nowrap; }
+    .td-main { color:var(--text); font-weight:500; }
+    .td-msg { font-size:12px; color:var(--sub); max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer; color:var(--blue); }
+    .td-msg:hover { text-decoration:underline; }
+    .tag { display:inline-flex; align-items:center; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:500; }
+    .tag-view { background:var(--bg); color:var(--sub); }
+    .tag-booking { background:var(--green-bg); color:var(--green-tx); }
+    .tag-form { background:#fff3e0; color:#b45000; }
+    .tag-device { background:var(--bg); color:var(--sub); }
+
+    /* SQL box */
+    .sql-box { background:var(--card); border-radius:var(--r); padding:20px 22px; box-shadow:var(--shadow); }
+    .sql-title { font-size:11px; font-weight:600; color:var(--sub); text-transform:uppercase; letter-spacing:.06em; margin-bottom:10px; }
+    .sql-desc { font-size:13px; color:var(--sub); margin-bottom:14px; line-height:1.5; }
+    .sql-code { background:#1d1d1f; color:#f5f5f7; font-family:"SF Mono","Fira Code","Menlo",monospace; font-size:12px; padding:14px 16px; border-radius:10px; line-height:1.6; white-space:pre; overflow-x:auto; }
+
+    /* ── Message modal */
+    .overlay { position:fixed; inset:0; background:rgba(0,0,0,.45); backdrop-filter:blur(6px); z-index:900; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .25s; }
+    .overlay.open { opacity:1; pointer-events:all; }
+    .modal-card { background:var(--card); border-radius:16px; padding:32px; width:min(500px,90vw); position:relative; transform:translateY(16px); transition:transform .3s cubic-bezier(.22,1,.36,1); max-height:80vh; overflow-y:auto; }
+    .overlay.open .modal-card { transform:translateY(0); }
+    .modal-x { position:absolute; top:16px; right:16px; background:var(--bg); border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; font-size:13px; color:var(--sub); display:flex; align-items:center; justify-content:center; }
+    .modal-x:hover { color:var(--text); }
+    .modal-eyebrow { font-size:10px; font-weight:600; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:6px; }
+    .modal-name { font-size:22px; font-weight:600; color:var(--text); margin-bottom:16px; }
+    .modal-meta { display:flex; flex-direction:column; gap:8px; margin-bottom:20px; }
+    .modal-row { display:flex; gap:10px; font-size:13px; }
+    .modal-key { color:var(--muted); width:60px; flex-shrink:0; }
+    .modal-val { color:var(--text); }
+    .modal-divider { height:.5px; background:var(--border); margin:16px 0; }
+    .modal-msg-label { font-size:10px; font-weight:600; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:8px; }
+    .modal-msg-body { font-size:14px; color:var(--text); line-height:1.7; white-space:pre-wrap; }
+
+    /* ── Tour modal */
+    .tour-modal-card { background:var(--card); border-radius:16px; padding:32px; width:min(420px,90vw); position:relative; transform:translateY(16px); transition:transform .3s cubic-bezier(.22,1,.36,1); }
+    .overlay.open .tour-modal-card { transform:translateY(0); }
+    .tm-title { font-size:18px; font-weight:600; color:var(--text); margin-bottom:4px; }
+    .tm-date { font-size:13px; color:var(--sub); margin-bottom:20px; }
+    .tm-tours { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
+    .tm-tour-item { background:var(--bg); border-radius:10px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; }
+    .tm-tour-name { font-size:13px; font-weight:500; color:var(--text); }
+    .tm-tour-time { font-size:12px; color:var(--sub); }
+    .tm-tour-del { background:none; border:none; cursor:pointer; color:var(--muted); font-size:14px; padding:0 4px; }
+    .tm-tour-del:hover { color:#c00; }
+    .tm-form { display:flex; flex-direction:column; gap:10px; }
+    .tm-label { font-size:10px; font-weight:600; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; margin-bottom:3px; display:block; }
+    .tm-input { font-family:var(--font); font-size:13px; padding:9px 12px; border:.5px solid var(--border); border-radius:8px; outline:none; width:100%; background:#fff; color:var(--text); }
+    .tm-input:focus { border-color:var(--blue); }
+    .tm-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .tm-add-btn { background:var(--text); color:#fff; border:none; border-radius:8px; padding:10px; font-family:var(--font); font-size:13px; font-weight:500; cursor:pointer; transition:background .15s; margin-top:4px; }
+    .tm-add-btn:hover { background:#333; }
+    .tm-empty { font-size:13px; color:var(--muted); text-align:center; padding:8px 0; }
+
+    .state-empty { padding:36px; text-align:center; font-size:13px; color:var(--muted); }
+    .error-bar { background:#fff2f2; border:.5px solid #ffb3b3; border-radius:12px; padding:14px 18px; font-size:13px; color:#c00; }
+
+    /* Platform chart */
+    .plat-chart { display:flex; align-items:center; gap:24px; flex-wrap:wrap; }
+    .plat-donut { flex-shrink:0; }
+    .plat-legend { display:flex; flex-direction:column; gap:10px; flex:1; min-width:140px; }
+    .plat-row { display:flex; align-items:center; gap:8px; }
+    .plat-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+    .plat-name { font-size:13px; color:var(--text); flex:1; }
+    .plat-n { font-size:13px; font-weight:500; color:var(--text); min-width:28px; text-align:right; }
+    .plat-pct { font-size:12px; color:var(--muted); min-width:32px; text-align:right; }
+    .tag-hb { background:#f0f0f5; color:#636366; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="h-left">
+      <span class="h-brand">DWELL</span>
+      <span class="h-sep">·</span>
+      <span class="h-prop" id="h-prop-name">Villa Espinette</span>
+    </div>
+    <div class="h-right">
+      <span class="live-badge"><span class="live-dot"></span>Live</span>
+      <span class="h-updated" id="updated">—</span>
+      <button class="btn" onclick="loadAll()">Refresh</button>
+    </div>
+  </header>
+
+  <!-- Property tabs -->
+  <div class="prop-tabs">
+    <button class="prop-tab active" data-page="villa-espinette" data-label="Villa Espinette" data-url="https://dwell-studio.github.io/villa-espinette/">Villa Espinette</button>
+    <button class="prop-tab" data-page="maison-erpicum-percke" data-label="Maison Erpicum · Percke" data-url="https://dwell-studio.github.io/maison-erpicum-percke/">Maison Erpicum · Percke</button>
+  </div>
+
+  <!-- Property URL link (below tabs) -->
+  <div class="prop-url-bar">
+    <a class="prop-url-link" id="prop-url-link" href="https://dwell-studio.github.io/villa-espinette/" target="_blank">
+      ↗ dwell-studio.github.io/villa-espinette/
+    </a>
+  </div>
+
+  <main>
+    <div id="error" class="error-bar" style="display:none"></div>
+
+    <!-- Live now -->
+    <div class="live-now-bar">
+      <span class="ln-dot"></span>
+      <span class="ln-count" id="ln-count">—</span>
+      <span class="ln-label">personne<span id="ln-plural"></span> sur la page en ce moment</span>
+      <span class="ln-updated" id="ln-updated"></span>
+    </div>
+
+    <!-- Date filter -->
+    <div class="filter-bar">
+      <span class="filter-label">From</span>
+      <input type="date" class="filter-date" id="date-from" autocomplete="off" onchange="loadAll()">
+      <span class="filter-label">to</span>
+      <input type="date" class="filter-date" id="date-to" autocomplete="off" onchange="loadAll()">
+      <button class="btn btn-blue" onclick="resetFilter()">All time</button>
+      <span class="filter-note" id="filter-note"></span>
+    </div>
+
+    <!-- Metrics -->
+    <div class="metrics-grid" id="metrics">
+      <div class="mc"><div class="mc-val">—</div><div class="mc-lbl">Total Visits</div></div>
+      <div class="mc"><div class="mc-val">—</div><div class="mc-lbl">Unique Visitors</div></div>
+      <div class="mc blue"><div class="mc-val">—</div><div class="mc-lbl">Leads</div></div>
+      <div class="mc"><div class="mc-val">—</div><div class="mc-lbl">Conversion</div></div>
+    </div>
+
+    <!-- Device + Visitors -->
+    <div class="row2">
+      <div class="ic">
+        <div class="ic-title">Device — Visits</div>
+        <div class="bars" id="devices"><div class="state-empty" style="padding:16px 0">—</div></div>
+      </div>
+      <div class="ic">
+        <div class="ic-title">New vs Returning</div>
+        <div class="vs" id="vs-split"><div class="state-empty" style="padding:16px 0">—</div></div>
+      </div>
+    </div>
+
+    <!-- Traffic sources -->
+    <div class="ic">
+      <div class="ic-title">Traffic Sources — Unique Visitors</div>
+      <div class="plat-chart" id="platform-chart"><div class="state-empty" style="padding:16px 0">—</div></div>
+    </div>
+
+    <!-- Time chart -->
+    <div class="tc-wrap">
+      <div class="tc-top">
+        <span class="tc-wrap-title">Visites dans le temps</span>
+        <div class="time-tabs">
+          <button class="time-tab" data-mode="month">Mois</button>
+          <button class="time-tab" data-mode="week">Semaine</button>
+          <button class="time-tab active" data-mode="day">Jour</button>
+          <button class="time-tab" data-mode="hour">Heure</button>
+        </div>
+      </div>
+      <div class="time-chart" id="time-chart"><div class="state-empty" style="padding:0;width:100%;font-size:12px">—</div></div>
+      <div class="time-foot" id="time-foot"></div>
+    </div>
+
+    <!-- Calendar -->
+    <div class="cal-wrap">
+      <div class="cal-top">
+        <span class="cal-title-label">Calendrier des visites</span>
+        <div class="cal-nav">
+          <button class="cal-nav-btn" id="cal-prev">‹</button>
+          <span class="cal-month-label" id="cal-month-label">—</span>
+          <button class="cal-nav-btn" id="cal-next">›</button>
+        </div>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+
+    <!-- Leads table -->
+    <div class="tcard">
+      <div class="tcard-head">
+        <span class="tcard-title">Leads — Form submissions</span>
+        <span class="tcard-count" id="leads-count">—</span>
+      </div>
+      <div id="leads-table"><div class="state-empty">No leads yet.</div></div>
+    </div>
+
+    <!-- Events table -->
+    <div class="tcard">
+      <div class="tcard-head">
+        <span class="tcard-title">Recent Activity</span>
+        <span class="tcard-count" id="events-count">—</span>
+      </div>
+      <div id="events-table"><div class="state-empty">—</div></div>
+    </div>
+
+    <!-- SQL box -->
+    <div class="sql-box">
+      <div class="sql-title">Clear test data — run in Supabase SQL Editor</div>
+      <div class="sql-desc">Run before going live to start with clean data.</div>
+      <div class="sql-code" id="sql-snippet">-- Delete all test events
+DELETE FROM events WHERE page_id = 'villa-espinette';
+
+-- Delete all test leads
+DELETE FROM leads  WHERE page_id = 'villa-espinette';</div>
+    </div>
+  </main>
+
+  <!-- Message modal -->
+  <div class="overlay" id="msg-overlay">
+    <div class="modal-card">
+      <button class="modal-x" id="msg-close">✕</button>
+      <div class="modal-eyebrow">Message reçu</div>
+      <div class="modal-name" id="msg-name">—</div>
+      <div class="modal-meta" id="msg-meta"></div>
+      <div class="modal-divider"></div>
+      <div class="modal-msg-label">Message</div>
+      <div class="modal-msg-body" id="msg-body">—</div>
+    </div>
+  </div>
+
+  <!-- Tour modal -->
+  <div class="overlay" id="tour-overlay">
+    <div class="tour-modal-card">
+      <button class="modal-x" id="tour-close">✕</button>
+      <div class="tm-title" id="tour-modal-title">Visites</div>
+      <div class="tm-date" id="tour-modal-date"></div>
+      <div class="tm-tours" id="tour-list"></div>
+      <div class="tm-form">
+        <div class="tm-row">
+          <div>
+            <label class="tm-label">Nom</label>
+            <input class="tm-input" id="tour-name" type="text" placeholder="Jean Dupont">
+          </div>
+          <div>
+            <label class="tm-label">Heure</label>
+            <input class="tm-input" id="tour-time" type="time" value="10:00">
+          </div>
+        </div>
+        <div>
+          <label class="tm-label">Téléphone</label>
+          <input class="tm-input" id="tour-phone" type="tel" placeholder="+32 4xx xx xx xx">
+        </div>
+        <button class="tm-add-btn" id="tour-add-btn">+ Ajouter la visite</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  const SB  = 'https://kdzkffcqmutwojyauqtj.supabase.co';
+  const KEY = 'sb_publishable_XtBrgzqzM2GBOa-RNVH8uA_qfrPEaTd';
+  const H   = { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY };
+  let PAGE  = 'villa-espinette';
+  let _allEvents = [];
+
+  const PLATFORM_COLORS = {
+    'Facebook':   '#1877F2',
+    'Instagram':  '#E4405F',
+    'LinkedIn':   '#003366',
+    'Direct':     '#FF9500',
+    'Google':     '#34C759',
+    'Twitter/X':  '#14171A',
+    'TikTok':     '#69C9D0',
+    'Pinterest':  '#BD081C',
+    'Other':      '#8E8E93'
+  };
+
+  function detectPlatform(referrer) {
+    const r = (referrer || '').toLowerCase();
+    if (!r || r === 'direct') return 'Direct';
+    if (r.includes('fbclid'))                                return 'Facebook';
+    if (r.includes('instagram'))                             return 'Instagram';
+    if (r.includes('facebook') || r.includes('fb.com'))     return 'Facebook';
+    if (r.includes('linkedin'))                              return 'LinkedIn';
+    if (r.includes('google'))                                return 'Google';
+    if (r.includes('twitter') || r.includes('t.co') || r.includes('x.com')) return 'Twitter/X';
+    if (r.includes('tiktok'))                                return 'TikTok';
+    if (r.includes('pinterest') || r.includes('pin.it'))    return 'Pinterest';
+    return 'Other';
+  }
+
+  function renderPlatformChart(views) {
+    const counts = {};
+    const seen = new Set();
+    // Iterate oldest-first so first visit wins for attribution
+    [...views].reverse().forEach(e => {
+      const vid = e.visitor_id;
+      if (vid && seen.has(vid)) return;
+      if (vid) seen.add(vid);
+      const p = detectPlatform(e.referrer);
+      counts[p] = (counts[p] || 0) + 1;
+    });
+    const total = Object.values(counts).reduce((a, b) => a + b, 0);
+    if (!total) {
+      document.getElementById('platform-chart').innerHTML =
+        '<div class="state-empty" style="padding:16px 0;width:100%">No visit data yet.</div>';
+      return;
+    }
+    const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    const cx = 70, cy = 70, R = 56, r = 34;
+    let angle = -Math.PI / 2, paths = '';
+    entries.forEach(([platform, count]) => {
+      const sweep = Math.max((count / total) * 2 * Math.PI, 0.001);
+      const end = angle + sweep;
+      const x1 = cx + R * Math.cos(angle), y1 = cy + R * Math.sin(angle);
+      const x2 = cx + R * Math.cos(end),   y2 = cy + R * Math.sin(end);
+      const ix1 = cx + r * Math.cos(end),  iy1 = cy + r * Math.sin(end);
+      const ix2 = cx + r * Math.cos(angle),iy2 = cy + r * Math.sin(angle);
+      const large = sweep > Math.PI ? 1 : 0;
+      const color = PLATFORM_COLORS[platform] || '#8E8E93';
+      paths += `<path d="M${x1.toFixed(2)},${y1.toFixed(2)} A${R},${R} 0 ${large},1 ${x2.toFixed(2)},${y2.toFixed(2)} L${ix1.toFixed(2)},${iy1.toFixed(2)} A${r},${r} 0 ${large},0 ${ix2.toFixed(2)},${iy2.toFixed(2)} Z" fill="${color}" opacity="0.9" stroke="white" stroke-width="1.5"/>`;
+      angle = end;
+    });
+    const svg = `<svg width="140" height="140" viewBox="0 0 140 140">${paths}
+      <circle cx="${cx}" cy="${cy}" r="${r - 2}" fill="white"/>
+      <text x="${cx}" y="${cy - 6}" text-anchor="middle" font-size="20" font-weight="200" fill="#1d1d1f" font-family="-apple-system,sans-serif">${total}</text>
+      <text x="${cx}" y="${cy + 10}" text-anchor="middle" font-size="9" fill="#6e6e73" font-family="-apple-system,sans-serif" letter-spacing="0.04em">PEOPLE</text>
+    </svg>`;
+    const legend = entries.map(([p, c]) => {
+      const color = PLATFORM_COLORS[p] || '#8E8E93';
+      const pct = Math.round(c / total * 100);
+      return `<div class="plat-row">
+        <span class="plat-dot" style="background:${color}"></span>
+        <span class="plat-name">${p}</span>
+        <span class="plat-n">${c}</span>
+        <span class="plat-pct">${pct}%</span>
+      </div>`;
+    }).join('');
+    document.getElementById('platform-chart').innerHTML =
+      `<div class="plat-donut">${svg}</div><div class="plat-legend">${legend}</div>`;
+  }
+
+  // ── Property tabs
+  const PROPS = {
+    'villa-espinette':   { label: 'Villa Espinette',       url: 'https://dwell-studio.github.io/villa-espinette/' },
+    'maison-erpicum-percke': { label: 'Maison Erpicum · Percke', url: 'https://dwell-studio.github.io/maison-erpicum-percke/' }
+  };
+  document.querySelectorAll('.prop-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.prop-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      PAGE = btn.dataset.page;
+      const p = PROPS[PAGE];
+      document.getElementById('h-prop-name').textContent = p.label;
+      const urlEl = document.getElementById('prop-url-link');
+      urlEl.href = p.url;
+      urlEl.textContent = '↗ ' + p.url.replace('https://','');
+      document.getElementById('sql-snippet').textContent =
+        `-- Delete all test events\nDELETE FROM events WHERE page_id = '${PAGE}';\n\n-- Delete all test leads\nDELETE FROM leads  WHERE page_id = '${PAGE}';`;
+      loadAll();
+      loadTours();
+      renderCalendar();
+    });
+  });
+
+  function resetFilter() {
+    document.getElementById('date-from').value = '';
+    document.getElementById('date-to').value   = '';
+    document.getElementById('filter-note').textContent = '';
+    loadAll();
+  }
+  function dateParams() {
+    const from = document.getElementById('date-from').value;
+    const to   = document.getElementById('date-to').value;
+    let p = '';
+    if (from) p += `&created_at=gte.${from}T00:00:00`;
+    if (to)   p += `&created_at=lte.${to}T23:59:59`;
+    document.getElementById('filter-note').textContent = (from||to) ? `${from||'…'} → ${to||'now'}` : '';
+    return p;
+  }
+
+  async function loadAll() {
+    document.getElementById('error').style.display = 'none';
+    const dp = dateParams();
+    try {
+      const [pvR, ldR, hbR] = await Promise.all([
+        fetch(`${SB}/rest/v1/events?select=*&page_id=eq.${PAGE}&event_type=eq.page_view&order=created_at.desc${dp}`, { headers: H }),
+        fetch(`${SB}/rest/v1/leads?select=*&page_id=eq.${PAGE}&order=created_at.desc${dp}`, { headers: H }),
+        fetch(`${SB}/rest/v1/events?select=id,event_type,visitor_id,device,referrer,created_at&page_id=eq.${PAGE}&event_type=eq.heartbeat&order=created_at.desc&limit=300${dp}`, { headers: H }),
+      ]);
+      if (!pvR.ok) throw new Error('events HTTP ' + pvR.status);
+      if (!ldR.ok) throw new Error('leads HTTP ' + ldR.status);
+      const [pageViews, leads, heartbeats] = await Promise.all([pvR.json(), ldR.json(), hbR.ok ? hbR.json() : []]);
+      _allEvents = [...pageViews, ...heartbeats].sort((a, b) => b.created_at.localeCompare(a.created_at));
+      render(pageViews, leads);
+      renderTimeChart(pageViews);
+      document.getElementById('updated').textContent =
+        new Date().toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+    } catch(e) {
+      document.getElementById('error').textContent = '⚠ ' + e.message;
+      document.getElementById('error').style.display = 'block';
+    }
+  }
+
+  function render(views, leads) {
+    const vids   = views.map(e => e.visitor_id).filter(Boolean);
+    const unique = vids.length ? new Set(vids).size : views.length;
+    const hasVids = vids.length > 0;
+    const conv   = unique ? (leads.length / unique * 100).toFixed(1) + '%' : '—';
+
+    document.getElementById('metrics').innerHTML = `
+      <div class="mc"><div class="mc-val">${views.length}</div><div class="mc-lbl">Total Visits</div><div class="mc-sub">page loads</div></div>
+      <div class="mc"><div class="mc-val">${unique}</div><div class="mc-lbl">Unique Visitors</div><div class="mc-sub">${hasVids ? 'by visitor ID' : 'estimated'}</div></div>
+      <div class="mc blue"><div class="mc-val">${leads.length}</div><div class="mc-lbl">Leads</div><div class="mc-sub">form submissions</div></div>
+      <div class="mc"><div class="mc-val">${conv}</div><div class="mc-lbl">Conversion</div><div class="mc-sub">leads / unique visitors</div></div>`;
+
+    const dc = { desktop:0, mobile:0, tablet:0 };
+    views.forEach(e => { dc[e.device||'desktop']++; });
+    const tot = views.length || 1;
+    document.getElementById('devices').innerHTML = [
+      ['Desktop','desktop',dc.desktop],['Mobile','mobile',dc.mobile],['Tablet','tablet',dc.tablet]
+    ].map(([n,cls,v]) => `
+      <div class="bar-row">
+        <span class="bar-lbl">${n}</span>
+        <div class="bar-track"><div class="bar-fill ${cls}" style="width:${Math.round(v/tot*100)}%"></div></div>
+        <div class="bar-r"><span class="bar-n">${v}</span><span class="bar-pct">${Math.round(v/tot*100)}%</span></div>
+      </div>`).join('');
+
+    if (!hasVids) {
+      document.getElementById('vs-split').innerHTML = '<div class="vs-note">Open the live page to start collecting visitor IDs.</div>';
+    } else {
+      const vc = {}; vids.forEach(v => { vc[v]=(vc[v]||0)+1; });
+      const nw = Object.values(vc).filter(c=>c===1).length;
+      const rt = Object.values(vc).filter(c=>c>1).length;
+      const vt = nw+rt||1;
+      document.getElementById('vs-split').innerHTML = `
+        <div><div class="vs-row"><span class="vs-lbl">New</span><span class="vs-n">${nw}</span></div><div class="vs-track"><div class="vs-fill" style="width:${Math.round(nw/vt*100)}%;background:var(--blue)"></div></div></div>
+        <div><div class="vs-row"><span class="vs-lbl">Returning</span><span class="vs-n">${rt}</span></div><div class="vs-track"><div class="vs-fill" style="width:${Math.round(rt/vt*100)}%;background:#34aadc"></div></div></div>
+        <div class="vs-note">Same browser = same visitor.</div>`;
+    }
+
+    // Platform chart
+    renderPlatformChart(views);
+
+    // Leads table
+    document.getElementById('leads-count').textContent = leads.length + ' total';
+    if (!leads.length) {
+      document.getElementById('leads-table').innerHTML = '<div class="state-empty">No form submissions yet.</div>';
+    } else {
+      const rows = leads.map((l,i) => {
+        const d = new Date(l.created_at);
+        const time = d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) + ' · ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+        const msg = l.message || '';
+        const preview = msg.length > 45 ? msg.slice(0,45) + '…' : (msg || '—');
+        return `<tr>
+          <td class="td-time">${time}</td>
+          <td class="td-main">${l.name||'—'}</td>
+          <td><a href="mailto:${l.email||''}" style="color:var(--blue);text-decoration:none">${l.email||'—'}</a></td>
+          <td>${l.phone||'—'}</td>
+          <td class="td-msg" onclick="openMsgModal(${i})" title="Cliquer pour lire le message complet">${preview}</td>
+        </tr>`;
+      });
+      document.getElementById('leads-table').innerHTML = `<table><thead><tr><th>Date</th><th>Name</th><th>Email</th><th>Phone</th><th>Message</th></tr></thead><tbody>${rows.join('')}</tbody></table>`;
+      window._leads = leads;
+    }
+
+    // Events table — show from _allEvents (page_views + heartbeats)
+    const evAll = _allEvents.length ? _allEvents : views;
+    document.getElementById('events-count').textContent = views.length + ' page views';
+    if (!evAll.length) { document.getElementById('events-table').innerHTML = '<div class="state-empty">No events yet.</div>'; return; }
+    const evRows = evAll.slice(0, 30).map(e => {
+      const d = new Date(e.created_at);
+      const time = d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}) + ' · ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+      const tagCls = e.event_type==='form_submit'?'tag-form':e.event_type==='demander_visite'?'tag-booking':e.event_type==='heartbeat'?'tag-hb':'tag-view';
+      const label = {page_view:'Page view',demander_visite:'CTA click',form_submit:'Form submit',modal_open:'Modal open',heartbeat:'Heartbeat ♡'}[e.event_type]||e.event_type.replace(/_/g,' ');
+      const plat = detectPlatform(e.referrer);
+      const platColor = PLATFORM_COLORS[plat] || '#8E8E93';
+      return `<tr><td class="td-time">${time}</td><td><span class="tag ${tagCls}">${label}</span></td><td><span class="tag tag-device">${e.device||'—'}</span></td><td class="td-time">${e.visitor_id?e.visitor_id.slice(-6):'—'}</td><td><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--sub)"><span style="width:7px;height:7px;border-radius:50%;background:${platColor};display:inline-block"></span>${plat}</span></td></tr>`;
+    }).join('');
+    document.getElementById('events-table').innerHTML = `<table><thead><tr><th>Time</th><th>Event</th><th>Device</th><th>Visitor</th><th>Source</th></tr></thead><tbody>${evRows}</tbody></table>`;
+  }
+
+  // ── Message modal
+  function openMsgModal(i) {
+    const l = window._leads[i];
+    if (!l) return;
+    const d = new Date(l.created_at);
+    const time = d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}) + ' à ' + d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('msg-name').textContent = l.name || 'Anonyme';
+    document.getElementById('msg-meta').innerHTML = `
+      <div class="modal-row"><span class="modal-key">Date</span><span class="modal-val">${time}</span></div>
+      <div class="modal-row"><span class="modal-key">Email</span><span class="modal-val"><a href="mailto:${l.email||''}" style="color:var(--blue)">${l.email||'—'}</a></span></div>
+      <div class="modal-row"><span class="modal-key">Tél.</span><span class="modal-val">${l.phone||'—'}</span></div>`;
+    document.getElementById('msg-body').textContent = l.message || '(aucun message)';
+    document.getElementById('msg-overlay').classList.add('open');
+  }
+  document.getElementById('msg-close').addEventListener('click', () => document.getElementById('msg-overlay').classList.remove('open'));
+  document.getElementById('msg-overlay').addEventListener('click', e => { if (e.target===document.getElementById('msg-overlay')) document.getElementById('msg-overlay').classList.remove('open'); });
+
+  // ── Time chart
+  let timeMode = 'day';
+  let _cachedEvents = [];
+  function renderTimeChart(events) {
+    _cachedEvents = events;
+    const views = events.filter(e => e.event_type === 'page_view');
+    let buckets=[], labels=[], footLabels=[];
+    if (timeMode==='hour') {
+      buckets = Array(24).fill(0);
+      views.forEach(e => buckets[new Date(e.created_at).getHours()]++);
+      labels = buckets.map((c,h) => `${h}h — ${c} visite${c!==1?'s':''}`);
+      footLabels = Array(24).fill(''); [0,6,12,18,23].forEach(h => footLabels[h]=h+'h');
+    } else if (timeMode==='day') {
+      const map={};
+      for (let i=29;i>=0;i--) { const d=new Date(); d.setDate(d.getDate()-i); map[d.toISOString().slice(0,10)]=0; }
+      views.forEach(e => { const k=e.created_at.slice(0,10); if(k in map) map[k]++; });
+      const keys=Object.keys(map);
+      buckets=keys.map(k=>map[k]);
+      labels=keys.map(k => { const d=new Date(k); return `${d.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'})} — ${map[k]} visite${map[k]!==1?'s':''}`;});
+      footLabels=keys.map((k,i) => [0,7,14,21,29].includes(i)?new Date(k).toLocaleDateString('fr-FR',{day:'2-digit',month:'short'}):'');
+    } else if (timeMode==='week') {
+      const map={};
+      for (let i=11;i>=0;i--) { const d=new Date(); d.setDate(d.getDate()-i*7); const mon=new Date(d); mon.setDate(d.getDate()-((d.getDay()+6)%7)); map[mon.toISOString().slice(0,10)]=0; }
+      views.forEach(e => { const d=new Date(e.created_at); const mon=new Date(d); mon.setDate(d.getDate()-((d.getDay()+6)%7)); const k=mon.toISOString().slice(0,10); if(k in map) map[k]++; });
+      const keys=Object.keys(map);
+      buckets=keys.map(k=>map[k]);
+      labels=keys.map(k=>`Sem. ${new Date(k).toLocaleDateString('fr-FR',{day:'2-digit',month:'short'})} — ${map[k]} visite${map[k]!==1?'s':''}`);
+      footLabels=keys.map((k,i)=>i%3===0?new Date(k).toLocaleDateString('fr-FR',{day:'2-digit',month:'short'}):'');
+    } else if (timeMode==='month') {
+      const map={};
+      for (let i=11;i>=0;i--) { const d=new Date(); d.setMonth(d.getMonth()-i); map[d.toISOString().slice(0,7)]=0; }
+      views.forEach(e => { const k=e.created_at.slice(0,7); if(k in map) map[k]++; });
+      const keys=Object.keys(map);
+      buckets=keys.map(k=>map[k]);
+      labels=keys.map(k=>`${k} — ${map[k]} visite${map[k]!==1?'s':''}`);
+      footLabels=keys.map(k=>new Date(k+'-01').toLocaleDateString('fr-FR',{month:'short'}));
+    }
+    if (!buckets.length) return;
+    const max=Math.max(...buckets)||1, peakI=buckets.indexOf(max);
+    document.getElementById('time-chart').innerHTML=buckets.map((c,i)=>`<div class="tb-wrap" title="${labels[i]}"><div class="tb-bar${i===peakI?' peak':''}" style="height:${Math.round(c/max*80)}px"></div></div>`).join('');
+    document.getElementById('time-foot').innerHTML=footLabels.map(l=>`<span>${l}</span>`).join('');
+  }
+  document.querySelectorAll('.time-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.time-tab').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active'); timeMode=btn.dataset.mode; renderTimeChart(_cachedEvents);
+    });
+  });
+
+  // ── Calendar
+  let calYear = new Date().getFullYear();
+  let calMonth = new Date().getMonth();
+  let _tours = [];
+  const MONTHS_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  const DAYS_FR   = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+
+  async function loadTours() {
+    try {
+      const r = await fetch(`${SB}/rest/v1/tours?select=*&page_id=eq.${PAGE}&order=tour_date.asc,tour_time.asc`, { headers: H });
+      if (!r.ok) return;
+      _tours = await r.json();
+      renderCalendar();
+    } catch(_) {}
+  }
+
+  function renderCalendar() {
+    document.getElementById('cal-month-label').textContent = MONTHS_FR[calMonth] + ' ' + calYear;
+    const grid = document.getElementById('cal-grid');
+    grid.innerHTML = DAYS_FR.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+
+    const first = new Date(calYear, calMonth, 1);
+    const startDow = (first.getDay()+6)%7;
+    const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+    const prevDays = new Date(calYear, calMonth, 0).getDate();
+    const today = new Date(); today.setHours(0,0,0,0);
+
+    const toursMap = {};
+    _tours.forEach(t => { if (!toursMap[t.tour_date]) toursMap[t.tour_date]=[]; toursMap[t.tour_date].push(t); });
+
+    for (let i=0; i<startDow; i++) {
+      const day = prevDays - startDow + 1 + i;
+      const dateStr = `${calYear}-${String(calMonth===0?12:calMonth).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+      grid.innerHTML += `<div class="cal-day other-month"><div class="cal-day-num">${day}</div></div>`;
+    }
+    for (let d=1; d<=daysInMonth; d++) {
+      const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const dt = new Date(calYear, calMonth, d);
+      const isToday = dt.getTime()===today.getTime();
+      const tours = toursMap[dateStr]||[];
+      const hasTour = tours.length>0;
+      const dotsHtml = tours.slice(0,2).map(t=>`<div class="cal-tour-dot">${t.tour_time?t.tour_time+' — ':''} ${t.visitor_name||'Visite'}</div>`).join('');
+      grid.innerHTML += `<div class="cal-day${isToday?' today':''} ${hasTour?' has-tour':''}" data-date="${dateStr}" onclick="openTourModal('${dateStr}')"><div class="cal-day-num">${d}</div>${dotsHtml}</div>`;
+    }
+    const totalCells = startDow + daysInMonth;
+    const remaining = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+    for (let i=1; i<=remaining; i++) {
+      grid.innerHTML += `<div class="cal-day other-month"><div class="cal-day-num">${i}</div></div>`;
+    }
+  }
+
+  document.getElementById('cal-prev').addEventListener('click', () => {
+    calMonth--; if (calMonth<0) { calMonth=11; calYear--; } renderCalendar();
+  });
+  document.getElementById('cal-next').addEventListener('click', () => {
+    calMonth++; if (calMonth>11) { calMonth=0; calYear++; } renderCalendar();
+  });
+
+  let _selectedDate = '';
+  function openTourModal(dateStr) {
+    _selectedDate = dateStr;
+    const d = new Date(dateStr+'T00:00:00');
+    document.getElementById('tour-modal-title').textContent = 'Visites — ' + d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+    document.getElementById('tour-modal-date').textContent = dateStr;
+    document.getElementById('tour-name').value = '';
+    document.getElementById('tour-time').value = '10:00';
+    document.getElementById('tour-phone').value = '';
+    renderTourList(dateStr);
+    document.getElementById('tour-overlay').classList.add('open');
+  }
+  function renderTourList(dateStr) {
+    const tours = _tours.filter(t=>t.tour_date===dateStr);
+    if (!tours.length) {
+      document.getElementById('tour-list').innerHTML = '<div class="tm-empty">Aucune visite prévue</div>';
+    } else {
+      document.getElementById('tour-list').innerHTML = tours.map(t=>`
+        <div class="tm-tour-item">
+          <div><div class="tm-tour-name">${t.visitor_name||'—'}</div><div class="tm-tour-time">${t.tour_time||''} ${t.visitor_phone?'· '+t.visitor_phone:''}</div></div>
+          <button class="tm-tour-del" onclick="deleteTour('${t.id}')">✕</button>
+        </div>`).join('');
+    }
+  }
+
+  document.getElementById('tour-add-btn').addEventListener('click', async () => {
+    const name  = document.getElementById('tour-name').value.trim();
+    const time  = document.getElementById('tour-time').value;
+    const phone = document.getElementById('tour-phone').value.trim();
+    if (!name) { document.getElementById('tour-name').focus(); return; }
+    const btn = document.getElementById('tour-add-btn');
+    btn.textContent = '…'; btn.disabled = true;
+    try {
+      const r = await fetch(`${SB}/rest/v1/tours`, {
+        method: 'POST',
+        headers: { ...H, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+        body: JSON.stringify({ page_id:PAGE, tour_date:_selectedDate, tour_time:time, visitor_name:name, visitor_phone:phone })
+      });
+      if (r.ok) {
+        const [newTour] = await r.json();
+        _tours.push(newTour);
+        document.getElementById('tour-name').value=''; document.getElementById('tour-phone').value='';
+        renderTourList(_selectedDate); renderCalendar();
+      }
+    } catch(_) {}
+    btn.textContent = '+ Ajouter la visite'; btn.disabled = false;
+  });
+
+  async function deleteTour(id) {
+    try {
+      await fetch(`${SB}/rest/v1/tours?id=eq.${id}`, { method:'DELETE', headers: H });
+      _tours = _tours.filter(t=>t.id!==id);
+      renderTourList(_selectedDate); renderCalendar();
+    } catch(_) {}
+  }
+
+  document.getElementById('tour-close').addEventListener('click', () => document.getElementById('tour-overlay').classList.remove('open'));
+  document.getElementById('tour-overlay').addEventListener('click', e => { if (e.target===document.getElementById('tour-overlay')) document.getElementById('tour-overlay').classList.remove('open'); });
+  document.addEventListener('keydown', e => {
+    if (e.key==='Escape') {
+      document.getElementById('msg-overlay').classList.remove('open');
+      document.getElementById('tour-overlay').classList.remove('open');
+    }
+  });
+
+  // ── Live now
+  async function loadLiveNow() {
+    const since = new Date(Date.now()-90000).toISOString();
+    try {
+      const r = await fetch(`${SB}/rest/v1/events?select=visitor_id&page_id=eq.${PAGE}&event_type=eq.heartbeat&created_at=gte.${since}`, { headers: H });
+      if (!r.ok) return;
+      const rows = await r.json();
+      const n = new Set(rows.map(e=>e.visitor_id).filter(Boolean)).size;
+      document.getElementById('ln-count').textContent = n;
+      document.getElementById('ln-plural').textContent = n!==1?'s':'';
+      document.getElementById('ln-updated').textContent = 'mis à jour ' + new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    } catch(_) {}
+  }
+
+  loadAll(); loadLiveNow(); loadTours(); renderCalendar();
+  setInterval(loadAll, 30000);
+  setInterval(loadLiveNow, 15000);
+  </script>
+
+</body>
+</html>
