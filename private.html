@@ -51,6 +51,11 @@ img{max-width:100%;display:block}
 .nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1.5px;background:var(--accent);transform:scaleX(0);transform-origin:0;transition:transform .4s var(--ease)}
 .nav-links a:hover{opacity:1}.nav-links a:hover::after{transform:scaleX(1)}
 @media(max-width:860px){.nav-links{display:none}}
+.nav-lang{display:inline-flex;gap:2px;align-items:center;font-family:var(--display);font-size:12px;font-weight:600;letter-spacing:.02em}
+.nav-lang a{padding:5px 8px;border-radius:999px;opacity:.55;transition:opacity .25s,background .25s,color .25s}
+.nav-lang a:hover{opacity:1}
+.nav-lang a[aria-current="page"]{opacity:1;background:rgba(200,205,175,.12);color:var(--accent-2)}
+.nav-right{display:inline-flex;align-items:center;gap:14px}
 
 /* BUTTONS */
 .btn{position:relative;display:inline-flex;align-items:center;gap:11px;padding:15px 26px;border-radius:999px;font-weight:600;font-size:15px;overflow:hidden;isolation:isolate;background:var(--sage);color:#20261A;box-shadow:var(--sh-md),var(--edge);transition:transform .5s var(--ease-expo),box-shadow .5s}
@@ -138,28 +143,31 @@ img{max-width:100%;display:block}
 <nav class="nav" id="nav">
   <a class="brand" href="#top"><span class="dot"></span><b>DWELL</b><span>Private</span></a>
   <div class="nav-links">
-    <a href="#engagement">Notre engagement</a><a href="#couverture">Ce que nous accompagnons</a><a href="#maniere">Notre manière</a><a href="#contact">Contact</a>
+    <a href="#engagement" data-i18n="p_nav1">Notre engagement</a><a href="#couverture" data-i18n="p_nav2">Ce que nous accompagnons</a><a href="#maniere" data-i18n="p_nav3">Notre manière</a><a href="#contact" data-i18n="p_nav4">Contact</a>
   </div>
-  <a class="btn-ghost" href="#contact"><span>Prendre contact</span><span class="ar">→</span></a>
+  <div class="nav-right">
+    <div class="nav-lang"><a href="#" data-lang="fr" aria-current="page">FR</a><a href="#" data-lang="en">EN</a><a href="#" data-lang="nl">NL</a></div>
+    <a class="btn-ghost" href="#contact"><span data-i18n="p_talk">Prendre contact</span><span class="ar">→</span></a>
+  </div>
 </nav>
 
 <header class="hero" id="top">
   <div class="hero-media" aria-hidden="true"></div>
   <h1 class="sr-only">DWELL Private — Exceller là où rien ne se montre.</h1>
-  <a class="hero-scroll" href="#engagement" aria-label="Découvrir"><span>Découvrir</span><span class="ln"></span></a>
+  <a class="hero-scroll" href="#engagement" aria-label="Découvrir"><span data-i18n="p_discover">Découvrir</span><span class="ln"></span></a>
 </header>
 
 <section class="section" id="engagement">
   <div class="wrap">
     <div class="engage-card reveal">
-      <span class="eyebrow" style="justify-content:center;margin-bottom:22px">Notre engagement</span>
-      <h2>Ce qui est construit chez vous <em>reste chez vous</em>.</h2>
-      <p>La discrétion n'est pas une option, c'est le cadre. Avant même de commencer, tout est encadré par contrat : ce que nous voyons, ce que nous produisons, ce qui ne sortira jamais. Vous gardez le contrôle, du premier échange à la livraison.</p>
+      <span class="eyebrow" style="justify-content:center;margin-bottom:22px" data-i18n="p_e_eye">Notre engagement</span>
+      <h2 data-i18n="p_e_h2">Ce qui est construit chez vous <em>reste chez vous</em>.</h2>
+      <p data-i18n="p_e_p">La discrétion n'est pas une option, c'est le cadre. Avant même de commencer, tout est encadré par contrat : ce que nous voyons, ce que nous produisons, ce qui ne sortira jamais. Vous gardez le contrôle, du premier échange à la livraison.</p>
     </div>
     <div class="g3">
-      <div class="pr reveal"><h4>Accords stricts</h4><p>NDA signés en amont, périmètre clair. Rien ne circule au-delà de l'équipe dédiée.</p></div>
-      <div class="pr reveal"><h4>Équipes réduites</h4><p>Un cercle minimal, trié sur le volet. Moins de personnes, moins d'exposition.</p></div>
-      <div class="pr reveal"><h4>Aucune trace publique</h4><p>Pas de portfolio, pas de mention, pas de communication. Le projet n'existe que pour vous.</p></div>
+      <div class="pr reveal"><h4 data-i18n="p_e1_t">Accords stricts</h4><p data-i18n="p_e1_p">NDA signés en amont, périmètre clair. Rien ne circule au-delà de l'équipe dédiée.</p></div>
+      <div class="pr reveal"><h4 data-i18n="p_e2_t">Équipes réduites</h4><p data-i18n="p_e2_p">Un cercle minimal, trié sur le volet. Moins de personnes, moins d'exposition.</p></div>
+      <div class="pr reveal"><h4 data-i18n="p_e3_t">Aucune trace publique</h4><p data-i18n="p_e3_p">Pas de portfolio, pas de mention, pas de communication. Le projet n'existe que pour vous.</p></div>
     </div>
   </div>
 </section>
@@ -167,30 +175,30 @@ img{max-width:100%;display:block}
 <section class="section" id="couverture">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="eyebrow">Ce que nous accompagnons</span>
-      <h2 class="h2">Pour les lieux et les projets <em>qui ne paraissent pas</em>.</h2>
-      <p>Là où la valeur exige la même exigence que la plus grande vitrine — mais sans la vitrine.</p>
+      <span class="eyebrow" data-i18n="p_c_eye">Ce que nous accompagnons</span>
+      <h2 class="h2" data-i18n="p_c_h2">Pour les lieux et les projets <em>qui ne paraissent pas</em>.</h2>
+      <p data-i18n="p_c_p">Là où la valeur exige la même exigence que la plus grande vitrine — mais sans la vitrine.</p>
     </div>
     <div class="svc-grid">
       <article class="svc reveal">
         <div class="svc-ic"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 15l4-4 4 4 3-3 5 5"/><circle cx="9" cy="9" r="1.4"/></svg></div>
-        <h3>Collections privées</h3>
-        <p>Documenter, mettre en valeur et gérer des collections d'exception — pour un cercle restreint, jamais pour le public.</p>
+        <h3 data-i18n="p_c1_t">Collections privées</h3>
+        <p data-i18n="p_c1_p">Documenter, mettre en valeur et gérer des collections d'exception — pour un cercle restreint, jamais pour le public.</p>
       </article>
       <article class="svc reveal">
         <div class="svc-ic"><svg viewBox="0 0 24 24"><path d="M4 11l8-6 8 6"/><path d="M6 10v9h12v-9"/><path d="M10 19v-5h4v5"/></svg></div>
-        <h3>Résidences</h3>
-        <p>Résidences privées et propriétés sensibles : images, outils et suivi, avec une équipe qui n'entre jamais dans la lumière.</p>
+        <h3 data-i18n="p_c2_t">Résidences</h3>
+        <p data-i18n="p_c2_p">Résidences privées et propriétés sensibles : images, outils et suivi, avec une équipe qui n'entre jamais dans la lumière.</p>
       </article>
       <article class="svc reveal">
         <div class="svc-ic"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 5-3 7.5-7 9-4-1.5-7-4-7-9V6z"/><path d="M9.5 12l1.8 1.8L15 10"/></svg></div>
-        <h3>Opérations sensibles</h3>
-        <p>Cessions, acquisitions, projets stratégiques : un accompagnement image &amp; outils qui protège la confidentialité de l'opération.</p>
+        <h3 data-i18n="p_c3_t">Opérations sensibles</h3>
+        <p data-i18n="p_c3_p">Cessions, acquisitions, projets stratégiques : un accompagnement image &amp; outils qui protège la confidentialité de l'opération.</p>
       </article>
       <article class="svc reveal">
         <div class="svc-ic"><svg viewBox="0 0 24 24"><circle cx="8" cy="12" r="3"/><path d="M11 12h9M17 12v3M20 12v2"/></svg></div>
-        <h3>Missions sur invitation</h3>
-        <p>Pour ceux qui exigent le meilleur en dehors des circuits habituels. On ne se présente pas : on est recommandé.</p>
+        <h3 data-i18n="p_c4_t">Missions sur invitation</h3>
+        <p data-i18n="p_c4_p">Pour ceux qui exigent le meilleur en dehors des circuits habituels. On ne se présente pas : on est recommandé.</p>
       </article>
     </div>
   </div>
@@ -199,15 +207,15 @@ img{max-width:100%;display:block}
 <section class="section" id="maniere">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="eyebrow">Notre manière</span>
-      <h2 class="h2">Discret, du <em>premier mot</em> à la livraison.</h2>
+      <span class="eyebrow" data-i18n="p_m_eye">Notre manière</span>
+      <h2 class="h2" data-i18n="p_m_h2">Discret, du <em>premier mot</em> à la livraison.</h2>
     </div>
     <div class="steps">
-      <div class="step reveal"><span class="step-n">01</span><div><h3>Premier contact</h3><p>Un échange confidentiel, souvent sur recommandation. On écoute, on comprend l'enjeu, sans rien noter qui ne doive l'être.</p></div></div>
-      <div class="step reveal"><span class="step-n">02</span><div><h3>Cadre &amp; contrat</h3><p>NDA et périmètre signés avant tout travail. Ce qui est permis, ce qui reste privé : c'est écrit noir sur blanc.</p></div></div>
-      <div class="step reveal"><span class="step-n">03</span><div><h3>Équipe dédiée</h3><p>Un cercle réduit, trié sur le volet, mobilisé uniquement pour vous. Moins de mains, plus de maîtrise.</p></div></div>
-      <div class="step reveal"><span class="step-n">04</span><div><h3>Exécution</h3><p>La même exigence que nos projets visibles — appliquée dans l'ombre. Chaque livrable vous est remis en propre.</p></div></div>
-      <div class="step reveal"><span class="step-n">05</span><div><h3>Rien ne paraît</h3><p>Aucune référence, aucune communication. Le travail existe, mais nulle part on ne le verra — sauf vous.</p></div></div>
+      <div class="step reveal"><span class="step-n">01</span><div><h3 data-i18n="p_m1_t">Premier contact</h3><p data-i18n="p_m1_p">Un échange confidentiel, souvent sur recommandation. On écoute, on comprend l'enjeu, sans rien noter qui ne doive l'être.</p></div></div>
+      <div class="step reveal"><span class="step-n">02</span><div><h3 data-i18n="p_m2_t">Cadre &amp; contrat</h3><p data-i18n="p_m2_p">NDA et périmètre signés avant tout travail. Ce qui est permis, ce qui reste privé : c'est écrit noir sur blanc.</p></div></div>
+      <div class="step reveal"><span class="step-n">03</span><div><h3 data-i18n="p_m3_t">Équipe dédiée</h3><p data-i18n="p_m3_p">Un cercle réduit, trié sur le volet, mobilisé uniquement pour vous. Moins de mains, plus de maîtrise.</p></div></div>
+      <div class="step reveal"><span class="step-n">04</span><div><h3 data-i18n="p_m4_t">Exécution</h3><p data-i18n="p_m4_p">La même exigence que nos projets visibles — appliquée dans l'ombre. Chaque livrable vous est remis en propre.</p></div></div>
+      <div class="step reveal"><span class="step-n">05</span><div><h3 data-i18n="p_m5_t">Rien ne paraît</h3><p data-i18n="p_m5_p">Aucune référence, aucune communication. Le travail existe, mais nulle part on ne le verra — sauf vous.</p></div></div>
     </div>
   </div>
 </section>
@@ -215,11 +223,11 @@ img{max-width:100%;display:block}
 <section class="section contact" id="contact">
   <div class="wrap">
     <div class="contact-card reveal">
-      <span class="eyebrow" style="justify-content:center;margin-bottom:20px">Contact</span>
-      <h2>Une demande confidentielle.</h2>
-      <p>Le premier échange est privé, sans engagement.</p>
+      <span class="eyebrow" style="justify-content:center;margin-bottom:20px" data-i18n="p_ct_eye">Contact</span>
+      <h2 data-i18n="p_ct_h2">Une demande confidentielle.</h2>
+      <p data-i18n="p_ct_p">Le premier échange est privé, sans engagement.</p>
       <div class="contact-actions">
-        <a class="btn" href="https://wa.me/32489041516" target="_blank" rel="noopener"><span>Écrire sur WhatsApp</span><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.031-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg></a>
+        <a class="btn" href="https://wa.me/32489041516" target="_blank" rel="noopener"><span data-i18n="p_ct_wa">Écrire sur WhatsApp</span><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.031-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg></a>
       </div>
       <p class="contact-mail"><a href="mailto:dwellstudio.rm@gmail.com">dwellstudio.rm@gmail.com</a></p>
     </div>
@@ -228,12 +236,80 @@ img{max-width:100%;display:block}
 
 <footer class="footer">
   <div class="wrap">
-    <span class="brand"><b>DWELL®</b> Private — un pôle de l'écosystème DWELL®</span>
+    <span class="brand" data-i18n="p_foot"><b>DWELL®</b> Private — un pôle de l'écosystème DWELL®</span>
     <span>© 2026 DWELL®</span>
   </div>
 </footer>
 
 <script>
+(function(){
+  var I18N = {
+    "p_nav1":{"en":"Our commitment","nl":"Onze belofte"},
+    "p_nav2":{"en":"What we support","nl":"Wat we begeleiden"},
+    "p_nav3":{"en":"Our way","nl":"Onze werkwijze"},
+    "p_nav4":{"en":"Contact","nl":"Contact"},
+    "p_talk":{"en":"Get in touch","nl":"Contact opnemen"},
+    "p_discover":{"en":"Discover","nl":"Ontdek"},
+    "p_e_eye":{"en":"Our commitment","nl":"Onze belofte"},
+    "p_e_h2":{"en":"What is built with you <em>stays with you</em>.","nl":"Wat bij u wordt gebouwd, <em>blijft bij u</em>."},
+    "p_e_p":{"en":"Discretion isn't an option, it's the framework. Before we even begin, everything is set out by contract: what we see, what we produce, what will never leave. You keep control, from the first conversation to delivery.","nl":"Discretie is geen optie, het is het kader. Nog voor we beginnen, wordt alles contractueel vastgelegd: wat we zien, wat we maken, wat nooit naar buiten komt. U houdt de controle, van het eerste gesprek tot de oplevering."},
+    "p_e1_t":{"en":"Strict agreements","nl":"Strikte overeenkomsten"},
+    "p_e1_p":{"en":"NDAs signed upfront, a clear scope. Nothing travels beyond the dedicated team.","nl":"NDA's vooraf ondertekend, een duidelijke perimeter. Niets gaat verder dan het toegewijde team."},
+    "p_e2_t":{"en":"Small teams","nl":"Kleine teams"},
+    "p_e2_p":{"en":"A minimal, hand-picked circle. Fewer people, less exposure.","nl":"Een minimale, zorgvuldig gekozen kring. Minder mensen, minder blootstelling."},
+    "p_e3_t":{"en":"No public trace","nl":"Geen publiek spoor"},
+    "p_e3_p":{"en":"No portfolio, no mention, no communication. The project exists for you alone.","nl":"Geen portfolio, geen vermelding, geen communicatie. Het project bestaat alleen voor u."},
+    "p_c_eye":{"en":"What we support","nl":"Wat we begeleiden"},
+    "p_c_h2":{"en":"For the places and projects <em>that never appear</em>.","nl":"Voor de plekken en projecten <em>die niet in beeld komen</em>."},
+    "p_c_p":{"en":"Where value demands the same rigour as the grandest showcase — but without the showcase.","nl":"Waar waarde dezelfde eis stelt als de grootste etalage — maar zonder de etalage."},
+    "p_c1_t":{"en":"Private collections","nl":"Privécollecties"},
+    "p_c1_p":{"en":"Documenting, showcasing and managing exceptional collections — for a restricted circle, never for the public.","nl":"Uitzonderlijke collecties documenteren, tonen en beheren — voor een besloten kring, nooit voor het publiek."},
+    "p_c2_t":{"en":"Residences","nl":"Residenties"},
+    "p_c2_p":{"en":"Private residences and sensitive properties: imagery, tools and follow-up, with a team that never steps into the light.","nl":"Privéresidenties en gevoelige panden: beeld, tools en opvolging, met een team dat nooit in de schijnwerpers stapt."},
+    "p_c3_t":{"en":"Sensitive operations","nl":"Gevoelige operaties"},
+    "p_c3_p":{"en":"Disposals, acquisitions, strategic projects: image &amp; tools support that protects the confidentiality of the operation.","nl":"Verkopen, overnames, strategische projecten: begeleiding op beeld &amp; tools die de vertrouwelijkheid van de operatie beschermt."},
+    "p_c4_t":{"en":"By-invitation assignments","nl":"Opdrachten op uitnodiging"},
+    "p_c4_p":{"en":"For those who demand the best outside the usual circuits. We don't introduce ourselves: we are recommended.","nl":"Voor wie het beste eist buiten de gebruikelijke circuits. We stellen ons niet voor: we worden aanbevolen."},
+    "p_m_eye":{"en":"Our way","nl":"Onze werkwijze"},
+    "p_m_h2":{"en":"Discreet, from the <em>first word</em> to delivery.","nl":"Discreet, van het <em>eerste woord</em> tot de oplevering."},
+    "p_m1_t":{"en":"First contact","nl":"Eerste contact"},
+    "p_m1_p":{"en":"A confidential exchange, often by recommendation. We listen, we understand what's at stake, noting nothing that shouldn't be noted.","nl":"Een vertrouwelijk gesprek, vaak op aanbeveling. We luisteren, we begrijpen wat er op het spel staat, en noteren niets wat niet genoteerd hoort te worden."},
+    "p_m2_t":{"en":"Framework &amp; contract","nl":"Kader &amp; contract"},
+    "p_m2_p":{"en":"NDA and scope signed before any work. What's allowed, what stays private: it's written in black and white.","nl":"NDA en perimeter ondertekend vóór elk werk. Wat mag, wat privé blijft: het staat zwart op wit."},
+    "p_m3_t":{"en":"Dedicated team","nl":"Toegewijd team"},
+    "p_m3_p":{"en":"A small, hand-picked circle, mobilised for you alone. Fewer hands, more control.","nl":"Een kleine, zorgvuldig gekozen kring, alleen voor u ingezet. Minder handen, meer controle."},
+    "p_m4_t":{"en":"Execution","nl":"Uitvoering"},
+    "p_m4_p":{"en":"The same rigour as our visible projects — applied in the shadows. Every deliverable is handed to you personally.","nl":"Dezelfde eis als onze zichtbare projecten — toegepast in de schaduw. Elk resultaat wordt u persoonlijk overhandigd."},
+    "p_m5_t":{"en":"Nothing appears","nl":"Niets komt naar buiten"},
+    "p_m5_p":{"en":"No references, no communication. The work exists, but nowhere will it be seen — except by you.","nl":"Geen referenties, geen communicatie. Het werk bestaat, maar nergens zal het te zien zijn — behalve door u."},
+    "p_ct_eye":{"en":"Contact","nl":"Contact"},
+    "p_ct_h2":{"en":"A confidential enquiry.","nl":"Een vertrouwelijke aanvraag."},
+    "p_ct_p":{"en":"The first exchange is private, no commitment.","nl":"Het eerste gesprek is privé, zonder verplichting."},
+    "p_ct_wa":{"en":"Message on WhatsApp","nl":"Schrijf op WhatsApp"},
+    "p_foot":{"en":"<b>DWELL®</b> Private — a division of the DWELL® ecosystem","nl":"<b>DWELL®</b> Private — een pool van het DWELL®-ecosysteem"}
+  };
+  var i18nEls = [].slice.call(document.querySelectorAll('[data-i18n]'));
+  i18nEls.forEach(function(el){ el.setAttribute('data-fr', el.innerHTML); });
+  function setLang(lang){
+    i18nEls.forEach(function(el){
+      var k = el.getAttribute('data-i18n');
+      if(lang === 'fr'){ el.innerHTML = el.getAttribute('data-fr'); }
+      else if(I18N[k] && I18N[k][lang] != null){ el.innerHTML = I18N[k][lang]; }
+    });
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-lang]').forEach(function(a){
+      a.removeAttribute('aria-current');
+      if(a.getAttribute('data-lang') === lang){ a.setAttribute('aria-current','page'); }
+    });
+    try{ localStorage.setItem('dwell_lang', lang); }catch(e){}
+  }
+  window.__setLang = setLang;
+  document.querySelectorAll('[data-lang]').forEach(function(a){
+    a.addEventListener('click', function(e){ e.preventDefault(); setLang(a.getAttribute('data-lang')); });
+  });
+  var saved = null; try{ saved = localStorage.getItem('dwell_lang'); }catch(e){}
+  if(saved === 'en' || saved === 'nl'){ setLang(saved); }
+})();
 (function(){
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   var els=document.querySelectorAll('.reveal');

@@ -56,6 +56,11 @@ img{max-width:100%;display:block}
 .nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1.5px;background:var(--accent);transform:scaleX(0);transform-origin:0;transition:transform .4s var(--ease)}
 .nav-links a:hover{opacity:1}.nav-links a:hover::after{transform:scaleX(1)}
 @media(max-width:860px){.nav-links{display:none}}
+.nav-lang{display:inline-flex;gap:2px;align-items:center;font-family:var(--display);font-size:12px;font-weight:600;letter-spacing:.02em}
+.nav-lang a{padding:5px 8px;border-radius:999px;opacity:.55;transition:opacity .25s,background .25s,color .25s}
+.nav-lang a:hover{opacity:1}
+.nav-lang a[aria-current="page"]{opacity:1;background:rgba(190,205,235,.14);color:var(--accent-2)}
+.nav-right{display:inline-flex;align-items:center;gap:14px}
 
 /* BUTTONS */
 .btn{position:relative;display:inline-flex;align-items:center;gap:11px;padding:15px 26px;border-radius:999px;font-weight:600;font-size:15px;overflow:hidden;isolation:isolate;background:var(--sage);color:#1A2033;box-shadow:var(--sh-md),var(--edge);transition:transform .5s var(--ease-expo),box-shadow .5s}
@@ -145,44 +150,47 @@ img{max-width:100%;display:block}
 <nav class="nav" id="nav">
   <a class="brand" href="#top"><span class="dot"></span><b>DWELL</b><span>Intelligence</span></a>
   <div class="nav-links">
-    <a href="#services">Ce que nous faisons</a><a href="#principe">Notre principe</a><a href="#methode">Méthode</a><a href="#contact">Contact</a>
+    <a href="#services" data-i18n="i_nav1">Ce que nous faisons</a><a href="#principe" data-i18n="i_nav2">Notre principe</a><a href="#methode" data-i18n="i_nav3">Méthode</a><a href="#contact" data-i18n="i_nav4">Contact</a>
   </div>
-  <a class="btn-ghost" href="#contact"><span>Nous parler</span><span class="ar">→</span></a>
+  <div class="nav-right">
+    <div class="nav-lang"><a href="#" data-lang="fr" aria-current="page">FR</a><a href="#" data-lang="en">EN</a><a href="#" data-lang="nl">NL</a></div>
+    <a class="btn-ghost" href="#contact"><span data-i18n="i_talk">Nous parler</span><span class="ar">→</span></a>
+  </div>
 </nav>
 
 <header class="hero" id="top">
   <div class="hero-media" aria-hidden="true"></div>
   <h1 class="sr-only">DWELL Intelligence — Des process augmentés, chez vous.</h1>
-  <a class="hero-scroll" href="#services" aria-label="Découvrir"><span>Découvrir</span><span class="ln"></span></a>
+  <a class="hero-scroll" href="#services" aria-label="Découvrir"><span data-i18n="i_discover">Découvrir</span><span class="ln"></span></a>
 </header>
 
 <section class="section" id="services">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="eyebrow">Ce que nous faisons</span>
-      <h2 class="h2">Quatre leviers, <em>un même but</em> : vous faire gagner du temps.</h2>
-      <p>Nous n'ajoutons pas une couche de logiciels que vous ne maîtrisez pas — nous améliorons ce que vous utilisez déjà.</p>
+      <span class="eyebrow" data-i18n="i_s_eye">Ce que nous faisons</span>
+      <h2 class="h2" data-i18n="i_s_h2">Quatre leviers, <em>un même but</em> : vous faire gagner du temps.</h2>
+      <p data-i18n="i_s_p">Nous n'ajoutons pas une couche de logiciels que vous ne maîtrisez pas — nous améliorons ce que vous utilisez déjà.</p>
     </div>
     <div class="svc-grid">
       <article class="svc reveal">
         <div class="svc-ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
-        <h3>Audit des flux</h3>
-        <p>Nous cartographions votre façon de travailler et repérons précisément ce qui vous coûte du temps. Pas un rapport dans un tiroir : des priorités claires.</p>
+        <h3 data-i18n="i_s1_t">Audit des flux</h3>
+        <p data-i18n="i_s1_p">Nous cartographions votre façon de travailler et repérons précisément ce qui vous coûte du temps. Pas un rapport dans un tiroir : des priorités claires.</p>
       </article>
       <article class="svc reveal">
         <div class="svc-ic"><svg viewBox="0 0 24 24"><path d="M4 7h10M4 12h16M4 17h7"/><circle cx="18" cy="7" r="2"/><circle cx="14" cy="17" r="2"/></svg></div>
-        <h3>Automatisations sur mesure</h3>
-        <p>Des automatisations conçues pour vos outils, qui font disparaître les tâches répétitives — sans bouleverser vos habitudes.</p>
+        <h3 data-i18n="i_s2_t">Automatisations sur mesure</h3>
+        <p data-i18n="i_s2_p">Des automatisations conçues pour vos outils, qui font disparaître les tâches répétitives — sans bouleverser vos habitudes.</p>
       </article>
       <article class="svc reveal">
         <div class="svc-ic"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6H9zM4 10h-1M4 14h-1M21 10h-1M21 14h-1M10 4V3M14 4V3M10 21v-1M14 21v-1"/></svg></div>
-        <h3>Outils d'IA intégrés</h3>
-        <p>L'intelligence artificielle branchée sur vos systèmes existants — pas une plateforme de plus à apprendre, mais un renfort discret dans vos outils.</p>
+        <h3 data-i18n="i_s3_t">Outils d'IA intégrés</h3>
+        <p data-i18n="i_s3_p">L'intelligence artificielle branchée sur vos systèmes existants — pas une plateforme de plus à apprendre, mais un renfort discret dans vos outils.</p>
       </article>
       <article class="svc reveal">
         <div class="svc-ic"><svg viewBox="0 0 24 24"><path d="M12 14c3.3 0 6 1.6 6 3.6V20H6v-2.4C6 15.6 8.7 14 12 14z"/><circle cx="12" cy="8" r="4"/></svg></div>
-        <h3>Formation &amp; transfert</h3>
-        <p>Votre équipe est formée et autonome. La documentation, les outils et la connaissance restent chez vous — pour toujours.</p>
+        <h3 data-i18n="i_s4_t">Formation &amp; transfert</h3>
+        <p data-i18n="i_s4_p">Votre équipe est formée et autonome. La documentation, les outils et la connaissance restent chez vous — pour toujours.</p>
       </article>
     </div>
   </div>
@@ -191,14 +199,14 @@ img{max-width:100%;display:block}
 <section class="section principe" id="principe">
   <div class="wrap">
     <div class="principe-card reveal">
-      <span class="eyebrow" style="justify-content:center;margin-bottom:22px">Notre principe</span>
-      <h2>Aucune dépendance nouvelle. <em>La connaissance reste chez vous.</em></h2>
-      <p>Nous améliorons ce que vous utilisez déjà, nous formons vos équipes, et nous documentons tout. À la fin de la mission, vous êtes plus rapides — et parfaitement autonomes. C'est notre définition d'un travail bien fait.</p>
+      <span class="eyebrow" style="justify-content:center;margin-bottom:22px" data-i18n="i_pr_eye">Notre principe</span>
+      <h2 data-i18n="i_pr_h2">Aucune dépendance nouvelle. <em>La connaissance reste chez vous.</em></h2>
+      <p data-i18n="i_pr_p">Nous améliorons ce que vous utilisez déjà, nous formons vos équipes, et nous documentons tout. À la fin de la mission, vous êtes plus rapides — et parfaitement autonomes. C'est notre définition d'un travail bien fait.</p>
     </div>
     <div class="principe-3">
-      <div class="pr reveal"><h4>Sur vos outils</h4><p>On s'intègre à votre stack existant, pas l'inverse. Zéro migration forcée.</p></div>
-      <div class="pr reveal"><h4>Mesurable</h4><p>Chaque gain de temps est chiffré, avant et après. Vous voyez le retour.</p></div>
-      <div class="pr reveal"><h4>Confidentiel</h4><p>Vos données restent les vôtres. Accords stricts, aucune fuite vers l'extérieur.</p></div>
+      <div class="pr reveal"><h4 data-i18n="i_pr1_t">Sur vos outils</h4><p data-i18n="i_pr1_p">On s'intègre à votre stack existant, pas l'inverse. Zéro migration forcée.</p></div>
+      <div class="pr reveal"><h4 data-i18n="i_pr2_t">Mesurable</h4><p data-i18n="i_pr2_p">Chaque gain de temps est chiffré, avant et après. Vous voyez le retour.</p></div>
+      <div class="pr reveal"><h4 data-i18n="i_pr3_t">Confidentiel</h4><p data-i18n="i_pr3_p">Vos données restent les vôtres. Accords stricts, aucune fuite vers l'extérieur.</p></div>
     </div>
   </div>
 </section>
@@ -206,15 +214,15 @@ img{max-width:100%;display:block}
 <section class="section" id="methode">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="eyebrow">Méthode</span>
-      <h2 class="h2">Comment ça se passe, <em>concrètement</em>.</h2>
+      <span class="eyebrow" data-i18n="i_m_eye">Méthode</span>
+      <h2 class="h2" data-i18n="i_m_h2">Comment ça se passe, <em>concrètement</em>.</h2>
     </div>
     <div class="steps">
-      <div class="step reveal"><span class="step-n">01</span><div><h3>Audit</h3><p>On observe, on écoute, on cartographie vos flux. On identifie où l'automatisation et l'IA créent le plus de valeur, vite.</p></div></div>
-      <div class="step reveal"><span class="step-n">02</span><div><h3>Prototype</h3><p>On construit une première automatisation en quelques jours, pour prouver la valeur sur un cas réel avant d'aller plus loin.</p></div></div>
-      <div class="step reveal"><span class="step-n">03</span><div><h3>Intégration</h3><p>On déploie proprement dans vos systèmes existants — sans casser ce qui marche, sans dépendance nouvelle.</p></div></div>
-      <div class="step reveal"><span class="step-n">04</span><div><h3>Formation</h3><p>On forme vos équipes jusqu'à l'autonomie complète, avec une documentation claire qui reste chez vous.</p></div></div>
-      <div class="step reveal"><span class="step-n">05</span><div><h3>Suivi</h3><p>On reste disponibles. Ce qui est en place vous appartient — nous, on veille à ce que ça continue de tourner.</p></div></div>
+      <div class="step reveal"><span class="step-n">01</span><div><h3 data-i18n="i_m1_t">Audit</h3><p data-i18n="i_m1_p">On observe, on écoute, on cartographie vos flux. On identifie où l'automatisation et l'IA créent le plus de valeur, vite.</p></div></div>
+      <div class="step reveal"><span class="step-n">02</span><div><h3 data-i18n="i_m2_t">Prototype</h3><p data-i18n="i_m2_p">On construit une première automatisation en quelques jours, pour prouver la valeur sur un cas réel avant d'aller plus loin.</p></div></div>
+      <div class="step reveal"><span class="step-n">03</span><div><h3 data-i18n="i_m3_t">Intégration</h3><p data-i18n="i_m3_p">On déploie proprement dans vos systèmes existants — sans casser ce qui marche, sans dépendance nouvelle.</p></div></div>
+      <div class="step reveal"><span class="step-n">04</span><div><h3 data-i18n="i_m4_t">Formation</h3><p data-i18n="i_m4_p">On forme vos équipes jusqu'à l'autonomie complète, avec une documentation claire qui reste chez vous.</p></div></div>
+      <div class="step reveal"><span class="step-n">05</span><div><h3 data-i18n="i_m5_t">Suivi</h3><p data-i18n="i_m5_p">On reste disponibles. Ce qui est en place vous appartient — nous, on veille à ce que ça continue de tourner.</p></div></div>
     </div>
   </div>
 </section>
@@ -222,11 +230,11 @@ img{max-width:100%;display:block}
 <section class="section contact" id="contact">
   <div class="wrap">
     <div class="contact-card reveal">
-      <span class="eyebrow" style="justify-content:center;margin-bottom:20px">Contact</span>
-      <h2>Parlons de vos process.</h2>
-      <p>Un audit d'une heure, sans engagement.</p>
+      <span class="eyebrow" style="justify-content:center;margin-bottom:20px" data-i18n="i_ct_eye">Contact</span>
+      <h2 data-i18n="i_ct_h2">Parlons de vos process.</h2>
+      <p data-i18n="i_ct_p">Un audit d'une heure, sans engagement.</p>
       <div class="contact-actions">
-        <a class="btn" href="https://wa.me/32489041516" target="_blank" rel="noopener"><span>Écrire sur WhatsApp</span><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.031-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg></a>
+        <a class="btn" href="https://wa.me/32489041516" target="_blank" rel="noopener"><span data-i18n="i_ct_wa">Écrire sur WhatsApp</span><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.031-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg></a>
       </div>
       <p class="contact-mail"><a href="mailto:dwellstudio.rm@gmail.com">dwellstudio.rm@gmail.com</a></p>
     </div>
@@ -235,12 +243,80 @@ img{max-width:100%;display:block}
 
 <footer class="footer">
   <div class="wrap">
-    <span class="brand"><b>DWELL®</b> Intelligence — un pôle de l'écosystème DWELL®</span>
+    <span class="brand" data-i18n="i_foot"><b>DWELL®</b> Intelligence — un pôle de l'écosystème DWELL®</span>
     <span>© 2026 DWELL®</span>
   </div>
 </footer>
 
 <script>
+(function(){
+  var I18N = {
+    "i_nav1":{"en":"What we do","nl":"Wat we doen"},
+    "i_nav2":{"en":"Our principle","nl":"Ons principe"},
+    "i_nav3":{"en":"Method","nl":"Methode"},
+    "i_nav4":{"en":"Contact","nl":"Contact"},
+    "i_talk":{"en":"Let's talk","nl":"Praat met ons"},
+    "i_discover":{"en":"Discover","nl":"Ontdek"},
+    "i_s_eye":{"en":"What we do","nl":"Wat we doen"},
+    "i_s_h2":{"en":"Four levers, <em>one goal</em>: giving you back your time.","nl":"Vier hefbomen, <em>één doel</em>: u tijd teruggeven."},
+    "i_s_p":{"en":"We don't add a layer of software you can't control — we improve what you already use.","nl":"We voegen geen laag software toe die u niet beheerst — we verbeteren wat u al gebruikt."},
+    "i_s1_t":{"en":"Workflow audit","nl":"Auditing van processen"},
+    "i_s1_p":{"en":"We map how you work and pinpoint exactly what's costing you time. Not a report in a drawer: clear priorities.","nl":"We brengen in kaart hoe u werkt en leggen precies bloot wat u tijd kost. Geen rapport in een la: heldere prioriteiten."},
+    "i_s2_t":{"en":"Bespoke automations","nl":"Automatiseringen op maat"},
+    "i_s2_p":{"en":"Automations built for your tools that make repetitive tasks disappear — without upending your habits.","nl":"Automatiseringen gebouwd voor uw tools die repetitieve taken laten verdwijnen — zonder uw gewoontes overhoop te halen."},
+    "i_s3_t":{"en":"Integrated AI tools","nl":"Geïntegreerde AI-tools"},
+    "i_s3_p":{"en":"Artificial intelligence plugged into your existing systems — not one more platform to learn, but a quiet reinforcement inside your tools.","nl":"Kunstmatige intelligentie gekoppeld aan uw bestaande systemen — geen extra platform om te leren, maar een discrete versterking in uw tools."},
+    "i_s4_t":{"en":"Training &amp; handover","nl":"Opleiding &amp; overdracht"},
+    "i_s4_p":{"en":"Your team is trained and autonomous. The documentation, the tools and the knowledge stay with you — for good.","nl":"Uw team wordt opgeleid en autonoom. De documentatie, de tools en de kennis blijven bij u — voorgoed."},
+    "i_pr_eye":{"en":"Our principle","nl":"Ons principe"},
+    "i_pr_h2":{"en":"No new dependency. <em>The knowledge stays with you.</em>","nl":"Geen nieuwe afhankelijkheid. <em>De kennis blijft bij u.</em>"},
+    "i_pr_p":{"en":"We improve what you already use, we train your teams, and we document everything. By the end of the assignment, you're faster — and fully autonomous. That's our definition of a job well done.","nl":"We verbeteren wat u al gebruikt, we leiden uw teams op en we documenteren alles. Aan het eind van de opdracht bent u sneller — en volledig autonoom. Dat is onze definitie van goed werk."},
+    "i_pr1_t":{"en":"On your tools","nl":"Op uw tools"},
+    "i_pr1_p":{"en":"We integrate into your existing stack, not the other way around. Zero forced migration.","nl":"We integreren in uw bestaande stack, niet andersom. Geen gedwongen migratie."},
+    "i_pr2_t":{"en":"Measurable","nl":"Meetbaar"},
+    "i_pr2_p":{"en":"Every time saving is quantified, before and after. You see the return.","nl":"Elke tijdwinst wordt becijferd, voor en na. U ziet het rendement."},
+    "i_pr3_t":{"en":"Confidential","nl":"Vertrouwelijk"},
+    "i_pr3_p":{"en":"Your data stays yours. Strict agreements, no leaks to the outside.","nl":"Uw gegevens blijven van u. Strikte overeenkomsten, geen lekken naar buiten."},
+    "i_m_eye":{"en":"Method","nl":"Methode"},
+    "i_m_h2":{"en":"How it works, <em>concretely</em>.","nl":"Hoe het werkt, <em>concreet</em>."},
+    "i_m1_t":{"en":"Audit","nl":"Audit"},
+    "i_m1_p":{"en":"We observe, we listen, we map your workflows. We identify where automation and AI create the most value, fast.","nl":"We observeren, we luisteren, we brengen uw processen in kaart. We bepalen waar automatisering en AI het snelst de meeste waarde creëren."},
+    "i_m2_t":{"en":"Prototype","nl":"Prototype"},
+    "i_m2_p":{"en":"We build a first automation within days, to prove the value on a real case before going further.","nl":"We bouwen binnen enkele dagen een eerste automatisering, om de waarde op een reëel geval te bewijzen voor we verdergaan."},
+    "i_m3_t":{"en":"Integration","nl":"Integratie"},
+    "i_m3_p":{"en":"We deploy cleanly into your existing systems — without breaking what works, without new dependency.","nl":"We implementeren netjes in uw bestaande systemen — zonder te breken wat werkt, zonder nieuwe afhankelijkheid."},
+    "i_m4_t":{"en":"Training","nl":"Opleiding"},
+    "i_m4_p":{"en":"We train your teams to full autonomy, with clear documentation that stays with you.","nl":"We leiden uw teams op tot volledige autonomie, met heldere documentatie die bij u blijft."},
+    "i_m5_t":{"en":"Follow-up","nl":"Opvolging"},
+    "i_m5_p":{"en":"We stay available. What's in place is yours — we make sure it keeps running.","nl":"We blijven beschikbaar. Wat er staat is van u — wij zorgen dat het blijft draaien."},
+    "i_ct_eye":{"en":"Contact","nl":"Contact"},
+    "i_ct_h2":{"en":"Let's talk about your processes.","nl":"Laten we over uw processen praten."},
+    "i_ct_p":{"en":"A one-hour audit, no commitment.","nl":"Een audit van één uur, zonder verplichting."},
+    "i_ct_wa":{"en":"Message on WhatsApp","nl":"Schrijf op WhatsApp"},
+    "i_foot":{"en":"<b>DWELL®</b> Intelligence — a division of the DWELL® ecosystem","nl":"<b>DWELL®</b> Intelligence — een pool van het DWELL®-ecosysteem"}
+  };
+  var i18nEls = [].slice.call(document.querySelectorAll('[data-i18n]'));
+  i18nEls.forEach(function(el){ el.setAttribute('data-fr', el.innerHTML); });
+  function setLang(lang){
+    i18nEls.forEach(function(el){
+      var k = el.getAttribute('data-i18n');
+      if(lang === 'fr'){ el.innerHTML = el.getAttribute('data-fr'); }
+      else if(I18N[k] && I18N[k][lang] != null){ el.innerHTML = I18N[k][lang]; }
+    });
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-lang]').forEach(function(a){
+      a.removeAttribute('aria-current');
+      if(a.getAttribute('data-lang') === lang){ a.setAttribute('aria-current','page'); }
+    });
+    try{ localStorage.setItem('dwell_lang', lang); }catch(e){}
+  }
+  window.__setLang = setLang;
+  document.querySelectorAll('[data-lang]').forEach(function(a){
+    a.addEventListener('click', function(e){ e.preventDefault(); setLang(a.getAttribute('data-lang')); });
+  });
+  var saved = null; try{ saved = localStorage.getItem('dwell_lang'); }catch(e){}
+  if(saved === 'en' || saved === 'nl'){ setLang(saved); }
+})();
 (function(){
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   var els=document.querySelectorAll('.reveal');
