@@ -38,7 +38,7 @@ img{max-width:100%;display:block}
 ::selection{background:var(--accent);color:#0B111F}
 .wrap{max-width:1240px;margin:0 auto;padding:0 clamp(20px,4vw,44px)}
 .eyebrow{display:inline-flex;align-items:center;gap:11px;font-family:var(--display);font-size:12px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--accent)}
-.eyebrow::before{content:"";width:26px;height:1px;background:currentColor;opacity:.6}
+.eyebrow::before{display:none}
 .reveal{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease-expo),transform .9s var(--ease-expo)}
 .reveal.vis{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
